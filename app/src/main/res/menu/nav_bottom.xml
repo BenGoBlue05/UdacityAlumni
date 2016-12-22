@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/articles"
+        android:icon="@drawable/ic_articles"
+        android:title="@string/articles" />
+    <item
+        android:id="@+id/careers"
+        android:icon="@drawable/ic_careers"
+        android:title="@string/careers" />
+    <item
+        android:id="@+id/mentorship"
+        android:icon="@drawable/ic_mentorship"
+        android:title="@string/mentorship" />
+    <item android:id="@+id/meetups"
+        android:icon="@drawable/ic_meetups"
+        android:title="@string/meetups"/>
+</menu>
