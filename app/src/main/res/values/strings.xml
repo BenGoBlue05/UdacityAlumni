@@ -6,6 +6,8 @@
     <string name="meetups">Meetups</string>
     <string name="spotlight">Spotlight</string>
     <string name="feed">Feed</string>
+    <string name="my_classroom">My Classroom</string>
+    <string name="sign_out">Sign Out</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

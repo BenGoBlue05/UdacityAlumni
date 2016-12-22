@@ -3,4 +3,5 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="md_keylines">16dp</dimen>
+    <dimen name="navheader_height">222dp</dimen>
 </resources>
