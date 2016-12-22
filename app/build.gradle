@@ -35,6 +35,8 @@ dependencies {
     compile "com.facebook.stetho:stetho-okhttp:$rootProject.stethoVersion"
     compile "com.firebase:firebase-jobdispatcher:$rootProject.firebaseJobDispatcherVersion"
     compile "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
+    compile "de.hdodenhof:circleimageview:$rootProject.circleImageVersion"
+    compile "com.android.support.constraint:constraint-layout:$rootProject.constraintLayoutVersion"
 
     // Dependencies for local unit tests
     testCompile "org.mockito:mockito-all:$rootProject.ext.mockitoVersion"
