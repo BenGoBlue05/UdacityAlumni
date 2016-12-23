@@ -1,10 +1,11 @@
 package com.google.developer.udacityalumni.activity;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.graphics.drawable.VectorDrawableCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -28,7 +29,9 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
+
     private PageAdapter mPageAdapter;
+    TabLayout.OnTabSelectedListener mTabListener;
 
     @BindView(R.id.navview_bottom)
     BottomNavigationView mNavViewBottom;
@@ -41,6 +44,12 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.viewpager)
     ViewPager mViewPager;
 
+    TabLayout.Tab mArticleTab;
+    TabLayout.Tab mCareersTab;
+    TabLayout.Tab mMentorshipTab;
+    TabLayout.Tab mMeetUpsTab;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +58,8 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
         setupViewPager(mViewPager);
-        mTabs.setupWithViewPager(mViewPager);
+        mTabs.setupWithViewPager(mViewPager);;
+        setUpTabs();
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
             VectorDrawableCompat indicator
@@ -59,31 +69,80 @@ public class MainActivity extends AppCompatActivity {
             supportActionBar.setHomeAsUpIndicator(indicator);
             supportActionBar.setDisplayHomeAsUpEnabled(true);
         }
-
-        mNavViewBottom.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        mTabListener = new TabLayout.OnTabSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.articles:
-                        mTabs.setVisibility(View.VISIBLE);
-                        mTabs.setupWithViewPager(mViewPager);
+            public void onTabSelected(TabLayout.Tab tab) {
+                Drawable icon = tab.getIcon();
+                assert icon != null;
+                icon.setTint(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
+                int bottomNavVisibility = View.GONE;
+                switch (tab.getPosition()){
+                    case 0:
+                        mToolbar.setTitle(getString(R.string.articles));
+                        bottomNavVisibility = View.VISIBLE;
+                        break;
+                    case 1:
+                        mToolbar.setTitle(getString(R.string.careers));
+                        break;
+                    case 2:
+                        mToolbar.setTitle(getString(R.string.mentorship));
+                        break;
+                    case 3:
+                        mToolbar.setTitle(getString(R.string.meetups));
                         break;
                     default:
-                        mTabs.removeAllTabs();
-                        mTabs.setVisibility(View.GONE);
-                        break;
+                        Log.e(LOG_TAG, "TAB POSITION UNRECOGINIZED");
                 }
-                return true;
+                mNavViewBottom.setVisibility(bottomNavVisibility);
             }
-        });
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                Drawable icon = tab.getIcon();
+                assert icon != null;
+                icon.setTint(ContextCompat.getColor(MainActivity.this, R.color.tab_unselected));
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        };
 
     }
 
     private void setupViewPager(ViewPager viewPager) {
         mPageAdapter = new PageAdapter(getSupportFragmentManager());
-        mPageAdapter.addFragment(new ArticleFragment(), getString(R.string.spotlight));
-        mPageAdapter.addFragment(new ArticleFragment(), getString(R.string.feed));
+        mPageAdapter.addFragment(new ArticleFragment());
+        mPageAdapter.addFragment(new ArticleFragment());
+        mPageAdapter.addFragment(new ArticleFragment());
+        mPageAdapter.addFragment(new ArticleFragment());
         viewPager.setAdapter(mPageAdapter);
+    }
+
+    private void setUpTabs(){
+        mArticleTab = mTabs.getTabAt(0);
+        mCareersTab = mTabs.getTabAt(1);
+        mMentorshipTab = mTabs.getTabAt(2);
+        mMeetUpsTab = mTabs.getTabAt(3);
+
+        mArticleTab.setIcon(R.drawable.ic_articles);
+        mCareersTab.setIcon(R.drawable.ic_careers);
+        mMentorshipTab.setIcon(R.drawable.ic_mentorship);
+        mMeetUpsTab.setIcon(R.drawable.ic_meetups);
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mTabs.addOnTabSelectedListener(mTabListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mTabs.removeOnTabSelectedListener(mTabListener);
     }
 
     @Override
