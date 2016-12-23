@@ -7,6 +7,5 @@
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#757575</color>
     <color name="icons">#FFFFFF</color>
-    <color name="tab_unselected">#757575</color>
     <color name="divider">#BDBDBD</color>
 </resources>

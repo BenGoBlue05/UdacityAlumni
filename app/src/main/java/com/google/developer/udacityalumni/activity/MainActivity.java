@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 Drawable icon = tab.getIcon();
                 assert icon != null;
-                icon.setTint(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
+                icon.setTint(ContextCompat.getColor(MainActivity.this, R.color.icons));
                 int bottomNavVisibility = View.GONE;
                 switch (tab.getPosition()){
                     case 0:
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             public void onTabUnselected(TabLayout.Tab tab) {
                 Drawable icon = tab.getIcon();
                 assert icon != null;
-                icon.setTint(ContextCompat.getColor(MainActivity.this, R.color.tab_unselected));
+                icon.setTint(ContextCompat.getColor(MainActivity.this, android.R.color.black));
             }
 
             @Override
