@@ -1,5 +1,6 @@
 package com.google.developer.udacityalumni.activity;
 
+import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
@@ -65,20 +66,32 @@ public class MainActivity extends AppCompatActivity {
             VectorDrawableCompat indicator
                     = VectorDrawableCompat.create(getResources(), R.drawable.ic_menu, getTheme());
             assert indicator != null;
-            indicator.setTint(ResourcesCompat.getColor(getResources(), android.R.color.white, getTheme()));
+            indicator.setTint(ResourcesCompat.getColor(getResources(), R.color.colorAccent, getTheme()));
             supportActionBar.setHomeAsUpIndicator(indicator);
             supportActionBar.setDisplayHomeAsUpEnabled(true);
         }
+        int[][] states = new int[][] {
+                new int[] { android.R.attr.state_checked}, // enabled
+                new int[] {-android.R.attr.state_checked}, // disabled
+        };
+
+        int[] colors = new int[] {
+                ContextCompat.getColor(MainActivity.this, R.color.colorAccent),
+                ContextCompat.getColor(MainActivity.this, R.color.unselected),
+        };
+        ColorStateList myList = new ColorStateList(states, colors);
+        mNavViewBottom.setItemIconTintList(myList);
+        mNavViewBottom.setItemTextColor(myList);
         mTabListener = new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 Drawable icon = tab.getIcon();
                 assert icon != null;
-                icon.setTint(ContextCompat.getColor(MainActivity.this, R.color.icons));
+                icon.setTint(ContextCompat.getColor(MainActivity.this, R.color.colorAccent));
                 int bottomNavVisibility = View.GONE;
                 switch (tab.getPosition()){
                     case 0:
-                        mToolbar.setTitle(getString(R.string.articles));
+                        mToolbar.setTitle(getString(R.string.home));
                         bottomNavVisibility = View.VISIBLE;
                         break;
                     case 1:
@@ -100,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
             public void onTabUnselected(TabLayout.Tab tab) {
                 Drawable icon = tab.getIcon();
                 assert icon != null;
-                icon.setTint(ContextCompat.getColor(MainActivity.this, android.R.color.black));
+                icon.setTint(ContextCompat.getColor(MainActivity.this, R.color.unselected));
             }
 
             @Override
@@ -126,7 +139,8 @@ public class MainActivity extends AppCompatActivity {
         mMentorshipTab = mTabs.getTabAt(2);
         mMeetUpsTab = mTabs.getTabAt(3);
 
-        mArticleTab.setIcon(R.drawable.ic_articles);
+        mArticleTab.setIcon(R.drawable.ic_home);
+        mArticleTab.getIcon().setTint(ContextCompat.getColor(this, R.color.colorAccent));
         mCareersTab.setIcon(R.drawable.ic_careers);
         mMentorshipTab.setIcon(R.drawable.ic_mentorship);
         mMeetUpsTab.setIcon(R.drawable.ic_meetups);
@@ -156,10 +170,6 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
-                break;
-            case R.id.careers:
-                Log.i(LOG_TAG, "CAREER TAB SELECTED");
-                mTabs.removeAllTabs();
                 break;
 
         }

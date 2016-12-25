@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="@dimen/cardview_image_height"
+        android:layout_height="@dimen/cardview_image_height"
+        android:id="@+id/item_image"
+        tools:src="@drawable/ic_mentorship"
+        android:layout_marginStart="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/article_image" />
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:id="@+id/item_prof_pic"
+        tools:src="@drawable/ben_lewis_prof_pic"
+        app:layout_constraintTop_toTopOf="@+id/item_image"
+        app:layout_constraintLeft_toLeftOf="@+id/item_title" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/item_username"
+        tools:text="Ben Lewis"
+        tools:layout_editor_absoluteX="168dp"
+        app:layout_constraintTop_toTopOf="@+id/item_prof_pic"
+        app:layout_constraintBottom_toBottomOf="@+id/item_prof_pic"
+        android:layout_marginStart="8dp"
+        app:layout_constraintLeft_toRightOf="@+id/item_prof_pic" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/item_time_ago"
+        tools:text="15m"
+        app:layout_constraintTop_toTopOf="@+id/item_username"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/item_title"
+        tools:text="Will technology prevent the next food shortage crisis?"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/item_prof_pic"
+        android:layout_marginStart="16dp"
+        app:layout_constraintLeft_toRightOf="@+id/item_image"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintRight_toRightOf="parent" />
+</android.support.constraint.ConstraintLayout>

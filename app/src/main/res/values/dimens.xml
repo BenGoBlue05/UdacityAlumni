@@ -4,8 +4,8 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="md_keylines">16dp</dimen>
     <dimen name="navheader_height">222dp</dimen>
-    <dimen name="cardview_min_height">136dp</dimen>
+    <dimen name="cardview_min_height">112dp</dimen>
     <dimen name="cardview_margin">8dp</dimen>
-    <dimen name="cardview_image_height">120dp</dimen>
+    <dimen name="cardview_image_height">96dp</dimen>
     <dimen name="profile_image_diameter">80dp</dimen>
 </resources>
