@@ -15,6 +15,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:name=".data.AlumContentProvider"
+            android:authorities="com.google.developer.udacityalumni"
+            android:enabled="true"
+            android:exported="true"></provider>
     </application>
 
 </manifest>

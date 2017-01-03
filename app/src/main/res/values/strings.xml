@@ -9,6 +9,8 @@
     <string name="my_classroom">My Classroom</string>
     <string name="sign_out">Sign Out</string>
     <string name="article_image">Article Image</string>
+    <string name="share_article">Share article</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

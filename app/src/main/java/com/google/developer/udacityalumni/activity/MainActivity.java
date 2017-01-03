@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
-    private PageAdapter mPageAdapter;
     TabLayout.OnTabSelectedListener mTabListener;
 
     @BindView(R.id.navview_bottom)
@@ -59,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
         setupViewPager(mViewPager);
-        mTabs.setupWithViewPager(mViewPager);;
+        mTabs.setupWithViewPager(mViewPager);
         setUpTabs();
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
@@ -125,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        mPageAdapter = new PageAdapter(getSupportFragmentManager());
+        PageAdapter mPageAdapter = new PageAdapter(getSupportFragmentManager());
         mPageAdapter.addFragment(new ArticleFragment());
         mPageAdapter.addFragment(new ArticleFragment());
         mPageAdapter.addFragment(new ArticleFragment());
@@ -138,9 +137,9 @@ public class MainActivity extends AppCompatActivity {
         mCareersTab = mTabs.getTabAt(1);
         mMentorshipTab = mTabs.getTabAt(2);
         mMeetUpsTab = mTabs.getTabAt(3);
-
+        Drawable homeIcon = ContextCompat.getDrawable(this, R.drawable.ic_home);
+        homeIcon.setTint(ContextCompat.getColor(this, R.color.colorAccent));
         mArticleTab.setIcon(R.drawable.ic_home);
-        mArticleTab.getIcon().setTint(ContextCompat.getColor(this, R.color.colorAccent));
         mCareersTab.setIcon(R.drawable.ic_careers);
         mMentorshipTab.setIcon(R.drawable.ic_mentorship);
         mMeetUpsTab.setIcon(R.drawable.ic_meetups);
@@ -176,7 +175,4 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void displayFragment() {
-
-    }
 }
