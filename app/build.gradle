@@ -36,6 +36,8 @@ dependencies {
     compile "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
     compile "de.hdodenhof:circleimageview:$rootProject.circleImageVersion"
     compile "com.android.support.constraint:constraint-layout:$rootProject.constraintLayoutVersion"
+    compile "com.squareup.okhttp3:okhttp:$rootProject.okHttpVersion"
+    compile "com.squareup.picasso:picasso:$rootProject.picassoVersion"
 
     // Dependencies for local unit tests
     testCompile "org.mockito:mockito-all:$rootProject.ext.mockitoVersion"

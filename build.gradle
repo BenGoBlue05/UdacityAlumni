@@ -45,4 +45,6 @@ ext {
     firebaseJobDispatcherVersion = '0.5.0'
     circleImageVersion = '2.1.0'
     constraintLayoutVersion = '1.0.0-beta4'
+    okHttpVersion = '3.5.0'
+    picassoVersion = '2.5.2'
 }

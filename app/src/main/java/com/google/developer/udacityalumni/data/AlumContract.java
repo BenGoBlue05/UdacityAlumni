@@ -1,12 +1,10 @@
 package com.google.developer.udacityalumni.data;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-/**
- * Created by benjaminlewis on 1/2/17.
- */
 
 public class AlumContract {
 
@@ -38,6 +36,10 @@ public class AlumContract {
         public static final String COL_CREATED_AT = "created_at";
         public static final String COL_UPDATED_AT = "updated_at";
 
+        public static Uri buildUriWithId(long id){
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
     }
 
     public static final class UserEntry implements BaseColumns{
@@ -56,6 +58,10 @@ public class AlumContract {
         public static final String COL_ROLE = "role";
         public static final String COL_BIO = "bio";
         public static final String COL_PUBLIC = "public";
+
+        public static Uri buildUriWithId(long id){
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
     }
 
     public static final class TagEntry implements BaseColumns{
@@ -67,15 +73,19 @@ public class AlumContract {
         static final String TABLE_NAME = "tags";
         public static final String COL_TAG_ID = "tag_id";
         public static final String COL_TAG = "tag";
+
+        public static Uri buildUriWithId(long id){
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
     }
 
-    public static final class ArticleTagEntry implements BaseColumns{
+    static final class ArticleTagEntry implements BaseColumns{
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_TAGS);
         static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" +
                 CONTENT_AUTHORITY + "/" + PATH_ARTICLE_TAGS;
         static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" +
                 CONTENT_AUTHORITY + "/" + PATH_ARTICLE_TAGS;
-        static final String TABLE_NAME = "tags";
+        static final String TABLE_NAME = "article_tag";
         public static final String COL_TAG_ID = "tag_id";
         public static final String COL_ARTICLE_ID = "article_id";
 

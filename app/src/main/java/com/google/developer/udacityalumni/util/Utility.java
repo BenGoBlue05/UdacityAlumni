@@ -1,6 +1,11 @@
 package com.google.developer.udacityalumni.util;
 
+import java.io.IOException;
 import java.util.Calendar;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by benjaminlewis on 1/3/17.
@@ -18,5 +23,14 @@ public final class Utility {
         Calendar cal = Calendar.getInstance();
         cal.set(year, month, day, hour, minute, second);
         return cal.getTimeInMillis();
+    }
+
+    public static String fetch(String url) throws IOException {
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        try (Response response = new OkHttpClient().newCall(request).execute()) {
+            return response.body().string();
+        }
     }
 }

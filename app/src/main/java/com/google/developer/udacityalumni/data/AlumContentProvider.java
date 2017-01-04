@@ -19,6 +19,7 @@ public class AlumContentProvider extends ContentProvider {
     private static final int TAG_WITH_ID = 301;
     private static final int ARTICLE_TAG = 400;
     private static final int ARTICLE_TAG_WITH_BOTH_IDS = 401;
+    private static final String LIMIT = "50";
 
     private static final String SELECTION_ARTICLE_ID = AlumContract.ArticleEntry.COL_ARTICLE_ID + "=?";
     private static final String SELECTION_USER_ID = AlumContract.UserEntry.COL_USER_ID + "=?";
@@ -172,7 +173,7 @@ public class AlumContentProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
             case ARTICLE:
                 cursor = db.query(AlumContract.ArticleEntry.TABLE_NAME,
-                        projection, selection, selectionArgs, null, null, sortOrder);
+                        projection, selection, selectionArgs, null, null, sortOrder, LIMIT);
                 break;
             case ARTICLE_WITH_ID:
                 cursor = db.query(AlumContract.ArticleEntry.TABLE_NAME, projection, SELECTION_ARTICLE_ID,

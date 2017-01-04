@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.google.developer.udacityalumni">
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -20,7 +21,13 @@
             android:name=".data.AlumContentProvider"
             android:authorities="com.google.developer.udacityalumni"
             android:enabled="true"
-            android:exported="true"></provider>
+            android:exported="false" />
+
+        <service
+            android:name=".service.ArticleIntentService"
+            android:exported="false" />
+
+        <activity android:name=".activity.ArticleDetailActivity" />
     </application>
 
 </manifest>

@@ -10,6 +10,7 @@
     <string name="sign_out">Sign Out</string>
     <string name="article_image">Article Image</string>
     <string name="share_article">Share article</string>
+    <string name="article_id_key" translatable="false">articleIdKey</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

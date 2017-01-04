@@ -11,12 +11,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class AlumDbHelper extends SQLiteOpenHelper {
 
     static final String DATABASE_NAME = "alum.db";
-    private static final int DATABASE_VERSION = 0;
+    private static final int DATABASE_VERSION = 4;
     private static final String TEXT_NOT_NULL = " TEXT NOT NULL";
     private static final String INT_NOT_NULL = " INTEGER NOT NULL";
     private static final String INT_PRIMARY_KEY= " INTEGER PRIMARY KEY";
 
-    public AlumDbHelper(Context context) {
+    AlumDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -30,7 +30,7 @@ public class AlumDbHelper extends SQLiteOpenHelper {
                 AlumContract.ArticleEntry.COL_SPOTLIGHTED + INT_NOT_NULL + ", " +
                 AlumContract.ArticleEntry.COL_CONTENT + TEXT_NOT_NULL + ", " +
                 AlumContract.ArticleEntry.COL_IMAGE + " TEXT, " +
-                AlumContract.ArticleEntry.COL_SLUG + "TEXT, " +
+                AlumContract.ArticleEntry.COL_SLUG + " TEXT, " +
                 AlumContract.ArticleEntry.COL_USER_ID + INT_NOT_NULL + ", " +
                 AlumContract.ArticleEntry.COL_CREATED_AT + INT_NOT_NULL + ", " +
                 AlumContract.ArticleEntry.COL_UPDATED_AT + INT_NOT_NULL + ");";
@@ -59,7 +59,7 @@ public class AlumDbHelper extends SQLiteOpenHelper {
                 "FOREIGN KEY (" + AlumContract.ArticleTagEntry.COL_ARTICLE_ID + ") REFERENCES " +
                 AlumContract.ArticleEntry.TABLE_NAME + "(" + AlumContract.ArticleEntry.COL_ARTICLE_ID + "), " +
                 "FOREIGN KEY (" + AlumContract.ArticleTagEntry.COL_TAG_ID + ") REFERENCES " +
-                AlumContract.TagEntry.TABLE_NAME + "(" + AlumContract.TagEntry.COL_TAG_ID + "));";
+                AlumContract.TagEntry.TABLE_NAME + "(" + AlumContract.TagEntry.COL_TAG_ID + ")" + ");";
 
         db.execSQL(SQL_CREATE_ARTICLE_TABLE);
         db.execSQL(SQL_CREATE_USER_TABLE);

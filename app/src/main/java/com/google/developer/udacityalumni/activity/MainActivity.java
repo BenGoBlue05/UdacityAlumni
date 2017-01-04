@@ -1,5 +1,6 @@
 package com.google.developer.udacityalumni.activity;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -21,13 +22,15 @@ import android.view.View;
 
 import com.facebook.stetho.Stetho;
 import com.google.developer.udacityalumni.R;
+import com.google.developer.udacityalumni.adapter.ArticleAdapter;
 import com.google.developer.udacityalumni.adapter.PageAdapter;
 import com.google.developer.udacityalumni.fragment.ArticleFragment;
+import com.google.developer.udacityalumni.service.ArticleIntentService;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ArticleFragment.ArticleCallback{
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
@@ -56,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Stetho.initializeWithDefaults(this);
         ButterKnife.bind(this);
+        startService(new Intent(this, ArticleIntentService.class));
         setSupportActionBar(mToolbar);
         setupViewPager(mViewPager);
         mTabs.setupWithViewPager(mViewPager);
@@ -175,4 +179,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onArticleSelected(long articleId, ArticleAdapter.ArticleViewHolder vh) {
+        startActivity(new Intent(this, ArticleDetailActivity.class)
+                .putExtra(this.getString(R.string.article_id_key), articleId));
+    }
 }
