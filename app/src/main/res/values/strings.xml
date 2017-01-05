@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="http://schemas.android.com/tools">
     <string name="app_name">Udacity Alumni</string>
     <string name="home">Home</string>
     <string name="careers">Careers</string>
@@ -11,6 +11,13 @@
     <string name="article_image">Article Image</string>
     <string name="share_article">Share article</string>
     <string name="article_id_key" translatable="false">articleIdKey</string>
+    <string name="seconds_ago"><xliff:g id="seconds">%d</xliff:g> secs ago</string>
+    <string name="minutes_ago"><xliff:g id="minutes">%d</xliff:g> mins ago</string>
+    <string name="hours_ago"><xliff:g id="hours">%d</xliff:g> hours ago</string>
+    <string name="days_ago"><xliff:g id="days">%d</xliff:g> days ago</string>
+    <string name="weeks_ago"><xliff:g id="days">%d</xliff:g> weeks ago</string>
+    <string name="months_ago"><xliff:g id="months">%d</xliff:g> months ago</string>
+    <string name="years_ago"><xliff:g id="years">%d</xliff:g> years ago</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

@@ -1,10 +1,8 @@
 package com.google.developer.udacityalumni.activity;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.ContextCompat;
@@ -18,14 +16,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.facebook.stetho.Stetho;
 import com.google.developer.udacityalumni.R;
 import com.google.developer.udacityalumni.adapter.ArticleAdapter;
 import com.google.developer.udacityalumni.adapter.PageAdapter;
 import com.google.developer.udacityalumni.fragment.ArticleFragment;
-import com.google.developer.udacityalumni.service.ArticleIntentService;
+import com.google.developer.udacityalumni.service.AlumIntentService;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,8 +33,6 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
 
     TabLayout.OnTabSelectedListener mTabListener;
 
-    @BindView(R.id.navview_bottom)
-    BottomNavigationView mNavViewBottom;
     @BindView(R.id.drawer)
     DrawerLayout mDrawerLayout;
     @BindView(R.id.toolbar)
@@ -59,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
         setContentView(R.layout.activity_main);
         Stetho.initializeWithDefaults(this);
         ButterKnife.bind(this);
-        startService(new Intent(this, ArticleIntentService.class));
+        startService(new Intent(this, AlumIntentService.class));
         setSupportActionBar(mToolbar);
         setupViewPager(mViewPager);
         mTabs.setupWithViewPager(mViewPager);
@@ -73,29 +68,15 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
             supportActionBar.setHomeAsUpIndicator(indicator);
             supportActionBar.setDisplayHomeAsUpEnabled(true);
         }
-        int[][] states = new int[][] {
-                new int[] { android.R.attr.state_checked}, // enabled
-                new int[] {-android.R.attr.state_checked}, // disabled
-        };
-
-        int[] colors = new int[] {
-                ContextCompat.getColor(MainActivity.this, R.color.colorAccent),
-                ContextCompat.getColor(MainActivity.this, R.color.unselected),
-        };
-        ColorStateList myList = new ColorStateList(states, colors);
-        mNavViewBottom.setItemIconTintList(myList);
-        mNavViewBottom.setItemTextColor(myList);
         mTabListener = new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 Drawable icon = tab.getIcon();
                 assert icon != null;
                 icon.setTint(ContextCompat.getColor(MainActivity.this, R.color.colorAccent));
-                int bottomNavVisibility = View.GONE;
                 switch (tab.getPosition()){
                     case 0:
                         mToolbar.setTitle(getString(R.string.home));
-                        bottomNavVisibility = View.VISIBLE;
                         break;
                     case 1:
                         mToolbar.setTitle(getString(R.string.careers));
@@ -109,7 +90,6 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
                     default:
                         Log.e(LOG_TAG, "TAB POSITION UNRECOGINIZED");
                 }
-                mNavViewBottom.setVisibility(bottomNavVisibility);
             }
 
             @Override

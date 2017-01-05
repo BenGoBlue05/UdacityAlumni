@@ -3,6 +3,7 @@ package com.google.developer.udacityalumni.adapter;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +12,13 @@ import android.widget.TextView;
 
 import com.google.developer.udacityalumni.R;
 import com.google.developer.udacityalumni.fragment.ArticleFragment;
+import com.google.developer.udacityalumni.utility.Date_Utils;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
-/**
- * Created by benjaminlewis on 1/3/17.
- */
 
 public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder> {
 
@@ -50,9 +50,28 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
     @Override
     public void onBindViewHolder(ArticleViewHolder holder, int position) {
         mCursor.moveToPosition(position);
-        holder.mTitle.setText(mCursor.getString(ArticleFragment.IND_TITLE));
-        Picasso.with(mContext).load(mCursor.getString(ArticleFragment.IND_IMAGE)).into(holder.mImageView);
-
+        String profPic = mCursor.getString(ArticleFragment.IND_USER_AVATAR);
+        if (TextUtils.isEmpty(profPic) || profPic.equals("null")){
+            holder.mProfPicCV.setVisibility(View.GONE);
+        } else{
+            holder.mProfPicCV.setVisibility(View.VISIBLE);
+            Picasso.with(mContext)
+                    .load(mCursor.getString(ArticleFragment.IND_USER_AVATAR))
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.ic_person)
+                    .into(holder.mProfPicCV);
+        }
+        holder.mUserNameTV.setText(mCursor.getString(ArticleFragment.IND_USER_NAME));
+        holder.mTimeAgoTV.setText(Date_Utils.formatTimeAgo(mContext, mCursor.getLong(ArticleFragment.IND_CREATED_AT)));
+        String image = mCursor.getString(ArticleFragment.IND_IMAGE);
+        if (TextUtils.isEmpty(image)){
+            holder.mImageView.setVisibility(View.GONE);
+        } else{
+            holder.mImageView.setVisibility(View.VISIBLE);
+            Picasso.with(mContext).load(image).into(holder.mImageView);
+        }
+        holder.mTitleTV.setText(mCursor.getString(ArticleFragment.IND_TITLE));
+        holder.mTagTV.setText(mCursor.getString(ArticleFragment.IND_RANDOM_TAG));
     }
 
     public void swapCursor(Cursor cursor){
@@ -67,12 +86,20 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
     }
 
     public class ArticleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        @BindView(R.id.item_prof_pic)
+        CircleImageView mProfPicCV;
+        @BindView(R.id.item_username)
+        TextView mUserNameTV;
+        @BindView(R.id.item_time_ago)
+        TextView mTimeAgoTV;
         @BindView(R.id.item_image)
         ImageView mImageView;
         @BindView(R.id.item_title)
-        TextView mTitle;
+        TextView mTitleTV;
+        @BindView(R.id.item_tag)
+        TextView mTagTV;
 
-        public ArticleViewHolder(View itemView) {
+        ArticleViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);

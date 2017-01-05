@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 
 import com.google.developer.udacityalumni.data.AlumContract;
-import com.google.developer.udacityalumni.util.Utility;
+import com.google.developer.udacityalumni.utility.Date_Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,14 +14,15 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Vector;
 
-public class ArticleIntentService extends IntentService {
+public class AlumIntentService extends IntentService {
 
-    private static final String LOG_TAG = ArticleIntentService.class.getSimpleName();
+    private static final String LOG_TAG = AlumIntentService.class.getSimpleName();
     HashSet<Long> mSet;
 
-    public ArticleIntentService() {
+    public AlumIntentService() {
         super(LOG_TAG);
     }
 
@@ -36,19 +37,24 @@ public class ArticleIntentService extends IntentService {
                 long articleId = article.getLong("id");
                 if (!mSet.contains(articleId)){
                     ContentValues values = new ContentValues();
-                    int isFeatured = article.getBoolean("featured") ? 1 : 0;
                     int isSpotlighted = article.getBoolean("spotlighted") ? 1 : 0;
                     JSONObject user = article.getJSONObject("user");
+                    JSONArray tags = article.getJSONArray("tags");
+                    int ind = new Random().nextInt(tags.length());
+                    JSONObject tag = tags.getJSONObject(ind);
                     values.put(AlumContract.ArticleEntry.COL_ARTICLE_ID, articleId);
                     values.put(AlumContract.ArticleEntry.COL_TITLE, article.getString("title"));
-                    values.put(AlumContract.ArticleEntry.COL_FEATURED, isFeatured);
                     values.put(AlumContract.ArticleEntry.COL_SPOTLIGHTED, isSpotlighted);
                     values.put(AlumContract.ArticleEntry.COL_CONTENT, article.getString("content"));
                     values.put(AlumContract.ArticleEntry.COL_IMAGE, article.getString("feature_image"));
                     values.put(AlumContract.ArticleEntry.COL_SLUG, article.getString("slug"));
                     values.put(AlumContract.ArticleEntry.COL_USER_ID, user.getLong("id"));
-                    values.put(AlumContract.ArticleEntry.COL_CREATED_AT, Utility.getTimeInMillis(article.getString("created_at")));
-                    values.put(AlumContract.ArticleEntry.COL_UPDATED_AT, Utility.getTimeInMillis(article.getString("updated_at")));
+                    values.put(AlumContract.ArticleEntry.COL_USER_NAME, user.getString("name"));
+                    if (user.get("avatar") != null) values.put(AlumContract.ArticleEntry.COL_USER_AVATAR, user.getString("avatar"));
+                    values.put(AlumContract.ArticleEntry.COL_CREATED_AT, Date_Utils.getTimeInMillis(article.getString("created_at")));
+                    values.put(AlumContract.ArticleEntry.COL_UPDATED_AT, Date_Utils.getTimeInMillis(article.getString("updated_at")));
+                    values.put(AlumContract.ArticleEntry.COL_RANDOM_TAG_ID, tag.getLong("id"));
+                    values.put(AlumContract.ArticleEntry.COL_RANDOM_TAG, tag.getString("tag"));
                     articleCvVector.add(values);
                 }
             }
@@ -80,7 +86,7 @@ public class ArticleIntentService extends IntentService {
         }
 
         try {
-            String json = Utility.fetch("http://udacity-alumni-api.herokuapp.com/api/v1/articles");
+            String json = Date_Utils.fetch("http://udacity-alumni-api.herokuapp.com/api/v1/articles");
             if (json != null) addArticles(json);
         } catch (IOException e) {
             e.printStackTrace();

@@ -24,7 +24,7 @@
             android:exported="false" />
 
         <service
-            android:name=".service.ArticleIntentService"
+            android:name=".service.AlumIntentService"
             android:exported="false" />
 
         <activity android:name=".activity.ArticleDetailActivity" />

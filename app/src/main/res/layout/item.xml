@@ -5,7 +5,8 @@
     android:id="@+id/item_cardview"
     android:minHeight="@dimen/cardview_image_height"
     android:layout_margin="@dimen/cardview_margin">
-    <include layout="@layout/include_item_constraint" />
+
+    <include layout="@layout/include_item" />
 
 
 

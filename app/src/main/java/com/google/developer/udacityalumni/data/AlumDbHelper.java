@@ -4,14 +4,11 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-/**
- * Created by benjaminlewis on 1/2/17.
- */
 
-public class AlumDbHelper extends SQLiteOpenHelper {
+class AlumDbHelper extends SQLiteOpenHelper {
 
-    static final String DATABASE_NAME = "alum.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final String DATABASE_NAME = "alum.db";
+    private static final int DATABASE_VERSION = 6;
     private static final String TEXT_NOT_NULL = " TEXT NOT NULL";
     private static final String INT_NOT_NULL = " INTEGER NOT NULL";
     private static final String INT_PRIMARY_KEY= " INTEGER PRIMARY KEY";
@@ -26,14 +23,18 @@ public class AlumDbHelper extends SQLiteOpenHelper {
                 AlumContract.ArticleEntry._ID + INT_PRIMARY_KEY + ", " +
                 AlumContract.ArticleEntry.COL_ARTICLE_ID + INT_NOT_NULL + ", " +
                 AlumContract.ArticleEntry.COL_TITLE + TEXT_NOT_NULL + ", " +
-                AlumContract.ArticleEntry.COL_FEATURED + INT_NOT_NULL + ", " +
                 AlumContract.ArticleEntry.COL_SPOTLIGHTED + INT_NOT_NULL + ", " +
                 AlumContract.ArticleEntry.COL_CONTENT + TEXT_NOT_NULL + ", " +
                 AlumContract.ArticleEntry.COL_IMAGE + " TEXT, " +
                 AlumContract.ArticleEntry.COL_SLUG + " TEXT, " +
                 AlumContract.ArticleEntry.COL_USER_ID + INT_NOT_NULL + ", " +
+                AlumContract.ArticleEntry.COL_USER_NAME + TEXT_NOT_NULL + ", " +
+                AlumContract.ArticleEntry.COL_USER_AVATAR + " TEXT, " +
                 AlumContract.ArticleEntry.COL_CREATED_AT + INT_NOT_NULL + ", " +
-                AlumContract.ArticleEntry.COL_UPDATED_AT + INT_NOT_NULL + ");";
+                AlumContract.ArticleEntry.COL_UPDATED_AT + INT_NOT_NULL + ", " +
+                AlumContract.ArticleEntry.COL_RANDOM_TAG_ID + INT_NOT_NULL + ", " +
+                AlumContract.ArticleEntry.COL_RANDOM_TAG + TEXT_NOT_NULL +
+                ");";
 
         final String SQL_CREATE_USER_TABLE = "CREATE TABLE " + AlumContract.UserEntry.TABLE_NAME + "(" +
                 AlumContract.UserEntry._ID + INT_PRIMARY_KEY + ", " +
@@ -67,12 +68,21 @@ public class AlumDbHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_ARTICLE_TAG_TABLE);
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    private void resetTables(SQLiteDatabase db){
         db.execSQL("DROP TABLE IF EXISTS " + AlumContract.ArticleEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + AlumContract.UserEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + AlumContract.TagEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + AlumContract.ArticleTagEntry.TABLE_NAME);
         onCreate(db);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        resetTables(db);
+    }
+
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        resetTables(db);
     }
 }

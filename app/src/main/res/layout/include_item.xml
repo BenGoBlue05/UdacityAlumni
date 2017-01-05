@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/view_padding">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/item_prof_pic"
+            android:layout_width="@dimen/profile_image_diameter"
+            android:layout_height="@dimen/profile_image_diameter"
+            tools:src="@drawable/ben_lewis_prof_pic" />
+        <TextView
+            android:id="@+id/item_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Ben Lewis"
+            android:layout_gravity="center"
+            android:padding="@dimen/view_padding"/>
+        <TextView
+            android:id="@+id/item_time_ago"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="end|center_vertical"
+            tools:text="5 min ago"
+            android:padding="@dimen/view_padding"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/item_image"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_large_image_height"
+        android:src="@drawable/ud_alum_sample_image"
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/article_image" />
+
+    <TextView
+        android:id="@+id/item_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        tools:text="Medicare Pre-existing condition Custodial care"
+        android:textStyle="bold"
+        android:paddingTop="@dimen/view_padding"
+        android:paddingStart="@dimen/view_padding"
+        android:paddingEnd="@dimen/view_padding"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/view_padding">
+        <TextView
+            android:id="@+id/item_tag"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            tools:text="Software Development"
+            android:gravity="center_vertical"/>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="end"
+            android:src="@drawable/ic_share"
+            android:contentDescription="@string/share_article" />
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

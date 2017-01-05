@@ -23,22 +23,27 @@ public class ArticleFragment extends Fragment implements LoaderManager.LoaderCal
 
     public static final String[] ARTICLE_COLUMNS = {AlumContract.ArticleEntry._ID,
             AlumContract.ArticleEntry.COL_ARTICLE_ID, AlumContract.ArticleEntry.COL_TITLE,
-            AlumContract.ArticleEntry.COL_FEATURED, AlumContract.ArticleEntry.COL_SPOTLIGHTED,
-            AlumContract.ArticleEntry.COL_CONTENT, AlumContract.ArticleEntry.COL_IMAGE,
-            AlumContract.ArticleEntry.COL_SLUG, AlumContract.ArticleEntry.COL_USER_ID,
-            AlumContract.ArticleEntry.COL_CREATED_AT, AlumContract.ArticleEntry.COL_UPDATED_AT};
+            AlumContract.ArticleEntry.COL_SPOTLIGHTED, AlumContract.ArticleEntry.COL_CONTENT,
+            AlumContract.ArticleEntry.COL_IMAGE, AlumContract.ArticleEntry.COL_SLUG,
+            AlumContract.ArticleEntry.COL_USER_ID, AlumContract.ArticleEntry.COL_USER_NAME,
+            AlumContract.ArticleEntry.COL_USER_AVATAR, AlumContract.ArticleEntry.COL_CREATED_AT,
+            AlumContract.ArticleEntry.COL_UPDATED_AT, AlumContract.ArticleEntry.COL_RANDOM_TAG_ID,
+            AlumContract.ArticleEntry.COL_RANDOM_TAG};
 
     public static final int IND_ID = 0;
     public static final int IND_ARTICLE_ID = 1;
     public static final int IND_TITLE = 2;
-    public static final int IND_FEATURED = 3;
-    public static final int IND_SPOTLIGHTED = 4;
-    public static final int IND_CONTENT = 5;
-    public static final int IND_IMAGE = 6;
-    public static final int IND_SLUG = 7;
-    public static final int IND_USER_ID = 8;
-    public static final int IND_CREATED_AT = 9;
-    public static final int IND_UPDATED_AT = 10;
+    public static final int IND_SPOTLIGHTED = 3;
+    public static final int IND_CONTENT = 4;
+    public static final int IND_IMAGE = 5;
+    public static final int IND_SLUG = 6;
+    public static final int IND_USER_ID = 7;
+    public static final int IND_USER_NAME = 8;
+    public static final int IND_USER_AVATAR = 9;
+    public static final int IND_CREATED_AT = 10;
+    public static final int IND_UPDATED_AT = 11;
+    public static final int IND_RANDOM_TAG_ID = 12;
+    public static final int IND_RANDOM_TAG = 13;
 
     private static final int ARTICLE_LOADER = 100;
 

@@ -27,14 +27,18 @@ public class AlumContract {
         static final String TABLE_NAME = "articles";
         public static final String COL_ARTICLE_ID = "article_id";
         public static final String COL_TITLE = "title";
-        public static final String COL_FEATURED = "featured";
         public static final String COL_SPOTLIGHTED = "spotlighted";
         public static final String COL_CONTENT = "content";
         public static final String COL_IMAGE = "image";
         public static final String COL_SLUG = "slug";
         public static final String COL_USER_ID = "user_id";
+        public static final String COL_USER_NAME = "user_name";
+        public static final String COL_USER_AVATAR = "user_avatar";
         public static final String COL_CREATED_AT = "created_at";
         public static final String COL_UPDATED_AT = "updated_at";
+        public static final String COL_RANDOM_TAG_ID = "tag_id";
+        public static final String COL_RANDOM_TAG = "tag";
+
 
         public static Uri buildUriWithId(long id){
             return ContentUris.withAppendedId(CONTENT_URI, id);
