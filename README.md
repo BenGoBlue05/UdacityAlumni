@@ -2,8 +2,10 @@
 Udacity Alumni Android App
 
 Early Screenshots of progress
-![alt tag](https://github.com/BenGoBlue05/UdacityAlumni/blob/master/MainActivity.png)
-![alt tag](https://github.com/BenGoBlue05/UdacityAlumni/blob/master/navview.png)
-![alt tag](https://github.com/BenGoBlue05/UdacityAlumni/blob/master/article_detail_activity.png)
+<img src="https://github.com/BenGoBlue05/UdacityAlumni/blob/master/mockups/MainActivity.png" width="280">
+<img src="https://github.com/BenGoBlue05/UdacityAlumni/blob/master/mockups/navview.png" width="280">
+<img src="https://github.com/BenGoBlue05/UdacityAlumni/blob/master/mockups/article_detail_activity.png" width="280">
+
+
 
 
