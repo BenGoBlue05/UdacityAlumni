@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
             public void onTabUnselected(TabLayout.Tab tab) {
                 Drawable icon = tab.getIcon();
                 assert icon != null;
-                icon.setTint(ContextCompat.getColor(MainActivity.this, R.color.unselected));
+                icon.setTint(ContextCompat.getColor(MainActivity.this, R.color.unselected_icon_dark));
             }
 
             @Override
@@ -190,7 +190,6 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.getCount() > 0) {
-            data.moveToPosition(-1);
             final long firstId = mArticleIds.get(0);
             while (data.moveToNext()) {
                 if (mArticleIds.size() > 10) break;

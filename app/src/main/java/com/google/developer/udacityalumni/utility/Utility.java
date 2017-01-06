@@ -1,6 +1,12 @@
 package com.google.developer.udacityalumni.utility;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 
 import com.google.developer.udacityalumni.R;
 
@@ -16,9 +22,9 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 
-public final class Date_Utils {
+public final class Utility {
 
-    private static final String LOG_TAG = Date_Utils.class.getSimpleName();
+    private static final String LOG_TAG = Utility.class.getSimpleName();
 
     public static Long getTimeInMillis(String dateJson) {
 
@@ -59,5 +65,18 @@ public final class Date_Utils {
         try (Response response = new OkHttpClient().newCall(request).execute()) {
             return response.body().string();
         }
+    }
+
+    public static SpannableString formatAuthorAndTimeAgo(Context context, String author, long date){
+        String timeAgo = formatTimeAgo(context, date);
+        SpannableString str = new SpannableString(author + "\n" + timeAgo);
+        int authorEnd = author.length();
+        str.setSpan(new StyleSpan(Typeface.BOLD), 0, authorEnd, 0);
+        str.setSpan(new RelativeSizeSpan(1.2f), 0, authorEnd, 0);
+        str.setSpan(new ForegroundColorSpan(Color.BLACK), 0, authorEnd, 0);
+        str.setSpan(new StyleSpan(Typeface.ITALIC), authorEnd, str.length(), 0);
+        str.setSpan(new RelativeSizeSpan(.8f), authorEnd, str.length(), 0);
+        str.setSpan(new ForegroundColorSpan(Color.GRAY), authorEnd, str.length(), 0);
+        return str;
     }
 }

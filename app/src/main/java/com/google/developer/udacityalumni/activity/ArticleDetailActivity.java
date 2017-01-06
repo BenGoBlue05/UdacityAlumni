@@ -39,9 +39,16 @@ public class ArticleDetailActivity extends AppCompatActivity {
     }
 
     private void setUpViewpager(ViewPager viewPager, long[] articleIds) {
-        for (long id : articleIds) {
+        for (int i = 0; i < articleIds.length; i++) {
             Bundle args = new Bundle();
-            args.putLong(getString(R.string.article_id_key), id);
+            if (i == 0) args.putBoolean(getString(R.string.article_is_first_key), true);
+            if (articleIds.length > 1 && i == articleIds.length - 1) {
+                args.putBoolean(getString(R.string.article_is_last_key), true);
+                args.putLong(getString(R.string.article_next_id_key), articleIds[i - 1]);
+            } else{
+                args.putLong(getString(R.string.article_next_id_key), articleIds[i + 1]);
+            }
+            args.putLong(getString(R.string.article_id_key), articleIds[i]);
             Fragment frag = new ArticleDetailFragment();
             frag.setArguments(args);
             mPageAdapter.addFragment(frag);

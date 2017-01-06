@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.google.developer.udacityalumni.R;
 import com.google.developer.udacityalumni.data.AlumContract;
+import com.google.developer.udacityalumni.utility.Utility;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -24,26 +26,38 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ArticleDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class ArticleDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    //Viewpager order - selected article at first position and then articles sorted by date
+
+    private static final String LOG_TAG = ArticleDetailFragment.class.getSimpleName();
+    private final int LOADER_FIRST_ARTICLE = 100;
+    private final int LOADER_SECOND_ARTICLE = 200;
+    private final int LOADER_CURRENT_AND_NEXT = 300;
+    private long mArticleId;
+    private long mNextArticleId;
+    private boolean mIsLast;
 
     @BindView(R.id.detail_article_title_tv)
     TextView mTitleTV;
-    @BindView(R.id.detail_article_date)
-    TextView mDateTV;
-    @BindView(R.id.detail_article_author_tv)
-    TextView mAuthorTV;
     @BindView(R.id.detail_article_image)
     ImageView mImageView;
     @BindView(R.id.detail_article_tv)
     TextView mArticleTV;
     @BindView(R.id.detail_article_prof_pic)
     CircleImageView mProfPicCV;
-    @BindView(R.id.detail_article_author_tv1)
-    TextView mAuthor1TV;
-
-    Long mArticleId;
-    int LOADER_ARTICLE = 100;
-
+    @BindView(R.id.detail_article_author_time_ago)
+    TextView mAuthorTimeAgoTV;
+    @BindView(R.id.detail_article_next_tv)
+    TextView mNextArticleTV;
+    @BindView(R.id.detail_article_back_arrow)
+    ImageView mBackArrowIV;
+    @BindView(R.id.detail_article_forward_arrow)
+    ImageView mForwardArrowIV;
+    @BindView(R.id.detail_article_spotlight)
+    TextView mSpotlightTV;
+    @BindView(R.id.detail_article_image_next)
+    ImageView mNextImageView;
 
     public ArticleDetailFragment() {
     }
@@ -53,42 +67,109 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail_article, container, false);
         ButterKnife.bind(this, rootView);
-        mArticleId = getArguments().getLong(getContext().getString(R.string.article_id_key), -1L);
-        if (mArticleId != -1L) getLoaderManager().initLoader(LOADER_ARTICLE, null, this);
+        Bundle args = getArguments();
+        boolean isFirstArticle = false;
+        mIsLast = false;
+        if (args != null){
+            mArticleId = args.getLong(getString(R.string.article_id_key), -5L);
+            isFirstArticle = args.getBoolean(getString(R.string.article_is_first_key), false);
+            if (isFirstArticle) mBackArrowIV.setVisibility(View.INVISIBLE);
+            mNextArticleId = args.getLong(getString(R.string.article_next_id_key), -5L);
+            mIsLast = args.getBoolean(getString(R.string.article_is_last_key), false);
+            if (mIsLast) mForwardArrowIV.setVisibility(View.INVISIBLE);
+        }
+        LoaderManager loaderManager = getLoaderManager();
+        if (args != null && loaderManager != null) {
+            if (mArticleId != -5L) {
+                if (isFirstArticle) {
+                    loaderManager.initLoader(LOADER_FIRST_ARTICLE, args, this);
+                    if (mNextArticleId != -5L) {
+                        loaderManager.initLoader(LOADER_SECOND_ARTICLE, args, this);
+                    }
+                } else {
+                    if (mNextArticleId != -5L) {
+                        loaderManager.initLoader(LOADER_CURRENT_AND_NEXT, args, this);
+                    }
+                }
+            }
+        }
         return rootView;
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(getContext(), AlumContract.ArticleEntry.buildUriWithId(mArticleId),
-                ArticleFragment.ARTICLE_COLUMNS, null, null, null);
+        CursorLoader loader = null;
+        long currentArticleId = args.getLong(getString(R.string.article_id_key), -5L);
+        if (currentArticleId != -5L) {
+            switch (id) {
+                case LOADER_FIRST_ARTICLE:
+                    loader = new CursorLoader(getContext(), AlumContract.ArticleEntry.buildUriWithId(currentArticleId),
+                            ArticleFragment.ARTICLE_COLUMNS, null, null, null);
+                    break;
+                case LOADER_SECOND_ARTICLE:
+                    if (mNextArticleId != -5L) {
+                        loader = new CursorLoader(getContext(), AlumContract.ArticleEntry.buildUriWithId(mNextArticleId),
+                                ArticleFragment.ARTICLE_COLUMNS, null, null, null);
+                    }
+                    break;
+
+                case LOADER_CURRENT_AND_NEXT:
+                    String colArticleId = AlumContract.ArticleEntry.COL_ARTICLE_ID;
+                    String sortOrder = mIsLast ? " ASC" : " DESC";
+                    loader = new CursorLoader(getContext(), AlumContract.ArticleEntry.CONTENT_URI,
+                            ArticleFragment.ARTICLE_COLUMNS, colArticleId + " =? OR " + colArticleId + " =?",
+                            new String[]{String.valueOf(currentArticleId), String.valueOf(mNextArticleId)},
+                            AlumContract.ArticleEntry.COL_CREATED_AT + sortOrder);
+                    break;
+                default:
+                    Log.e(LOG_TAG, "LOADER ID NOT FOUND");
+            }
+        }
+        return loader;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (data != null && data.moveToFirst()){
-            mTitleTV.setText(data.getString(ArticleFragment.IND_TITLE));
-            String author = data.getString(ArticleFragment.IND_USER_NAME);
-            mAuthorTV.setText(author);
-            String image = data.getString(ArticleFragment.IND_IMAGE);
-            if (image == null || image.equals("null")){
-                mImageView.setVisibility(View.GONE);
-            } else{
-                mImageView.setVisibility(View.VISIBLE);
-                Picasso.with(getContext()).load(image).placeholder(R.drawable.placeholder)
-                        .error(R.drawable.udacity_logo_banner).into(mImageView);
+        int loaderId = loader.getId();
+        if (loaderId == LOADER_FIRST_ARTICLE || loaderId == LOADER_CURRENT_AND_NEXT) {
+            if (data != null && data.moveToFirst()) {
+                mTitleTV.setText(data.getString(ArticleFragment.IND_TITLE));
+                String author = data.getString(ArticleFragment.IND_USER_NAME);
+                String image = data.getString(ArticleFragment.IND_IMAGE);
+                if (data.getInt(ArticleFragment.IND_SPOTLIGHTED) == 0) mSpotlightTV.setVisibility(View.GONE);
+                if (image == null || image.equals("null")) {
+                    mImageView.setVisibility(View.GONE);
+                } else {
+                    mImageView.setVisibility(View.VISIBLE);
+                    Picasso.with(getContext()).load(image).placeholder(R.drawable.placeholder)
+                            .error(R.drawable.udacity_logo_banner).into(mImageView);
+                }
+                mArticleTV.setText(data.getString(ArticleFragment.IND_CONTENT));
+                String profPic = data.getString(ArticleFragment.IND_USER_AVATAR);
+                if (image == null || image.equals("null")) {
+                    mProfPicCV.setVisibility(View.GONE);
+                } else {
+                    Picasso.with(getContext()).load(profPic).placeholder(R.drawable.placeholder)
+                            .error(R.drawable.ic_person).into(mProfPicCV);
+                }
+                mAuthorTimeAgoTV.setText(Utility.formatAuthorAndTimeAgo(getContext(), author,
+                        data.getLong(ArticleFragment.IND_CREATED_AT)));
             }
-            mArticleTV.setText(data.getString(ArticleFragment.IND_CONTENT));
-            String profPic = data.getString(ArticleFragment.IND_USER_AVATAR);
-            if (image == null || image.equals("null")){
-                mProfPicCV.setVisibility(View.GONE);
-            } else{
-                mProfPicCV.setVisibility(View.VISIBLE);
-                Picasso.with(getContext()).load(profPic).placeholder(R.drawable.placeholder)
-                        .error(R.drawable.ic_person).into(mProfPicCV);
-            }
-            mAuthor1TV.setText(author);
         }
+        if (loaderId == LOADER_CURRENT_AND_NEXT || loaderId == LOADER_SECOND_ARTICLE) {
+            if (data != null && data.moveToNext()) {
+                mNextArticleTV.setText(data.getString(ArticleFragment.IND_TITLE));
+                String nextImage = data.getString(ArticleFragment.IND_IMAGE);
+                if (nextImage == null || nextImage.equals("null")) {
+                    mNextImageView.setVisibility(View.GONE);
+                } else {
+                    mNextImageView.setVisibility(View.VISIBLE);
+                    Picasso.with(getContext()).load(nextImage).placeholder(R.drawable.placeholder)
+                            .error(R.drawable.ic_person).into(mNextImageView);
+                }
+            }
+        }
+
     }
 
     @Override

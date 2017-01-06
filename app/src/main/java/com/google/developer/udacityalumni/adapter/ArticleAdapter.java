@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.google.developer.udacityalumni.R;
 import com.google.developer.udacityalumni.fragment.ArticleFragment;
-import com.google.developer.udacityalumni.utility.Date_Utils;
+import com.google.developer.udacityalumni.utility.Utility;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -61,8 +61,13 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
                     .error(R.drawable.ic_person)
                     .into(holder.mProfPicCV);
         }
-        holder.mUserNameTV.setText(mCursor.getString(ArticleFragment.IND_USER_NAME));
-        holder.mTimeAgoTV.setText(Date_Utils.formatTimeAgo(mContext, mCursor.getLong(ArticleFragment.IND_CREATED_AT)));
+        holder.mAuthorTimeAgo.setText(Utility.formatAuthorAndTimeAgo(mContext,
+                mCursor.getString(ArticleFragment.IND_USER_NAME), mCursor.getLong(ArticleFragment.IND_CREATED_AT)));
+        if (mCursor.getInt(ArticleFragment.IND_SPOTLIGHTED) == 1){
+            holder.mSpotLightTV.setVisibility(View.VISIBLE);
+        } else{
+            holder.mSpotLightTV.setVisibility(View.INVISIBLE);
+        }
         String image = mCursor.getString(ArticleFragment.IND_IMAGE);
         if (TextUtils.isEmpty(image)){
             holder.mImageView.setVisibility(View.GONE);
@@ -89,9 +94,9 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
         @BindView(R.id.item_prof_pic)
         CircleImageView mProfPicCV;
         @BindView(R.id.item_username)
-        TextView mUserNameTV;
-        @BindView(R.id.item_time_ago)
-        TextView mTimeAgoTV;
+        TextView mAuthorTimeAgo;
+        @BindView(R.id.item_spotlight)
+        TextView mSpotLightTV;
         @BindView(R.id.item_image)
         ImageView mImageView;
         @BindView(R.id.item_title)

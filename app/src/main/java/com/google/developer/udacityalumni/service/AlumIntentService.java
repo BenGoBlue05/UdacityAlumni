@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 
 import com.google.developer.udacityalumni.data.AlumContract;
-import com.google.developer.udacityalumni.utility.Date_Utils;
+import com.google.developer.udacityalumni.utility.Utility;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,8 +51,8 @@ public class AlumIntentService extends IntentService {
                     values.put(AlumContract.ArticleEntry.COL_USER_ID, user.getLong("id"));
                     values.put(AlumContract.ArticleEntry.COL_USER_NAME, user.getString("name"));
                     if (user.get("avatar") != null) values.put(AlumContract.ArticleEntry.COL_USER_AVATAR, user.getString("avatar"));
-                    values.put(AlumContract.ArticleEntry.COL_CREATED_AT, Date_Utils.getTimeInMillis(article.getString("created_at")));
-                    values.put(AlumContract.ArticleEntry.COL_UPDATED_AT, Date_Utils.getTimeInMillis(article.getString("updated_at")));
+                    values.put(AlumContract.ArticleEntry.COL_CREATED_AT, Utility.getTimeInMillis(article.getString("created_at")));
+                    values.put(AlumContract.ArticleEntry.COL_UPDATED_AT, Utility.getTimeInMillis(article.getString("updated_at")));
                     values.put(AlumContract.ArticleEntry.COL_RANDOM_TAG_ID, tag.getLong("id"));
                     values.put(AlumContract.ArticleEntry.COL_RANDOM_TAG, tag.getString("tag"));
                     articleCvVector.add(values);
@@ -86,7 +86,7 @@ public class AlumIntentService extends IntentService {
         }
 
         try {
-            String json = Date_Utils.fetch("http://udacity-alumni-api.herokuapp.com/api/v1/articles");
+            String json = Utility.fetch("http://udacity-alumni-api.herokuapp.com/api/v1/articles");
             if (json != null) addArticles(json);
         } catch (IOException e) {
             e.printStackTrace();
