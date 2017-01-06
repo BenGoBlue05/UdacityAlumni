@@ -78,6 +78,7 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
                 Picasso.with(getContext()).load(image).placeholder(R.drawable.placeholder)
                         .error(R.drawable.udacity_logo_banner).into(mImageView);
             }
+            mArticleTV.setText(data.getString(ArticleFragment.IND_CONTENT));
             String profPic = data.getString(ArticleFragment.IND_USER_AVATAR);
             if (image == null || image.equals("null")){
                 mProfPicCV.setVisibility(View.GONE);
