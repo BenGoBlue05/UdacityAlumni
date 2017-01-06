@@ -11,6 +11,7 @@
     <string name="article_image">Article Image</string>
     <string name="share_article">Share article</string>
     <string name="article_id_key" translatable="false">articleIdKey</string>
+    <string name="article_list_key" translatable="false">articleListIdKey</string>
     <string name="seconds_ago"><xliff:g id="seconds">%d</xliff:g> secs ago</string>
     <string name="minutes_ago"><xliff:g id="minutes">%d</xliff:g> mins ago</string>
     <string name="hours_ago"><xliff:g id="hours">%d</xliff:g> hours ago</string>
@@ -18,6 +19,12 @@
     <string name="weeks_ago"><xliff:g id="days">%d</xliff:g> weeks ago</string>
     <string name="months_ago"><xliff:g id="months">%d</xliff:g> months ago</string>
     <string name="years_ago"><xliff:g id="years">%d</xliff:g> years ago</string>
+    <string name="more">More</string>
+    <string name="bio">Bio</string>
+    <string name="down_arrow">Down arrow</string>
+    <string name="up_arrow">Up arrow</string>
+    <string name="less">Less</string>
+    <string name="swipe_across_articles">Swipe Across Articles</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

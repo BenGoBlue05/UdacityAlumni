@@ -7,7 +7,8 @@
     <dimen name="cardview_min_height">112dp</dimen>
     <dimen name="cardview_margin">8dp</dimen>
     <dimen name="cardview_image_height">96dp</dimen>
-    <dimen name="item_large_image_height">144dp</dimen>
+    <dimen name="item_large_image_height">160dp</dimen>
+    <dimen name="detail_article_image_height">256dp</dimen>
     <dimen name="profile_image_diameter">40dp</dimen>
     <dimen name="view_padding">8dp</dimen>
 </resources>

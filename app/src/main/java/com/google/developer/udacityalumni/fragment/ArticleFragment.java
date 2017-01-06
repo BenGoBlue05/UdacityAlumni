@@ -46,6 +46,7 @@ public class ArticleFragment extends Fragment implements LoaderManager.LoaderCal
     public static final int IND_RANDOM_TAG = 13;
 
     private static final int ARTICLE_LOADER = 100;
+    private static final int ARTICLE_LIST_LOADER = 200;
 
     private RecyclerView mRecyclerView;
     private ArticleAdapter mArticleAdapter;

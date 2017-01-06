@@ -1,11 +1,15 @@
 package com.google.developer.udacityalumni.activity;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.graphics.drawable.VectorDrawableCompat;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -21,16 +25,22 @@ import com.facebook.stetho.Stetho;
 import com.google.developer.udacityalumni.R;
 import com.google.developer.udacityalumni.adapter.ArticleAdapter;
 import com.google.developer.udacityalumni.adapter.PageAdapter;
+import com.google.developer.udacityalumni.data.AlumContract;
 import com.google.developer.udacityalumni.fragment.ArticleFragment;
 import com.google.developer.udacityalumni.service.AlumIntentService;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements ArticleFragment.ArticleCallback{
+public class MainActivity extends AppCompatActivity implements ArticleFragment.ArticleCallback,
+        LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
+    private ArrayList<Long> mArticleIds;
+    private static final int LOADER = 101;
     TabLayout.OnTabSelectedListener mTabListener;
 
     @BindView(R.id.drawer)
@@ -74,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
                 Drawable icon = tab.getIcon();
                 assert icon != null;
                 icon.setTint(ContextCompat.getColor(MainActivity.this, R.color.colorAccent));
-                switch (tab.getPosition()){
+                switch (tab.getPosition()) {
                     case 0:
                         mToolbar.setTitle(getString(R.string.home));
                         break;
@@ -116,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
         viewPager.setAdapter(mPageAdapter);
     }
 
-    private void setUpTabs(){
+    private void setUpTabs() {
         mArticleTab = mTabs.getTabAt(0);
         mCareersTab = mTabs.getTabAt(1);
         mMentorshipTab = mTabs.getTabAt(2);
@@ -154,14 +164,49 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 break;
-
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onArticleSelected(long articleId, ArticleAdapter.ArticleViewHolder vh) {
-        startActivity(new Intent(this, ArticleDetailActivity.class)
-                .putExtra(this.getString(R.string.article_id_key), articleId));
+        mArticleIds = new ArrayList<>();
+        mArticleIds.add(articleId);
+        Loader loader = getSupportLoaderManager().getLoader(LOADER);
+        if (loader == null || !loader.isStarted()){
+            getSupportLoaderManager().initLoader(LOADER, null, this);
+        } else{
+            getSupportLoaderManager().restartLoader(LOADER, null, this);
+        }
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(this, AlumContract.ArticleEntry.CONTENT_URI,
+                new String[]{AlumContract.ArticleEntry.COL_ARTICLE_ID}, null, null,
+                AlumContract.ArticleEntry.COL_CREATED_AT + " DESC");
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if (data != null && data.getCount() > 0) {
+            data.moveToPosition(-1);
+            final long firstId = mArticleIds.get(0);
+            while (data.moveToNext()) {
+                if (mArticleIds.size() > 10) break;
+                long id = data.getLong(0);
+                if (firstId != id) mArticleIds.add(data.getLong(0));
+            }
+            int len = mArticleIds.size();
+            long[] ids = new long[len];
+            for (int i=0;i<len;i++) ids[i] = mArticleIds.get(i);
+            startActivity(new Intent(this, ArticleDetailActivity.class)
+                    .putExtra(getString(R.string.article_list_key), ids));
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 }

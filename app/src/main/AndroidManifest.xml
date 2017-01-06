@@ -27,7 +27,15 @@
             android:name=".service.AlumIntentService"
             android:exported="false" />
 
-        <activity android:name=".activity.ArticleDetailActivity" />
+        <activity android:name=".activity.ArticleDetailActivity"
+            android:parentActivityName=".activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+
+        </activity>
+
+
     </application>
 
 </manifest>

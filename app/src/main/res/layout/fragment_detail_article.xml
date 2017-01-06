@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/detail_article_title_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/cardview_margin"
+            android:layout_marginStart="@dimen/cardview_margin"
+            android:layout_marginTop="@dimen/cardview_margin"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            tools:text="AIND Grad Gets Job at IBM" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/detail_article_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/cardview_margin"
+                android:layout_marginStart="@dimen/cardview_margin"
+                android:textStyle="italic"
+                tools:text="Jan 5 at 9:50am" />
+
+            <TextView
+                android:id="@+id/detail_article_author_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/status_bar_color"
+                tools:text="Ben Lewis" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/detail_article_image"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/detail_article_image_height"
+            android:contentDescription="@string/article_image"
+            tools:src="@drawable/sample_image_vr" />
+
+
+        <TextView
+            android:id="@+id/detail_article_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/cardview_margin"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            tools:text="Health maintenance organization permanent insurance renewal risk grievance EAPs benefit. General agent ambulatory care preventive care renewal policyholder hospice care hospital-surgical coverage health care provider. Claim incurral date exclusions and limitations medicare health care provider FSA. Group health plan workers compensation medicaid free-look period short-term medical insurance FSA. Hsa fee schedule insured short-term medical insurance benefit cap." />
+
+        <View style="@style/Divider" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/detail_article_prof_pic"
+                android:layout_width="@dimen/profile_image_diameter"
+                android:layout_height="@dimen/profile_image_diameter"
+                android:layout_marginBottom="@dimen/cardview_margin"
+                android:layout_marginStart="@dimen/cardview_margin"
+                android:layout_marginTop="@dimen/cardview_margin"
+                android:src="@drawable/ben_lewis_prof_pic" />
+
+            <TextView
+                android:id="@+id/detail_article_author_tv1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/cardview_margin"
+                android:gravity="center_vertical"
+                tools:text="Ben Lewis" />
+
+        </LinearLayout>
+
+        <View style="@style/Divider" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_arrow_back"
+            android:text="@string/swipe_across_articles"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:drawableEnd="@drawable/ic_arrow_right"
+            android:drawableTint="@android:color/secondary_text_light"
+            android:drawablePadding="@dimen/activity_horizontal_margin"
+            tools:targetApi="m"
+            android:layout_marginTop="@dimen/view_padding"/>
+
+
+    </LinearLayout>
+
+</ScrollView>

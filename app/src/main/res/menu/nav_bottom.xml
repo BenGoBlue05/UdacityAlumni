@@ -3,8 +3,7 @@
     <item
         android:id="@+id/feed"
         android:title="@string/feed"
-        android:icon="@drawable/ic_feed"
-        />
+        android:icon="@drawable/ic_feed" />
     <item
         android:id="@+id/spotlight"
         android:title="@string/spotlight"
