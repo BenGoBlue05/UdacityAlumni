@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 class AlumDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "alum.db";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 1;
     private static final String TEXT_NOT_NULL = " TEXT NOT NULL";
     private static final String INT_NOT_NULL = " INTEGER NOT NULL";
     private static final String INT_PRIMARY_KEY= " INTEGER PRIMARY KEY";
@@ -33,7 +33,9 @@ class AlumDbHelper extends SQLiteOpenHelper {
                 AlumContract.ArticleEntry.COL_CREATED_AT + INT_NOT_NULL + ", " +
                 AlumContract.ArticleEntry.COL_UPDATED_AT + INT_NOT_NULL + ", " +
                 AlumContract.ArticleEntry.COL_RANDOM_TAG_ID + INT_NOT_NULL + ", " +
-                AlumContract.ArticleEntry.COL_RANDOM_TAG + TEXT_NOT_NULL +
+                AlumContract.ArticleEntry.COL_RANDOM_TAG + TEXT_NOT_NULL + ", " +
+                AlumContract.ArticleEntry.COL_BOOKMARKED + INT_NOT_NULL + ", " +
+                AlumContract.ArticleEntry.COL_FOLLOWING_AUTHOR + INT_NOT_NULL +
                 ");";
 
         final String SQL_CREATE_USER_TABLE = "CREATE TABLE " + AlumContract.UserEntry.TABLE_NAME + "(" +

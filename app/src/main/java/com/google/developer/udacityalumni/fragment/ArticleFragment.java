@@ -1,11 +1,13 @@
 package com.google.developer.udacityalumni.fragment;
 
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,13 +15,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.google.developer.udacityalumni.R;
 import com.google.developer.udacityalumni.adapter.ArticleAdapter;
 import com.google.developer.udacityalumni.data.AlumContract;
 
 
-public class ArticleFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class ArticleFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String[] ARTICLE_COLUMNS = {AlumContract.ArticleEntry._ID,
             AlumContract.ArticleEntry.COL_ARTICLE_ID, AlumContract.ArticleEntry.COL_TITLE,
@@ -28,7 +31,8 @@ public class ArticleFragment extends Fragment implements LoaderManager.LoaderCal
             AlumContract.ArticleEntry.COL_USER_ID, AlumContract.ArticleEntry.COL_USER_NAME,
             AlumContract.ArticleEntry.COL_USER_AVATAR, AlumContract.ArticleEntry.COL_CREATED_AT,
             AlumContract.ArticleEntry.COL_UPDATED_AT, AlumContract.ArticleEntry.COL_RANDOM_TAG_ID,
-            AlumContract.ArticleEntry.COL_RANDOM_TAG};
+            AlumContract.ArticleEntry.COL_RANDOM_TAG, AlumContract.ArticleEntry.COL_BOOKMARKED,
+            AlumContract.ArticleEntry.COL_FOLLOWING_AUTHOR};
 
     public static final int IND_ID = 0;
     public static final int IND_ARTICLE_ID = 1;
@@ -44,6 +48,8 @@ public class ArticleFragment extends Fragment implements LoaderManager.LoaderCal
     public static final int IND_UPDATED_AT = 11;
     public static final int IND_RANDOM_TAG_ID = 12;
     public static final int IND_RANDOM_TAG = 13;
+    public static final int IND_BOOKMARKED = 14;
+    public static final int IND_FOLLOWING_AUTHOR = 15;
 
     private static final int ARTICLE_LOADER = 100;
     private static final int ARTICLE_LIST_LOADER = 200;
@@ -51,14 +57,14 @@ public class ArticleFragment extends Fragment implements LoaderManager.LoaderCal
     private RecyclerView mRecyclerView;
     private ArticleAdapter mArticleAdapter;
 
-    public interface ArticleCallback{
-        void onArticleSelected(long articleId, ArticleAdapter.ArticleViewHolder vh);
+    public interface ArticleCallback {
+        void onArticleSelected(long articleId);
     }
 
     public ArticleFragment() {
     }
 
-    public void scrollToTop(){
+    public void scrollToTop() {
         mRecyclerView.scrollToPosition(0);
     }
 
@@ -70,11 +76,46 @@ public class ArticleFragment extends Fragment implements LoaderManager.LoaderCal
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.article_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setHasFixedSize(true);
-        mArticleAdapter = new ArticleAdapter(getContext(), new ArticleAdapter.ArticleClickHandler() {
+        mArticleAdapter = new ArticleAdapter(getContext(), new ArticleAdapter.ArticleItemClickHandler() {
             @Override
-            public void onArticleClick(long articleId, ArticleAdapter.ArticleViewHolder vh) {
-                ((ArticleCallback) getActivity()).onArticleSelected(articleId, vh);
+            public void onArticleClick(long articleId) {
+                ((ArticleCallback) getActivity()).onArticleSelected(articleId);
             }
+
+            @Override
+            public void onProfPicClick(long userId) {
+                //TODO: Pull up users profile from bottom pane: https://github.com/BenGoBlue05/UdacityAlumni/blob/master/Todos/prof-pic-click.md
+            }
+
+            @Override
+            public void onFollowUserClick(long userId, long articleId, boolean wasFollowingBeforeClick, ImageView icon) {
+                icon.setImageResource(!wasFollowingBeforeClick ? R.drawable.ic_following : R.drawable.ic_follow);
+                ContentValues values = new ContentValues();
+                values.put(AlumContract.ArticleEntry.COL_FOLLOWING_AUTHOR, !wasFollowingBeforeClick ? 1 : 0);
+                getContext().getContentResolver().update(AlumContract.ArticleEntry.buildUriWithId(articleId),
+                        values, null, null);
+            }
+
+            @Override
+            public void onShareClick(String title) {
+                title = title.toLowerCase();
+                String url = "https://udacity-alumni-client.herokuapp.com/articles/" + title.replaceAll("\\s", "-");
+//                ie: https://udacity-alumni-client.herokuapp.com/articles/medically-necessary-utilization-review-evidence-of-insurability
+//                TODO: Share link to the article  (the 'url' above is a link to the article on the web app)
+            }
+
+            @Override
+            public void onBookmarkClick(long articleId, boolean wasBookmarkedBeforeClick, ImageView icon) {
+                icon.setImageResource(!wasBookmarkedBeforeClick ? R.drawable.ic_bookmark :
+                        R.drawable.ic_bookmark_outline);
+                int color = !wasBookmarkedBeforeClick ? R.color.colorPrimary : R.color.unselected_icon_dark;
+                icon.getDrawable().setTint(ContextCompat.getColor(getContext(), color));
+                ContentValues values = new ContentValues();
+                values.put(AlumContract.ArticleEntry.COL_BOOKMARKED, !wasBookmarkedBeforeClick ? 1 : 0);
+                getContext().getContentResolver().update(AlumContract.ArticleEntry.buildUriWithId(articleId),
+                        values, null, null);
+            }
+
         });
 
         mRecyclerView.setAdapter(mArticleAdapter);
@@ -86,7 +127,6 @@ public class ArticleFragment extends Fragment implements LoaderManager.LoaderCal
         getLoaderManager().initLoader(ARTICLE_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
-
 
 
     @Override

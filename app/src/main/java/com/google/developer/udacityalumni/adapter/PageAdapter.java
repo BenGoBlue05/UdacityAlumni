@@ -25,6 +25,8 @@ public class PageAdapter extends FragmentStatePagerAdapter{
         return mFragmentList.size();
     }
 
+
+
     public void addFragment(Fragment fragment) {
         mFragmentList.add(fragment);
     }

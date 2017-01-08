@@ -75,8 +75,9 @@ public final class Utility {
         str.setSpan(new RelativeSizeSpan(1.2f), 0, authorEnd, 0);
         str.setSpan(new ForegroundColorSpan(Color.BLACK), 0, authorEnd, 0);
         str.setSpan(new StyleSpan(Typeface.ITALIC), authorEnd, str.length(), 0);
-        str.setSpan(new RelativeSizeSpan(.8f), authorEnd, str.length(), 0);
+        str.setSpan(new RelativeSizeSpan(1f), authorEnd, str.length(), 0);
         str.setSpan(new ForegroundColorSpan(Color.GRAY), authorEnd, str.length(), 0);
         return str;
     }
+
 }

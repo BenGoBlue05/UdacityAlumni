@@ -23,7 +23,6 @@ import android.view.MenuItem;
 
 import com.facebook.stetho.Stetho;
 import com.google.developer.udacityalumni.R;
-import com.google.developer.udacityalumni.adapter.ArticleAdapter;
 import com.google.developer.udacityalumni.adapter.PageAdapter;
 import com.google.developer.udacityalumni.data.AlumContract;
 import com.google.developer.udacityalumni.fragment.ArticleFragment;
@@ -169,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
     }
 
     @Override
-    public void onArticleSelected(long articleId, ArticleAdapter.ArticleViewHolder vh) {
+    public void onArticleSelected(long articleId) {
         mArticleIds = new ArrayList<>();
         mArticleIds.add(articleId);
         Loader loader = getSupportLoaderManager().getLoader(LOADER);

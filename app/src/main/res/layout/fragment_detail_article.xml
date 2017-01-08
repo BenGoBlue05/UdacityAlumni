@@ -20,18 +20,41 @@
             android:layout_marginEnd="@dimen/cardview_margin"
             android:layout_marginStart="@dimen/cardview_margin"
             android:layout_marginTop="@dimen/cardview_margin"
+            android:textStyle="bold"
+            android:textSize="@dimen/detail_title_text_size"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             tools:text="AIND Grad Gets Job at IBM" />
 
-
-        <ImageView
-            android:id="@+id/detail_article_image"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/detail_article_image_height"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/article_image"
-            android:scaleType="centerCrop"
-            tools:src="@drawable/sample_image_vr" />
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/detail_article_image"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/detail_article_image_height"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/article_image"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/sample_image_vr" />
+
+            <TextView
+                android:id="@+id/detail_article_spotlight"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="sans-serif"
+                android:text="@string/spotlight"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:background="@color/colorPrimary"
+                android:padding="8dp"
+                android:layout_alignParentBottom="true"
+                android:alpha=".7"
+                android:textStyle="bold" />
+
+
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -58,27 +81,8 @@
                 android:gravity="center_vertical"
                 tools:text="Ben Lewis\n3 hrs ago" />
 
-            <TextView
-                android:id="@+id/detail_article_spotlight"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="@dimen/view_padding"
-                android:fontFamily="sans-serif"
-                android:gravity="center_vertical"
-                android:text="@string/spotlight"
-                android:textColor="@color/colorPrimary"
-                android:textSize="18sp"
-                android:textStyle="bold" />
 
-            <ImageView
-                android:id="@+id/detail_article_bookmark"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:contentDescription="@string/bookmark"
-                android:padding="4dp"
-                android:src="@drawable/ic_bookmark"
-                android:tint="@color/unselected_icon_dark" />
+
 
             <ImageView
                 android:id="@+id/detail_article_share"
@@ -86,9 +90,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:contentDescription="@string/share_article"
-                android:padding="4dp"
-                android:src="@drawable/ic_share"
-                android:tint="@color/unselected_icon_dark" />
+                android:padding="@dimen/view_padding"
+                android:src="@drawable/ic_follow"
+                android:tint="@color/unselected_icon_dark"
+                android:layout_marginEnd="@dimen/view_padding"/>
 
 
         </LinearLayout>
@@ -101,6 +106,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/cardview_margin"
+            android:textSize="18sp"
+            android:lineSpacingExtra="@dimen/line_spacing"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             tools:text="Health maintenance organization permanent insurance renewal risk grievance EAPs benefit. General agent ambulatory care preventive care renewal policyholder hospice care hospital-surgical coverage health care provider. Claim incurral date exclusions and limitations medicare health care provider FSA. Group health plan workers compensation medicaid free-look period short-term medical insurance FSA. Hsa fee schedule insured short-term medical insurance benefit cap." />
 
@@ -110,7 +117,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/view_padding">
 
             <ImageView
                 android:id="@+id/detail_article_back_arrow"
@@ -144,10 +152,13 @@
             android:background="@color/primary_text" />
 
         <TextView
+            android:layout_marginTop="@dimen/view_padding"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity=""
-            android:text="@string/next_article" />
+            android:text="@string/next_article"
+            android:layout_marginStart="@dimen/view_padding"
+            android:layout_marginBottom="@dimen/view_padding"/>
 
         <include layout="@layout/include_next_article" />
 

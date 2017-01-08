@@ -25,15 +25,23 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
     private static final String LOG_TAG = ArticleAdapter.class.getSimpleName();
     private Cursor mCursor;
     final private Context mContext;
-    final private ArticleClickHandler mArticleClickHandler;
+    final private ArticleItemClickHandler mArticleClickHandler;
 
-    public ArticleAdapter(Context mContext, ArticleClickHandler mArticleClickHandler) {
+    public ArticleAdapter(Context mContext, ArticleItemClickHandler mArticleClickHandler) {
         this.mContext = mContext;
         this.mArticleClickHandler = mArticleClickHandler;
     }
 
-    public interface ArticleClickHandler {
-        void onArticleClick(long articleId, ArticleViewHolder vh);
+    public interface ArticleItemClickHandler {
+        void onArticleClick(long articleId);
+
+        void onProfPicClick(long userId);
+
+        void onFollowUserClick(long userId, long articleId, boolean wasFollowingBeforeClick, ImageView icon);
+
+        void onShareClick(String title);
+
+        void onBookmarkClick(long articleId, boolean wasBookmarkedBeforeClick, ImageView icon);
     }
 
     @Override
@@ -50,36 +58,34 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
     @Override
     public void onBindViewHolder(ArticleViewHolder holder, int position) {
         mCursor.moveToPosition(position);
-        String profPic = mCursor.getString(ArticleFragment.IND_USER_AVATAR);
-        if (TextUtils.isEmpty(profPic) || profPic.equals("null")){
-            holder.mProfPicCV.setVisibility(View.GONE);
-        } else{
-            holder.mProfPicCV.setVisibility(View.VISIBLE);
-            Picasso.with(mContext)
-                    .load(mCursor.getString(ArticleFragment.IND_USER_AVATAR))
-                    .placeholder(R.drawable.placeholder)
-                    .error(R.drawable.ic_person)
-                    .into(holder.mProfPicCV);
-        }
+        Picasso.with(mContext)
+                .load(mCursor.getString(ArticleFragment.IND_USER_AVATAR)).placeholder(R.drawable.placeholder)
+                .error(R.drawable.ic_person).into(holder.mProfPicCV);
         holder.mAuthorTimeAgo.setText(Utility.formatAuthorAndTimeAgo(mContext,
                 mCursor.getString(ArticleFragment.IND_USER_NAME), mCursor.getLong(ArticleFragment.IND_CREATED_AT)));
-        if (mCursor.getInt(ArticleFragment.IND_SPOTLIGHTED) == 1){
+        if (mCursor.getInt(ArticleFragment.IND_SPOTLIGHTED) == 1) {
             holder.mSpotLightTV.setVisibility(View.VISIBLE);
-        } else{
-            holder.mSpotLightTV.setVisibility(View.INVISIBLE);
+        } else {
+            holder.mSpotLightTV.setVisibility(View.GONE);
         }
         String image = mCursor.getString(ArticleFragment.IND_IMAGE);
-        if (TextUtils.isEmpty(image)){
+        if (TextUtils.isEmpty(image)) {
             holder.mImageView.setVisibility(View.GONE);
-        } else{
+        } else {
             holder.mImageView.setVisibility(View.VISIBLE);
-            Picasso.with(mContext).load(image).into(holder.mImageView);
+            Picasso.with(mContext).load(image).placeholder(R.drawable.placeholder)
+                    .error(R.drawable.placeholder).into(holder.mImageView);
         }
         holder.mTitleTV.setText(mCursor.getString(ArticleFragment.IND_TITLE));
         holder.mTagTV.setText(mCursor.getString(ArticleFragment.IND_RANDOM_TAG));
+        boolean isBookmarked = mCursor.getInt(ArticleFragment.IND_BOOKMARKED) == 1;
+        holder.mBookmarkIV.setImageResource(isBookmarked ? R.drawable.ic_bookmark : R.drawable.ic_bookmark_outline);
+
+        boolean isFollowing = mCursor.getInt(ArticleFragment.IND_FOLLOWING_AUTHOR) == 1;
+        holder.mFollowIV.setImageResource(isFollowing ? R.drawable.ic_following : R.drawable.ic_follow);
     }
 
-    public void swapCursor(Cursor cursor){
+    public void swapCursor(Cursor cursor) {
         mCursor = cursor;
         notifyDataSetChanged();
     }
@@ -90,7 +96,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
         return mCursor.getCount();
     }
 
-    public class ArticleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ArticleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.item_prof_pic)
         CircleImageView mProfPicCV;
         @BindView(R.id.item_username)
@@ -103,17 +109,45 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
         TextView mTitleTV;
         @BindView(R.id.item_tag)
         TextView mTagTV;
+        @BindView(R.id.item_bookmark)
+        ImageView mBookmarkIV;
+        @BindView(R.id.item_share)
+        ImageView mShareIV;
+        @BindView(R.id.item_follow)
+        ImageView mFollowIV;
+
 
         ArticleViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
+            mProfPicCV.setOnClickListener(this);
+            mBookmarkIV.setOnClickListener(this);
+            mShareIV.setOnClickListener(this);
+            mFollowIV.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            mCursor.moveToPosition(getAdapterPosition());
-            mArticleClickHandler.onArticleClick(mCursor.getLong(ArticleFragment.IND_ARTICLE_ID), this);
+            if (mCursor != null && mCursor.moveToPosition(getAdapterPosition())){
+                int viewId = v.getId();
+                long articleId = mCursor.getLong(ArticleFragment.IND_ARTICLE_ID);
+                long authorId = mCursor.getLong(ArticleFragment.IND_USER_ID);
+                //for some reason switch statement doesn't work for this
+                if (viewId == mProfPicCV.getId()){
+                    mArticleClickHandler.onProfPicClick(authorId);
+                } else if (viewId == mBookmarkIV.getId()){
+                    mArticleClickHandler.onBookmarkClick(articleId,
+                            mCursor.getInt(ArticleFragment.IND_BOOKMARKED) == 1, mBookmarkIV);
+                } else if (viewId == mShareIV.getId()){
+                    mArticleClickHandler.onShareClick(mCursor.getString(ArticleFragment.IND_TITLE));
+                } else if (viewId == mFollowIV.getId()){
+                    mArticleClickHandler.onFollowUserClick(authorId, articleId,
+                            mCursor.getInt(ArticleFragment.IND_FOLLOWING_AUTHOR) == 1, mFollowIV);
+                } else{
+                    mArticleClickHandler.onArticleClick(articleId);
+                }
+            }
         }
     }
 

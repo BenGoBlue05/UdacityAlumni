@@ -55,6 +55,8 @@ public class AlumIntentService extends IntentService {
                     values.put(AlumContract.ArticleEntry.COL_UPDATED_AT, Utility.getTimeInMillis(article.getString("updated_at")));
                     values.put(AlumContract.ArticleEntry.COL_RANDOM_TAG_ID, tag.getLong("id"));
                     values.put(AlumContract.ArticleEntry.COL_RANDOM_TAG, tag.getString("tag"));
+                    values.put(AlumContract.ArticleEntry.COL_BOOKMARKED, 0);
+                    values.put(AlumContract.ArticleEntry.COL_FOLLOWING_AUTHOR, 0);
                     articleCvVector.add(values);
                 }
             }

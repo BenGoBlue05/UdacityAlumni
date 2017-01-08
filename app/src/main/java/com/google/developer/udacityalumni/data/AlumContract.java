@@ -38,6 +38,8 @@ public class AlumContract {
         public static final String COL_UPDATED_AT = "updated_at";
         public static final String COL_RANDOM_TAG_ID = "tag_id";
         public static final String COL_RANDOM_TAG = "tag";
+        public static final String COL_BOOKMARKED = "bookmarked";
+        public static final String COL_FOLLOWING_AUTHOR = "author";
 
 
         public static Uri buildUriWithId(long id){
