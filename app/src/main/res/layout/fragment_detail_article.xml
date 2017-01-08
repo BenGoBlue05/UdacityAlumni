@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -20,9 +21,9 @@
             android:layout_marginEnd="@dimen/cardview_margin"
             android:layout_marginStart="@dimen/cardview_margin"
             android:layout_marginTop="@dimen/cardview_margin"
-            android:textStyle="bold"
-            android:textSize="@dimen/detail_title_text_size"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textSize="@dimen/detail_title_text_size"
+            android:textStyle="bold"
             tools:text="AIND Grad Gets Job at IBM" />
 
         <RelativeLayout
@@ -42,16 +43,15 @@
                 android:id="@+id/detail_article_spotlight"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:alpha=".7"
+                android:background="@color/colorPrimary"
                 android:fontFamily="sans-serif"
+                android:padding="8dp"
                 android:text="@string/spotlight"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
-                android:background="@color/colorPrimary"
-                android:padding="8dp"
-                android:layout_alignParentBottom="true"
-                android:alpha=".7"
                 android:textStyle="bold" />
-
 
 
         </RelativeLayout>
@@ -82,18 +82,15 @@
                 tools:text="Ben Lewis\n3 hrs ago" />
 
 
-
-
             <ImageView
-                android:id="@+id/detail_article_share"
+                android:id="@+id/detail_article_follow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:layout_marginEnd="@dimen/view_padding"
                 android:contentDescription="@string/share_article"
                 android:padding="@dimen/view_padding"
-                android:src="@drawable/ic_follow"
-                android:tint="@color/unselected_icon_dark"
-                android:layout_marginEnd="@dimen/view_padding"/>
+                android:src="@drawable/ic_add_follow" />
 
 
         </LinearLayout>
@@ -106,19 +103,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/cardview_margin"
-            android:textSize="18sp"
             android:lineSpacingExtra="@dimen/line_spacing"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="18sp"
             tools:text="Health maintenance organization permanent insurance renewal risk grievance EAPs benefit. General agent ambulatory care preventive care renewal policyholder hospice care hospital-surgical coverage health care provider. Claim incurral date exclusions and limitations medicare health care provider FSA. Group health plan workers compensation medicaid free-look period short-term medical insurance FSA. Hsa fee schedule insured short-term medical insurance benefit cap." />
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/view_padding"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:gravity="center"
-            android:orientation="horizontal"
-            android:layout_marginBottom="@dimen/view_padding">
+            android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/detail_article_back_arrow"
@@ -152,16 +149,16 @@
             android:background="@color/primary_text" />
 
         <TextView
-            android:layout_marginTop="@dimen/view_padding"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity=""
-            android:text="@string/next_article"
+            android:layout_marginBottom="@dimen/view_padding"
             android:layout_marginStart="@dimen/view_padding"
-            android:layout_marginBottom="@dimen/view_padding"/>
+            android:layout_marginTop="@dimen/view_padding"
+            android:text="@string/next_article" />
 
         <include layout="@layout/include_next_article" />
 
     </LinearLayout>
 
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>

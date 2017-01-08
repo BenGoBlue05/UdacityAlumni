@@ -29,6 +29,7 @@ import com.google.developer.udacityalumni.fragment.ArticleFragment;
 import com.google.developer.udacityalumni.service.AlumIntentService;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,7 +39,8 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
-    private ArrayList<Long> mArticleIds;
+    private List<Long> mArticleIds;
+    private List<Integer> mBookmarks;
     private static final int LOADER = 101;
     TabLayout.OnTabSelectedListener mTabListener;
 
@@ -167,23 +169,13 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onArticleSelected(long articleId) {
-        mArticleIds = new ArrayList<>();
-        mArticleIds.add(articleId);
-        Loader loader = getSupportLoaderManager().getLoader(LOADER);
-        if (loader == null || !loader.isStarted()){
-            getSupportLoaderManager().initLoader(LOADER, null, this);
-        } else{
-            getSupportLoaderManager().restartLoader(LOADER, null, this);
-        }
-    }
+
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(this, AlumContract.ArticleEntry.CONTENT_URI,
-                new String[]{AlumContract.ArticleEntry.COL_ARTICLE_ID}, null, null,
-                AlumContract.ArticleEntry.COL_CREATED_AT + " DESC");
+                new String[]{AlumContract.ArticleEntry.COL_ARTICLE_ID, AlumContract.ArticleEntry.COL_BOOKMARKED},
+                null, null, AlumContract.ArticleEntry.COL_CREATED_AT + " DESC");
     }
 
     @Override
@@ -193,18 +185,40 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
             while (data.moveToNext()) {
                 if (mArticleIds.size() > 10) break;
                 long id = data.getLong(0);
-                if (firstId != id) mArticleIds.add(data.getLong(0));
+                if (firstId != id) {
+                    mArticleIds.add(data.getLong(0));
+                    mBookmarks.add(data.getInt(1));
+                }
             }
             int len = mArticleIds.size();
             long[] ids = new long[len];
-            for (int i=0;i<len;i++) ids[i] = mArticleIds.get(i);
+            int[] isBookmarked = new int[len];
+            for (int i = 0; i < len; i++) {
+                ids[i] = mArticleIds.get(i);
+                isBookmarked[i] = mBookmarks.get(i);
+            }
             startActivity(new Intent(this, ArticleDetailActivity.class)
-                    .putExtra(getString(R.string.article_list_key), ids));
+                    .putExtra(getString(R.string.article_list_key), ids)
+                    .putExtra(getString(R.string.article_bookmarks_key), isBookmarked));
         }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    @Override
+    public void onArticleSelected(long articleId, boolean isBookmarked) {
+        mArticleIds = new ArrayList<>();
+        mArticleIds.add(articleId);
+        mBookmarks = new ArrayList<>();
+        mBookmarks.add(isBookmarked ? 1 : 0);
+        Loader loader = getSupportLoaderManager().getLoader(LOADER);
+        if (loader == null || !loader.isStarted()) {
+            getSupportLoaderManager().initLoader(LOADER, null, this);
+        } else {
+            getSupportLoaderManager().restartLoader(LOADER, null, this);
+        }
     }
 }

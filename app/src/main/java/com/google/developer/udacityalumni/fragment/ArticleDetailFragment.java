@@ -1,6 +1,7 @@
 package com.google.developer.udacityalumni.fragment;
 
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,17 +27,15 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ArticleDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ArticleDetailFragment extends Fragment
+        implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
     //Viewpager order - selected article at first position and then articles sorted by date
 
     private static final String LOG_TAG = ArticleDetailFragment.class.getSimpleName();
-    private final int LOADER_FIRST_ARTICLE = 100;
-    private final int LOADER_SECOND_ARTICLE = 200;
-    private final int LOADER_CURRENT_AND_NEXT = 300;
-    private long mArticleId;
-    private long mNextArticleId;
-    private boolean mIsLast;
+    private final int LOADER_FIRST_ARTICLE = 100, LOADER_SECOND_ARTICLE = 200, LOADER_CURRENT_AND_NEXT = 300;
+    private long mArticleId, mNextArticleId;
+    private boolean mIsLast, mIsFollowing;
 
     @BindView(R.id.detail_article_title_tv)
     TextView mTitleTV;
@@ -58,19 +57,20 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
     TextView mSpotlightTV;
     @BindView(R.id.detail_article_image_next)
     ImageView mNextImageView;
+    @BindView(R.id.detail_article_follow)
+    ImageView mFollowIV;
 
     public ArticleDetailFragment() {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail_article, container, false);
         ButterKnife.bind(this, rootView);
         Bundle args = getArguments();
         boolean isFirstArticle = false;
         mIsLast = false;
-        if (args != null){
+        if (args != null) {
             mArticleId = args.getLong(getString(R.string.article_id_key), -5L);
             isFirstArticle = args.getBoolean(getString(R.string.article_is_first_key), false);
             if (isFirstArticle) mBackArrowIV.setVisibility(View.INVISIBLE);
@@ -78,6 +78,8 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
             mIsLast = args.getBoolean(getString(R.string.article_is_last_key), false);
             if (mIsLast) mForwardArrowIV.setVisibility(View.INVISIBLE);
         }
+        mFollowIV.setOnClickListener(this);
+        mProfPicCV.setOnClickListener(this);
         LoaderManager loaderManager = getLoaderManager();
         if (args != null && loaderManager != null) {
             if (mArticleId != -5L) {
@@ -95,6 +97,12 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
         }
         return rootView;
     }
+
+
+
+
+
+
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -136,7 +144,8 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
                 mTitleTV.setText(data.getString(ArticleFragment.IND_TITLE));
                 String author = data.getString(ArticleFragment.IND_USER_NAME);
                 String image = data.getString(ArticleFragment.IND_IMAGE);
-                if (data.getInt(ArticleFragment.IND_SPOTLIGHTED) == 0) mSpotlightTV.setVisibility(View.GONE);
+                if (data.getInt(ArticleFragment.IND_SPOTLIGHTED) == 0)
+                    mSpotlightTV.setVisibility(View.GONE);
                 if (image == null || image.equals("null")) {
                     mImageView.setVisibility(View.GONE);
                 } else {
@@ -147,13 +156,16 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
                 mArticleTV.setText(data.getString(ArticleFragment.IND_CONTENT));
                 String profPic = data.getString(ArticleFragment.IND_USER_AVATAR);
                 if (image == null || image.equals("null")) {
-                    mProfPicCV.setVisibility(View.GONE);
+                    Picasso.with(getContext()).load(R.drawable.ic_person).placeholder(R.drawable.placeholder)
+                            .into(mProfPicCV);
                 } else {
                     Picasso.with(getContext()).load(profPic).placeholder(R.drawable.placeholder)
                             .error(R.drawable.ic_person).into(mProfPicCV);
                 }
                 mAuthorTimeAgoTV.setText(Utility.formatAuthorAndTimeAgo(getContext(), author,
                         data.getLong(ArticleFragment.IND_CREATED_AT)));
+                mIsFollowing = data.getInt(ArticleFragment.IND_FOLLOWING_AUTHOR) == 1;
+                setFollowingIcon();
             }
         }
         if (loaderId == LOADER_CURRENT_AND_NEXT || loaderId == LOADER_SECOND_ARTICLE) {
@@ -172,8 +184,29 @@ public class ArticleDetailFragment extends Fragment implements LoaderManager.Loa
 
     }
 
+
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+    }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.detail_article_follow:
+                setFollowingIcon();
+                mIsFollowing = !mIsFollowing;
+                ContentValues values = new ContentValues();
+                values.put(AlumContract.ArticleEntry.COL_FOLLOWING_AUTHOR, mIsFollowing ? 1 : 0);
+                getContext().getContentResolver().update(AlumContract.ArticleEntry.buildUriWithId(mArticleId),
+                        values, null, null);
+                break;
+            case (R.id.circle_prof_pic):
+                //TODO: have user bio pane slide from bottom;
+                break;
+        }
+    }
+
+    private void setFollowingIcon(){
+        mFollowIV.setImageResource(mIsFollowing ? R.drawable.ic_following : R.drawable.ic_add_follow);
     }
 }

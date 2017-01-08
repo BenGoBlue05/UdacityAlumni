@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
@@ -52,13 +51,13 @@ public class ArticleFragment extends Fragment implements LoaderManager.LoaderCal
     public static final int IND_FOLLOWING_AUTHOR = 15;
 
     private static final int ARTICLE_LOADER = 100;
-    private static final int ARTICLE_LIST_LOADER = 200;
 
     private RecyclerView mRecyclerView;
     private ArticleAdapter mArticleAdapter;
+    private boolean mIsBookmarked;
 
     public interface ArticleCallback {
-        void onArticleSelected(long articleId);
+        void onArticleSelected(long articleId, boolean isBookmarked);
     }
 
     public ArticleFragment() {
@@ -77,9 +76,10 @@ public class ArticleFragment extends Fragment implements LoaderManager.LoaderCal
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setHasFixedSize(true);
         mArticleAdapter = new ArticleAdapter(getContext(), new ArticleAdapter.ArticleItemClickHandler() {
+
             @Override
-            public void onArticleClick(long articleId) {
-                ((ArticleCallback) getActivity()).onArticleSelected(articleId);
+            public void onArticleClick(long articleId, boolean isBookmarked) {
+                ((ArticleCallback) getActivity()).onArticleSelected(articleId, isBookmarked);
             }
 
             @Override
@@ -89,7 +89,7 @@ public class ArticleFragment extends Fragment implements LoaderManager.LoaderCal
 
             @Override
             public void onFollowUserClick(long userId, long articleId, boolean wasFollowingBeforeClick, ImageView icon) {
-                icon.setImageResource(!wasFollowingBeforeClick ? R.drawable.ic_following : R.drawable.ic_follow);
+                icon.setImageResource(!wasFollowingBeforeClick ? R.drawable.ic_following : R.drawable.ic_add_follow);
                 ContentValues values = new ContentValues();
                 values.put(AlumContract.ArticleEntry.COL_FOLLOWING_AUTHOR, !wasFollowingBeforeClick ? 1 : 0);
                 getContext().getContentResolver().update(AlumContract.ArticleEntry.buildUriWithId(articleId),
@@ -108,8 +108,7 @@ public class ArticleFragment extends Fragment implements LoaderManager.LoaderCal
             public void onBookmarkClick(long articleId, boolean wasBookmarkedBeforeClick, ImageView icon) {
                 icon.setImageResource(!wasBookmarkedBeforeClick ? R.drawable.ic_bookmark :
                         R.drawable.ic_bookmark_outline);
-                int color = !wasBookmarkedBeforeClick ? R.color.colorPrimary : R.color.unselected_icon_dark;
-                icon.getDrawable().setTint(ContextCompat.getColor(getContext(), color));
+                mIsBookmarked = !wasBookmarkedBeforeClick;
                 ContentValues values = new ContentValues();
                 values.put(AlumContract.ArticleEntry.COL_BOOKMARKED, !wasBookmarkedBeforeClick ? 1 : 0);
                 getContext().getContentResolver().update(AlumContract.ArticleEntry.buildUriWithId(articleId),

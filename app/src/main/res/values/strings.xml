@@ -18,6 +18,7 @@
     <string name="article_is_first_key" translatable="false">isFirstArticle</string>
     <string name="article_is_last_key" translatable="false">isLastArticle</string>
     <string name="article_is_next_key" translatable="false">isNextArticle</string>
+    <string name="article_bookmarks_key" translatable="false">isBookmarked</string>
 
     <string name="seconds_ago"><xliff:g id="seconds">%d</xliff:g> secs ago</string>
     <string name="minutes_ago"><xliff:g id="minutes">%d</xliff:g> mins ago</string>

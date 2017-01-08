@@ -31,7 +31,7 @@
             android:layout_gravity="end"
             android:contentDescription="@string/share_article"
             android:padding="@dimen/view_padding"
-            android:src="@drawable/ic_follow"
+            android:src="@drawable/ic_add_follow"
             android:paddingStart="@dimen/view_padding"
             android:paddingEnd="@dimen/view_padding"
             android:focusable="true"

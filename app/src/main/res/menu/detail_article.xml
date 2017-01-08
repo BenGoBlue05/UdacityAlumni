@@ -11,6 +11,6 @@
         android:id="@+id/menu_detail_share"
         android:icon="@drawable/ic_share"
         android:title="@string/share_article"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
 
 </menu>
