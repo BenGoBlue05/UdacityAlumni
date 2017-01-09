@@ -1,0 +1,42 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.google.developer.udacityalumni.fragment.PlaceholderFragment"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/activity_horizontal_margin"
+    android:fitsSystemWindows="true">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="36sp"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:text="@string/under_construction"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="320dp"
+        android:src="@drawable/udacity_under_construction"
+        android:scaleType="centerInside"
+        android:contentDescription="@string/under_construction"
+        android:adjustViewBounds="true"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/help_build_app"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:gravity="center"
+        android:textSize="18sp"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/get_in_touch"
+        />
+
+</LinearLayout>

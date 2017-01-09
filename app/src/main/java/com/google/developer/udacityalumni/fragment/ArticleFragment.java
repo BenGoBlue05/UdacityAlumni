@@ -52,7 +52,6 @@ public class ArticleFragment extends Fragment implements LoaderManager.LoaderCal
 
     private static final int ARTICLE_LOADER = 100;
 
-    private RecyclerView mRecyclerView;
     private ArticleAdapter mArticleAdapter;
     private boolean mIsBookmarked;
 
@@ -63,16 +62,13 @@ public class ArticleFragment extends Fragment implements LoaderManager.LoaderCal
     public ArticleFragment() {
     }
 
-    public void scrollToTop() {
-        mRecyclerView.scrollToPosition(0);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_article, container, false);
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.article_recycler_view);
+        RecyclerView mRecyclerView = (RecyclerView) rootView.findViewById(R.id.article_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setHasFixedSize(true);
         mArticleAdapter = new ArticleAdapter(getContext(), new ArticleAdapter.ArticleItemClickHandler() {

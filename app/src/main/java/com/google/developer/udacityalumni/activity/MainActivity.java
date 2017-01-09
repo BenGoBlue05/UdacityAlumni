@@ -26,6 +26,7 @@ import com.google.developer.udacityalumni.R;
 import com.google.developer.udacityalumni.adapter.PageAdapter;
 import com.google.developer.udacityalumni.data.AlumContract;
 import com.google.developer.udacityalumni.fragment.ArticleFragment;
+import com.google.developer.udacityalumni.fragment.PlaceholderFragment;
 import com.google.developer.udacityalumni.service.AlumIntentService;
 
 import java.util.ArrayList;
@@ -35,14 +36,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements ArticleFragment.ArticleCallback,
-        LoaderManager.LoaderCallbacks<Cursor> {
+        LoaderManager.LoaderCallbacks<Cursor>, TabLayout.OnTabSelectedListener {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private List<Long> mArticleIds;
     private List<Integer> mBookmarks;
     private static final int LOADER = 101;
-    TabLayout.OnTabSelectedListener mTabListener;
 
     @BindView(R.id.drawer)
     DrawerLayout mDrawerLayout;
@@ -53,11 +53,7 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
     @BindView(R.id.viewpager)
     ViewPager mViewPager;
 
-    TabLayout.Tab mArticleTab;
-    TabLayout.Tab mCareersTab;
-    TabLayout.Tab mMentorshipTab;
-    TabLayout.Tab mMeetUpsTab;
-
+    TabLayout.Tab mArticleTab, mCareersTab, mMentorshipTab, mMeetUpsTab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,51 +75,15 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
             supportActionBar.setHomeAsUpIndicator(indicator);
             supportActionBar.setDisplayHomeAsUpEnabled(true);
         }
-        mTabListener = new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                Drawable icon = tab.getIcon();
-                assert icon != null;
-                icon.setTint(ContextCompat.getColor(MainActivity.this, R.color.colorAccent));
-                switch (tab.getPosition()) {
-                    case 0:
-                        mToolbar.setTitle(getString(R.string.home));
-                        break;
-                    case 1:
-                        mToolbar.setTitle(getString(R.string.careers));
-                        break;
-                    case 2:
-                        mToolbar.setTitle(getString(R.string.mentorship));
-                        break;
-                    case 3:
-                        mToolbar.setTitle(getString(R.string.meetups));
-                        break;
-                    default:
-                        Log.e(LOG_TAG, "TAB POSITION UNRECOGINIZED");
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                Drawable icon = tab.getIcon();
-                assert icon != null;
-                icon.setTint(ContextCompat.getColor(MainActivity.this, R.color.unselected_icon_dark));
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        };
 
     }
 
     private void setupViewPager(ViewPager viewPager) {
         PageAdapter mPageAdapter = new PageAdapter(getSupportFragmentManager());
         mPageAdapter.addFragment(new ArticleFragment());
-        mPageAdapter.addFragment(new ArticleFragment());
-        mPageAdapter.addFragment(new ArticleFragment());
-        mPageAdapter.addFragment(new ArticleFragment());
+        mPageAdapter.addFragment(new PlaceholderFragment());
+        mPageAdapter.addFragment(new PlaceholderFragment());
+        mPageAdapter.addFragment(new PlaceholderFragment());
         viewPager.setAdapter(mPageAdapter);
     }
 
@@ -144,13 +104,13 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
     @Override
     protected void onStart() {
         super.onStart();
-        mTabs.addOnTabSelectedListener(mTabListener);
+        mTabs.addOnTabSelectedListener(this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        mTabs.removeOnTabSelectedListener(mTabListener);
+        mTabs.removeOnTabSelectedListener(this);
     }
 
     @Override
@@ -220,5 +180,40 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
         } else {
             getSupportLoaderManager().restartLoader(LOADER, null, this);
         }
+    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        Drawable icon = tab.getIcon();
+        assert icon != null;
+        icon.setTint(ContextCompat.getColor(MainActivity.this, R.color.colorAccent));
+        switch (tab.getPosition()) {
+            case 0:
+                mToolbar.setTitle(getString(R.string.home));
+                break;
+            case 1:
+                mToolbar.setTitle(getString(R.string.careers));
+                break;
+            case 2:
+                mToolbar.setTitle(getString(R.string.mentorship));
+                break;
+            case 3:
+                mToolbar.setTitle(getString(R.string.meetups));
+                break;
+            default:
+                Log.e(LOG_TAG, "TAB POSITION UNRECOGINIZED");
+        }
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+        Drawable icon = tab.getIcon();
+        assert icon != null;
+        icon.setTint(ContextCompat.getColor(MainActivity.this, R.color.unselected_icon_dark));
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
     }
 }
