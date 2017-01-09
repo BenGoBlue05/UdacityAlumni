@@ -56,7 +56,7 @@ public class ArticleFragment extends Fragment implements LoaderManager.LoaderCal
     private boolean mIsBookmarked;
 
     public interface ArticleCallback {
-        void onArticleSelected(long articleId, boolean isBookmarked);
+        void onArticleSelected(long articleId, boolean isBookmarked, String tag);
     }
 
     public ArticleFragment() {
@@ -74,8 +74,8 @@ public class ArticleFragment extends Fragment implements LoaderManager.LoaderCal
         mArticleAdapter = new ArticleAdapter(getContext(), new ArticleAdapter.ArticleItemClickHandler() {
 
             @Override
-            public void onArticleClick(long articleId, boolean isBookmarked) {
-                ((ArticleCallback) getActivity()).onArticleSelected(articleId, isBookmarked);
+            public void onArticleClick(long articleId, boolean isBookmarked, String tag) {
+                ((ArticleCallback) getActivity()).onArticleSelected(articleId, isBookmarked,tag);
             }
 
             @Override

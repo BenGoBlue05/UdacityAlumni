@@ -1,42 +1,79 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.google.developer.udacityalumni.fragment.PlaceholderFragment"
-    android:orientation="vertical"
-    android:layout_margin="@dimen/activity_horizontal_margin"
-    android:fitsSystemWindows="true">
+    android:layout_height="match_parent">
 
-
-    <TextView
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="36sp"
-        android:padding="@dimen/activity_horizontal_margin"
-        android:text="@string/under_construction"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
-        />
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical"
+        tools:context="com.google.developer.udacityalumni.fragment.PlaceholderFragment">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="320dp"
-        android:src="@drawable/udacity_under_construction"
-        android:scaleType="centerInside"
-        android:contentDescription="@string/under_construction"
-        android:adjustViewBounds="true"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/help_build_app"
-        android:padding="@dimen/activity_horizontal_margin"
-        android:gravity="center"
-        android:textSize="18sp"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/get_in_touch"
-        />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:text="@string/under_construction"
+            android:textColor="@android:color/black"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:gravity="center_horizontal"/>
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="336dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/under_construction"
+            android:scaleType="centerInside"
+            android:src="@drawable/udacity_under_construction"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center_horizontal"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:text="@string/help_build_app"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+        <Button
+            android:layout_width="126dp"
+            android:layout_height="52dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/get_in_touch"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v4.widget.NestedScrollView>

@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
 
     private List<Long> mArticleIds;
     private List<Integer> mBookmarks;
+    private List<String> mTags;
     private static final int LOADER = 101;
 
     @BindView(R.id.drawer)
@@ -130,11 +131,11 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
     }
 
 
-
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(this, AlumContract.ArticleEntry.CONTENT_URI,
-                new String[]{AlumContract.ArticleEntry.COL_ARTICLE_ID, AlumContract.ArticleEntry.COL_BOOKMARKED},
+                new String[]{AlumContract.ArticleEntry.COL_ARTICLE_ID, AlumContract.ArticleEntry.COL_BOOKMARKED,
+                        AlumContract.ArticleEntry.COL_RANDOM_TAG},
                 null, null, AlumContract.ArticleEntry.COL_CREATED_AT + " DESC");
     }
 
@@ -148,18 +149,22 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
                 if (firstId != id) {
                     mArticleIds.add(data.getLong(0));
                     mBookmarks.add(data.getInt(1));
+                    mTags.add(data.getString(2));
                 }
             }
             int len = mArticleIds.size();
             long[] ids = new long[len];
             int[] isBookmarked = new int[len];
+            String[] tags = new String[len];
             for (int i = 0; i < len; i++) {
                 ids[i] = mArticleIds.get(i);
                 isBookmarked[i] = mBookmarks.get(i);
+                tags[i] = mTags.get(i);
             }
             startActivity(new Intent(this, ArticleDetailActivity.class)
                     .putExtra(getString(R.string.article_list_key), ids)
-                    .putExtra(getString(R.string.article_bookmarks_key), isBookmarked));
+                    .putExtra(getString(R.string.article_bookmarks_key), isBookmarked)
+                    .putExtra(getString(R.string.tag_key), tags));
         }
     }
 
@@ -169,11 +174,13 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
     }
 
     @Override
-    public void onArticleSelected(long articleId, boolean isBookmarked) {
+    public void onArticleSelected(long articleId, boolean isBookmarked, String tag) {
         mArticleIds = new ArrayList<>();
         mArticleIds.add(articleId);
         mBookmarks = new ArrayList<>();
         mBookmarks.add(isBookmarked ? 1 : 0);
+        mTags = new ArrayList<>();
+        mTags.add(tag);
         Loader loader = getSupportLoaderManager().getLoader(LOADER);
         if (loader == null || !loader.isStarted()) {
             getSupportLoaderManager().initLoader(LOADER, null, this);

@@ -8,11 +8,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.developer.udacityalumni.R;
@@ -35,7 +37,7 @@ public class ArticleDetailFragment extends Fragment
     private static final String LOG_TAG = ArticleDetailFragment.class.getSimpleName();
     private final int LOADER_FIRST_ARTICLE = 100, LOADER_SECOND_ARTICLE = 200, LOADER_CURRENT_AND_NEXT = 300;
     private long mArticleId, mNextArticleId;
-    private boolean mIsLast, mIsFollowing;
+    private boolean mIsFollowing;
 
     @BindView(R.id.detail_article_title_tv)
     TextView mTitleTV;
@@ -59,8 +61,14 @@ public class ArticleDetailFragment extends Fragment
     ImageView mNextImageView;
     @BindView(R.id.detail_article_follow)
     ImageView mFollowIV;
+    @BindView(R.id.detail_article_preview_ll)
+    LinearLayout mPreviewLL;
 
     public ArticleDetailFragment() {
+    }
+
+    public interface DetailArticleCallbacks{
+        void onNextArticleClicked();
     }
 
     @Override
@@ -68,71 +76,73 @@ public class ArticleDetailFragment extends Fragment
         View rootView = inflater.inflate(R.layout.fragment_detail_article, container, false);
         ButterKnife.bind(this, rootView);
         Bundle args = getArguments();
-        boolean isFirstArticle = false;
-        mIsLast = false;
         if (args != null) {
-            mArticleId = args.getLong(getString(R.string.article_id_key), -5L);
-            isFirstArticle = args.getBoolean(getString(R.string.article_is_first_key), false);
+            mArticleId = args.getLong(getString(R.string.article_id_key), -1L);
+            boolean isFirstArticle = args.getBoolean(getString(R.string.article_is_first_key), false);
             if (isFirstArticle) mBackArrowIV.setVisibility(View.INVISIBLE);
-            mNextArticleId = args.getLong(getString(R.string.article_next_id_key), -5L);
-            mIsLast = args.getBoolean(getString(R.string.article_is_last_key), false);
-            if (mIsLast) mForwardArrowIV.setVisibility(View.INVISIBLE);
-        }
-        mFollowIV.setOnClickListener(this);
-        mProfPicCV.setOnClickListener(this);
-        LoaderManager loaderManager = getLoaderManager();
-        if (args != null && loaderManager != null) {
-            if (mArticleId != -5L) {
-                if (isFirstArticle) {
-                    loaderManager.initLoader(LOADER_FIRST_ARTICLE, args, this);
-                    if (mNextArticleId != -5L) {
-                        loaderManager.initLoader(LOADER_SECOND_ARTICLE, args, this);
-                    }
-                } else {
-                    if (mNextArticleId != -5L) {
-                        loaderManager.initLoader(LOADER_CURRENT_AND_NEXT, args, this);
+            mNextArticleId = args.getLong(getString(R.string.article_next_id_key), -1L);
+            boolean isLast = args.getBoolean(getString(R.string.article_is_last_key), false);
+            if (isLast) mForwardArrowIV.setVisibility(View.INVISIBLE);
+            mFollowIV.setOnClickListener(this);
+            mProfPicCV.setOnClickListener(this);
+            mPreviewLL.setOnClickListener(this);
+            LoaderManager loaderManager = getLoaderManager();
+            if (loaderManager != null) {
+                if (mArticleId != -1L) {
+                    if (isFirstArticle || isLast) {
+                        loaderManager.initLoader(LOADER_FIRST_ARTICLE, args, this);
+                        if (mNextArticleId != -1L) {
+                            if (loaderManager.getLoader(LOADER_SECOND_ARTICLE) != null){
+                                loaderManager.restartLoader(LOADER_SECOND_ARTICLE, args, this);
+                            } else{
+                                loaderManager.initLoader(LOADER_SECOND_ARTICLE, args, this);
+                            }
+                        }
+                    } else {
+                        if (mNextArticleId != -1L) {
+                            loaderManager.initLoader(LOADER_CURRENT_AND_NEXT, args, this);
+                        }
                     }
                 }
             }
         }
+
+
         return rootView;
     }
-
-
-
-
-
-
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         CursorLoader loader = null;
-        long currentArticleId = args.getLong(getString(R.string.article_id_key), -5L);
-        if (currentArticleId != -5L) {
-            switch (id) {
-                case LOADER_FIRST_ARTICLE:
-                    loader = new CursorLoader(getContext(), AlumContract.ArticleEntry.buildUriWithId(currentArticleId),
+        long currentArticleId = args.getLong(getString(R.string.article_id_key), -1L);
+        switch (id) {
+            case LOADER_FIRST_ARTICLE:
+                if (currentArticleId != -1L)
+                    loader = new CursorLoader(getContext(), AlumContract.ArticleEntry
+                            .buildUriWithId(currentArticleId), ArticleFragment.ARTICLE_COLUMNS,
+                            null, null, null);
+                break;
+            case LOADER_SECOND_ARTICLE:
+                Log.i(LOG_TAG, "ARTICLE ID: " + mNextArticleId);
+                if (mNextArticleId != -1L) {
+                    loader = new CursorLoader(getContext(), AlumContract.ArticleEntry.buildUriWithId(mNextArticleId),
                             ArticleFragment.ARTICLE_COLUMNS, null, null, null);
-                    break;
-                case LOADER_SECOND_ARTICLE:
-                    if (mNextArticleId != -5L) {
-                        loader = new CursorLoader(getContext(), AlumContract.ArticleEntry.buildUriWithId(mNextArticleId),
-                                ArticleFragment.ARTICLE_COLUMNS, null, null, null);
-                    }
-                    break;
+                }
+                break;
 
-                case LOADER_CURRENT_AND_NEXT:
-                    String colArticleId = AlumContract.ArticleEntry.COL_ARTICLE_ID;
-                    String sortOrder = mIsLast ? " ASC" : " DESC";
+            case LOADER_CURRENT_AND_NEXT:
+                String colArticleId = AlumContract.ArticleEntry.COL_ARTICLE_ID;
+                if (currentArticleId != -1L){
                     loader = new CursorLoader(getContext(), AlumContract.ArticleEntry.CONTENT_URI,
                             ArticleFragment.ARTICLE_COLUMNS, colArticleId + " =? OR " + colArticleId + " =?",
                             new String[]{String.valueOf(currentArticleId), String.valueOf(mNextArticleId)},
-                            AlumContract.ArticleEntry.COL_CREATED_AT + sortOrder);
-                    break;
-                default:
-                    Log.e(LOG_TAG, "LOADER ID NOT FOUND");
-            }
+                            AlumContract.ArticleEntry.COL_CREATED_AT + " DESC");
+                }
+                break;
+            default:
+                Log.e(LOG_TAG, "LOADER ID NOT FOUND");
         }
+
         return loader;
     }
 
@@ -155,9 +165,8 @@ public class ArticleDetailFragment extends Fragment
                 }
                 mArticleTV.setText(data.getString(ArticleFragment.IND_CONTENT));
                 String profPic = data.getString(ArticleFragment.IND_USER_AVATAR);
-                if (image == null || image.equals("null")) {
-                    Picasso.with(getContext()).load(R.drawable.ic_person).placeholder(R.drawable.placeholder)
-                            .into(mProfPicCV);
+                if (profPic == null || TextUtils.isEmpty(image) || profPic.equals("null")) {
+                    mProfPicCV.setImageResource(R.drawable.ic_person);
                 } else {
                     Picasso.with(getContext()).load(profPic).placeholder(R.drawable.placeholder)
                             .error(R.drawable.ic_person).into(mProfPicCV);
@@ -170,6 +179,7 @@ public class ArticleDetailFragment extends Fragment
         }
         if (loaderId == LOADER_CURRENT_AND_NEXT || loaderId == LOADER_SECOND_ARTICLE) {
             if (data != null && data.moveToNext()) {
+                Log.i(LOG_TAG, "SECOND LOAD: " + data.getString(ArticleFragment.IND_TITLE));
                 mNextArticleTV.setText(data.getString(ArticleFragment.IND_TITLE));
                 String nextImage = data.getString(ArticleFragment.IND_IMAGE);
                 if (nextImage == null || nextImage.equals("null")) {
@@ -177,7 +187,7 @@ public class ArticleDetailFragment extends Fragment
                 } else {
                     mNextImageView.setVisibility(View.VISIBLE);
                     Picasso.with(getContext()).load(nextImage).placeholder(R.drawable.placeholder)
-                            .error(R.drawable.ic_person).into(mNextImageView);
+                            .error(R.drawable.udacity_logo).into(mNextImageView);
                 }
             }
         }
@@ -191,7 +201,7 @@ public class ArticleDetailFragment extends Fragment
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.detail_article_follow:
                 setFollowingIcon();
                 mIsFollowing = !mIsFollowing;
@@ -203,10 +213,13 @@ public class ArticleDetailFragment extends Fragment
             case (R.id.circle_prof_pic):
                 //TODO: have user bio pane slide from bottom;
                 break;
+            case R.id.detail_article_preview_ll:
+                ((DetailArticleCallbacks) getActivity()).onNextArticleClicked();
+                break;
         }
     }
 
-    private void setFollowingIcon(){
+    private void setFollowingIcon() {
         mFollowIV.setImageResource(mIsFollowing ? R.drawable.ic_following : R.drawable.ic_add_follow);
     }
 }

@@ -18,9 +18,18 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/detail_article_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+            <TextView
+                android:id="@+id/detail_toolbar_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                tools:text="Articles\nSoftware" />
+            </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
 
