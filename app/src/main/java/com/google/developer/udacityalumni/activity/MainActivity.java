@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
     private List<Integer> mBookmarks;
     private List<String> mTags;
     private static final int LOADER = 101;
+    private String mTitle;
 
     @BindView(R.id.drawer)
     DrawerLayout mDrawerLayout;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
 
     TabLayout.Tab mArticleTab, mCareersTab, mMentorshipTab, mMeetUpsTab;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
         Stetho.initializeWithDefaults(this);
         ButterKnife.bind(this);
         startService(new Intent(this, AlumIntentService.class));
+        if (mToolbar != null && savedInstanceState != null)
+            mToolbar.setTitle(mTitle);
         setSupportActionBar(mToolbar);
         setupViewPager(mViewPager);
         mTabs.setupWithViewPager(mViewPager);
@@ -182,11 +186,10 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
         mTags = new ArrayList<>();
         mTags.add(tag);
         Loader loader = getSupportLoaderManager().getLoader(LOADER);
-        if (loader == null || !loader.isStarted()) {
+        if (loader == null || !loader.isStarted())
             getSupportLoaderManager().initLoader(LOADER, null, this);
-        } else {
+        else
             getSupportLoaderManager().restartLoader(LOADER, null, this);
-        }
     }
 
     @Override
@@ -196,20 +199,21 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
         icon.setTint(ContextCompat.getColor(MainActivity.this, R.color.colorAccent));
         switch (tab.getPosition()) {
             case 0:
-                mToolbar.setTitle(getString(R.string.home));
+                mTitle = getString(R.string.home);
                 break;
             case 1:
-                mToolbar.setTitle(getString(R.string.careers));
+                mTitle = getString(R.string.careers);
                 break;
             case 2:
-                mToolbar.setTitle(getString(R.string.mentorship));
+                mTitle = getString(R.string.mentorship);
                 break;
             case 3:
-                mToolbar.setTitle(getString(R.string.meetups));
+                mTitle = getString(R.string.meetups);
                 break;
             default:
                 Log.e(LOG_TAG, "TAB POSITION UNRECOGINIZED");
         }
+        if (mTitle != null) setTitle(mTitle);
     }
 
     @Override
@@ -221,6 +225,11 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
+    }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(getString(R.string.title_key), mTitle);
     }
 }

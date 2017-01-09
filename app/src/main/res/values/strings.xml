@@ -21,6 +21,7 @@
     <string name="article_bookmarks_key" translatable="false">isBookmarked</string>
     <string name="viewpager_position_key" translatable="false">viewpagerKey</string>
     <string name="tag_key" translatable="false">tagKey</string>
+    <string name="title_key" translatable="false">titleKey</string>
 
     <string name="seconds_ago"><xliff:g id="seconds">%d</xliff:g> secs ago</string>
     <string name="minutes_ago"><xliff:g id="minutes">%d</xliff:g> mins ago</string>
@@ -45,8 +46,8 @@
     <string name="catalog">Catalog</string>
     <string name="alums">Alums</string>
     <string name="under_construction">Under Construction</string>
-    <string name="help_build_app">If you feel like helping us build this app</string>
-    <string name="get_in_touch">Get in Touch</string>
+    <string name="help_build_app">Help us build this app and gain experience working on group projects!</string>
+    <string name="learn_more">Learn More</string>
     <string name="articles">Articles</string>
 
     <!-- TODO: Remove or change this placeholder text -->
