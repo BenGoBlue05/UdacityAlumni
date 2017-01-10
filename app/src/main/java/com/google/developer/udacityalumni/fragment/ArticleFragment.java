@@ -97,7 +97,8 @@ public class ArticleFragment extends Fragment implements LoaderManager.LoaderCal
                 title = title.toLowerCase();
                 String url = "https://udacity-alumni-client.herokuapp.com/articles/" + title.replaceAll("\\s", "-");
 //                ie: https://udacity-alumni-client.herokuapp.com/articles/medically-necessary-utilization-review-evidence-of-insurability
-//                TODO: Share link to the article  (the 'url' above is a link to the article on the web app)
+//                TODO: Share DYNAMIC link to the article  (the 'url' above is a link to the article on the web app)
+//               Will implement later
             }
 
             @Override

@@ -134,7 +134,8 @@ public class ArticleDetailActivity extends AppCompatActivity
                 break;
             case R.id.menu_detail_share:
                 if (articleId != -1) {
-                    //TODO: Share link to article
+//                    TODO: Share DYNAMIC link to article
+//                    Will be assigned later
                 }
                 break;
         }
