@@ -28,6 +28,7 @@ import com.google.developer.udacityalumni.data.AlumContract;
 import com.google.developer.udacityalumni.fragment.ArticleFragment;
 import com.google.developer.udacityalumni.fragment.PlaceholderFragment;
 import com.google.developer.udacityalumni.service.AlumIntentService;
+import com.google.developer.udacityalumni.utility.Utility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
             mToolbar.setTitle(mTitle);
         setSupportActionBar(mToolbar);
         setupViewPager(mViewPager);
+        Utility.scheduleArticleSync(this);
         mTabs.setupWithViewPager(mViewPager);
         setUpTabs();
         ActionBar supportActionBar = getSupportActionBar();

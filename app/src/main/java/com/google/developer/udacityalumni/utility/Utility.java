@@ -3,18 +3,28 @@ package com.google.developer.udacityalumni.utility;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.support.annotation.NonNull;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 
+import com.firebase.jobdispatcher.Constraint;
+import com.firebase.jobdispatcher.Driver;
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+import com.firebase.jobdispatcher.Job;
+import com.firebase.jobdispatcher.Lifetime;
+import com.firebase.jobdispatcher.Trigger;
 import com.google.developer.udacityalumni.R;
+import com.google.developer.udacityalumni.service.ArticleFirebaseJobService;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -25,10 +35,12 @@ import okhttp3.Response;
 public final class Utility {
 
     private static final String LOG_TAG = Utility.class.getSimpleName();
+    private static boolean sInitialized;
+    private static final String REMINDER_JOB_TAG = "sync_articles_tag";
 
     public static Long getTimeInMillis(String dateJson) {
 
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         String formattedDate = dateJson.substring(0, 10) + " " + dateJson.substring(11, 19);
         try {
             Date date = dateFormatter.parse(formattedDate);
@@ -41,7 +53,7 @@ public final class Utility {
         }
     }
 
-    public static String formatTimeAgo(Context context, long date) {
+    private static String formatTimeAgo(Context context, long date) {
         long timeDiffMillis = Calendar.getInstance().getTimeInMillis() - date;
         if (timeDiffMillis < TimeUnit.MINUTES.toMillis(1))
             return context.getString(R.string.seconds_ago, TimeUnit.MILLISECONDS.toSeconds(timeDiffMillis));
@@ -80,4 +92,22 @@ public final class Utility {
         return str;
     }
 
+//    TEMPORARY BACKGROUND SYNC METHOD UNTIL FIREBASE CLOUD MESSAGING IMPLEMENTED
+    public static void scheduleArticleSync(@NonNull final Context context) {
+        if (sInitialized) return;
+        Driver driver = new GooglePlayDriver(context);
+        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
+        Job job = dispatcher.newJobBuilder()
+                .setService(ArticleFirebaseJobService.class)
+                .setTag(REMINDER_JOB_TAG)
+                .setConstraints(Constraint.ON_UNMETERED_NETWORK)
+                .setLifetime(Lifetime.FOREVER)
+                .setRecurring(true)
+                .setTrigger(Trigger.executionWindow((int) TimeUnit.HOURS.toSeconds(6),
+                        (int) TimeUnit.HOURS.toSeconds(9)))
+                .setReplaceCurrent(true)
+                .build();
+        dispatcher.schedule(job);
+        sInitialized = true;
+    }
 }
