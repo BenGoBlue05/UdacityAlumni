@@ -1,10 +1,8 @@
 # UdacityAlumni
-Udacity Alumni Android App
+Udacity Alumni Android App from web app started by Ryan Collins https://github.com/udacityalumni/udacity-alumni-fe
 
-<img src="https://github.com/BenGoBlue05/UdacityAlumni/blob/master/mockups/main_activity.png" width="280">
-<img src="https://github.com/BenGoBlue05/UdacityAlumni/blob/master/mockups/navview.png" width="280">
-<img src="https://github.com/BenGoBlue05/UdacityAlumni/blob/master/mockups/article_detail_activity.png" width="280">
 
+[![Demo](https://j.gifs.com/GZXDKJ.gif)]
 
 
 
