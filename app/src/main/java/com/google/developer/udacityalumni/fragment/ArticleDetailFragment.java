@@ -210,7 +210,7 @@ public class ArticleDetailFragment extends Fragment
                 getContext().getContentResolver().update(AlumContract.ArticleEntry.buildUriWithId(mArticleId),
                         values, null, null);
                 break;
-            case (R.id.circle_prof_pic):
+            case (R.id.nav_header_prof_pic):
                 //TODO: have user bio pane slide from bottom;
                 break;
             case R.id.detail_article_preview_ll:

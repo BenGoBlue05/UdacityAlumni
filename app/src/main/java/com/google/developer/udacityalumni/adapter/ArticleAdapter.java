@@ -99,7 +99,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
         return mCursor.getCount();
     }
 
-    class ArticleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ArticleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.item_prof_pic)
         CircleImageView mProfPicCV;
         @BindView(R.id.item_username)

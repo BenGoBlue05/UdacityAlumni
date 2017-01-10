@@ -2,20 +2,28 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
+            android:id="@+id/nav_alums"
             android:icon="@drawable/ic_alums"
             android:title="@string/alums" />
+
+        <!--More items will be added-->
 
     </group>
 
     <item android:title="@string/udacity">
         <menu>
             <item
+                android:id="@+id/nav_classroom"
                 android:icon="@drawable/ic_classroom"
                 android:title="@string/my_classroom" />
             <item
+                android:id="@+id/nav_catalog"
                 android:icon="@drawable/ic_catalog"
                 android:title="@string/catalog" />
+            <item
+                android:id="@+id/nav_success"
+                android:icon="@drawable/ic_success"
+                android:title="@string/success_stories"/>
         </menu>
     </item>
 </menu>

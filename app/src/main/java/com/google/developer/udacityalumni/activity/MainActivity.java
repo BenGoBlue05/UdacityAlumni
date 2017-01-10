@@ -130,8 +130,23 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 break;
+            case R.id.nav_classroom:
+//                TODO: Open My Classroom in browser (https://classroom.udacity.com/me)
+//                https://developer.android.com/guide/components/intents-common.html
+
+                break;
+            case R.id.nav_catalog:
+//                TODO: Open My Catalog in browser (https://www.udacity.com/courses/all)
+
+                break;
+            case R.id.nav_success:
+//                TODO: Display catalog in WebView - different from browser - (https://www.udacity.com/success)
+//                https://developer.android.com/reference/android/webkit/WebView.html
+
+                break;
+
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
 
