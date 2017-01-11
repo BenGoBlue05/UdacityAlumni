@@ -7,6 +7,8 @@ If you are a Udacity ND graduate, or current or prospective student you are welc
 
 https://waffle.io/BenGoBlue05/UdacityAlumni/join
 
+If you have any questions feel free to contact bplewis5@gmail.com.
+
 
 [![Demo](https://j.gifs.com/GZXDKJ.gif)]
 
