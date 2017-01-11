@@ -60,6 +60,7 @@ public class AlumContentProvider extends ContentProvider {
             case ARTICLE_WITH_ID:
                 numRows = db.delete(AlumContract.ArticleEntry.TABLE_NAME, SELECTION_ARTICLE_ID,
                         new String[]{uri.getLastPathSegment()});
+                break;
             case USER:
                 numRows = db.delete(AlumContract.UserEntry.TABLE_NAME, selection, selectionArgs);
                 break;

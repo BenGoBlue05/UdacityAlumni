@@ -52,12 +52,14 @@ public class ArticleDetailActivity extends AppCompatActivity
         setContentView(R.layout.activity_article_detail);
         ButterKnife.bind(this);
         Intent intent = getIntent();
+
         if (savedInstanceState != null)
             mPosition = savedInstanceState.getInt(getString(R.string.viewpager_position_key));
         if (intent != null) {
             mArticleIds = intent.getLongArrayExtra(getString(R.string.article_list_key));
             mBookMarks = intent.getIntArrayExtra(getString(R.string.article_bookmarks_key));
             mTags = intent.getStringArrayExtra(getString(R.string.tag_key));
+
             Log.i(LOG_TAG, Arrays.toString(mArticleIds));
             if (mToolbar != null) {
                 String title = mPosition == null ? mTags[0] : mTags[mPosition];
@@ -78,6 +80,7 @@ public class ArticleDetailActivity extends AppCompatActivity
         mPageAdapter = new PageAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         setUpViewpager(mViewPager, mArticleIds);
+
     }
 
     private void setUpViewpager(ViewPager viewPager, long[] articleIds) {

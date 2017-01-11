@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="spotlight_articles_title">
+        <item quantity="one">One New Article</item>
+        <item quantity="other">%d New Articles</item>
+    </plurals>
+</resources>

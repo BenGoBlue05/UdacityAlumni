@@ -51,5 +51,8 @@
     <string name="articles">Articles</string>
     <string name="success_stories">Success Stories</string>
 
+    <!-- Notifications -->
+    <string name="notification_title">New Spotlighted Content</string>
+
 
 </resources>
