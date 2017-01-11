@@ -55,7 +55,7 @@ final class SpotlightNotificationManagerImpl implements SpotlightNotificationMan
         final Resources res = mContext.getResources();
 
         final NotificationCompat.InboxStyle style = new NotificationCompat.InboxStyle();
-        style.setSummaryText(res.getQuantityString(R.plurals.spotlight_articles_title, count));
+        style.setSummaryText(res.getQuantityString(R.plurals.spotlight_articles_title, count, count));
         style.setBigContentTitle(res.getString(R.string.notification_title));
 
         for (int i = 0; i < count - 1; i++) {
