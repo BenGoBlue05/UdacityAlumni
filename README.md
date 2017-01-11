@@ -23,7 +23,7 @@ If you would like to learn how to use GitHub on Android Studio please check out 
 <img src="https://github.com/BenGoBlue05/UdacityAlumni/blob/master/Todos/pull-request.png" width = 400>
 
 
-
+Contact bplewis5@gmail.com if you have any questions.
 
 
 
