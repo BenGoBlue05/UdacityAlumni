@@ -67,7 +67,7 @@ public class ArticleDetailFragment extends Fragment
     public ArticleDetailFragment() {
     }
 
-    public interface DetailArticleCallbacks{
+    public interface DetailArticleCallbacks {
         void onNextArticleClicked();
     }
 
@@ -176,6 +176,7 @@ public class ArticleDetailFragment extends Fragment
                 mIsFollowing = data.getInt(ArticleFragment.IND_FOLLOWING_AUTHOR) == 1;
                 setFollowingIcon();
             }
+
         }
         if (loaderId == LOADER_CURRENT_AND_NEXT || loaderId == LOADER_SECOND_ARTICLE) {
             if (data != null && data.moveToNext()) {

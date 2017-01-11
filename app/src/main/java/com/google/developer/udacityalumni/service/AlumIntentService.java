@@ -4,8 +4,12 @@ import android.app.IntentService;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.util.Log;
 
 import com.google.developer.udacityalumni.data.AlumContract;
+import com.google.developer.udacityalumni.notification.SpotlightNotificationFactory;
+import com.google.developer.udacityalumni.notification.SpotlightNotificationManager;
+import com.google.developer.udacityalumni.notification.SpotlightNotificationUtils;
 import com.google.developer.udacityalumni.utility.Utility;
 
 import org.json.JSONArray;
@@ -20,6 +24,13 @@ import java.util.Vector;
 public class AlumIntentService extends IntentService {
 
     private static final String LOG_TAG = AlumIntentService.class.getSimpleName();
+
+    private static final String KEY_ARTICLES = "articles";
+    private static final String KEY_ID = "id";
+    private static final String KEY_SPOTLIGHTED = "spotlighted";
+    private static final String KEY_USER = "user";
+    private static final String KEY_TAGS = "tags";
+
     HashSet<Long> mSet;
 
     public AlumIntentService() {
@@ -29,17 +40,17 @@ public class AlumIntentService extends IntentService {
     public void addArticles(String json){
         try {
             JSONObject object = new JSONObject(json);
-            JSONArray articles = object.getJSONArray("articles");
+            JSONArray articles = object.getJSONArray(KEY_ARTICLES);
             int numArticles = articles != null ? articles.length() : 0;
             Vector<ContentValues> articleCvVector = new Vector<>();
             for (int i=0;i<numArticles;i++){
                 JSONObject article = articles.getJSONObject(i);
-                long articleId = article.getLong("id");
+                long articleId = article.getLong(KEY_ID);
                 if (!mSet.contains(articleId)){
                     ContentValues values = new ContentValues();
-                    int isSpotlighted = article.getBoolean("spotlighted") ? 1 : 0;
-                    JSONObject user = article.getJSONObject("user");
-                    JSONArray tags = article.getJSONArray("tags");
+                    int isSpotlighted = article.getBoolean(KEY_SPOTLIGHTED) ? 1 : 0;
+                    JSONObject user = article.getJSONObject(KEY_USER);
+                    JSONArray tags = article.getJSONArray(KEY_TAGS);
                     int ind = new Random().nextInt(tags.length());
                     JSONObject tag = tags.getJSONObject(ind);
                     values.put(AlumContract.ArticleEntry.COL_ARTICLE_ID, articleId);
@@ -65,6 +76,11 @@ public class AlumIntentService extends IntentService {
                 ContentValues[] cvArray = new ContentValues[articleCvVector.size()];
                 articleCvVector.toArray(cvArray);
                 getContentResolver().bulkInsert(AlumContract.ArticleEntry.CONTENT_URI, cvArray);
+                // Send notifications for any new Spotlighted articles
+                Log.i(LOG_TAG, "Sending Notifications...");
+                final SpotlightNotificationManager manager =
+                        SpotlightNotificationFactory.newInstance(this);
+                manager.sendNotifications(SpotlightNotificationUtils.toSpotlightedModels(cvArray));
             }
 
         } catch (JSONException e) {
