@@ -18,7 +18,7 @@ If you would like to learn how to use GitHub on Android Studio please check out 
 
 ![TODO](https://github.com/BenGoBlue05/UdacityAlumni/blob/master/Todos/Todo.png)
 
-3. Once you've finished your TODO/s make a pull request and feel proud of your contribution!
+Once you've finished your TODO/s make a pull request and feel proud of your contribution!
 
 <img src="https://github.com/BenGoBlue05/UdacityAlumni/blob/master/Todos/pull-request.png" width = 400>
 
