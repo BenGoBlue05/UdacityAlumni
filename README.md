@@ -7,7 +7,7 @@ If you are a Udacity ND graduate, or current or prospective student you are welc
 
 https://waffle.io/BenGoBlue05/UdacityAlumni/join
 
-If you have any questions feel free to contact bplewis5@gmail.com.
+If you would like to learn how to use GitHub on Android Studio please check out this tutorial by Will Willis https://www.youtube.com/playlist?list=PLhO3X757HABdao5hv4HGQSWPX0tnN4lCO. If you have any questions feel free to contact bplewis5@gmail.com.
 
 
 [![Demo](https://j.gifs.com/GZXDKJ.gif)]
