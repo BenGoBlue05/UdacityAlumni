@@ -1,5 +1,6 @@
 package com.google.developer.udacityalumni.activity;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
@@ -20,6 +21,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 import com.facebook.stetho.Stetho;
 import com.google.developer.udacityalumni.R;
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
     private List<String> mTags;
     private static final int LOADER = 101;
     private String mTitle;
+    private Bundle bundle;
 
     @BindView(R.id.drawer)
     DrawerLayout mDrawerLayout;
@@ -182,10 +185,17 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
                 isBookmarked[i] = mBookmarks.get(i);
                 tags[i] = mTags.get(i);
             }
-            startActivity(new Intent(this, ArticleDetailActivity.class)
-                    .putExtra(getString(R.string.article_list_key), ids)
-                    .putExtra(getString(R.string.article_bookmarks_key), isBookmarked)
-                    .putExtra(getString(R.string.tag_key), tags));
+            if (bundle != null) {
+                startActivity(new Intent(this, ArticleDetailActivity.class)
+                        .putExtra(getString(R.string.article_list_key), ids)
+                        .putExtra(getString(R.string.article_bookmarks_key), isBookmarked)
+                        .putExtra(getString(R.string.tag_key), tags), bundle);
+            } else {
+                startActivity(new Intent(this, ArticleDetailActivity.class)
+                        .putExtra(getString(R.string.article_list_key), ids)
+                        .putExtra(getString(R.string.article_bookmarks_key), isBookmarked)
+                        .putExtra(getString(R.string.tag_key), tags));
+            }
         }
     }
 
@@ -195,13 +205,19 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
     }
 
     @Override
-    public void onArticleSelected(long articleId, boolean isBookmarked, String tag) {
+    public void onArticleSelected(ImageView imageView, long articleId, boolean isBookmarked, String tag) {
         mArticleIds = new ArrayList<>();
         mArticleIds.add(articleId);
         mBookmarks = new ArrayList<>();
         mBookmarks.add(isBookmarked ? 1 : 0);
         mTags = new ArrayList<>();
         mTags.add(tag);
+
+        bundle = ActivityOptions
+                .makeSceneTransitionAnimation(
+                        MainActivity.this,
+                        imageView,
+                        imageView.getTransitionName()).toBundle();
         Loader loader = getSupportLoaderManager().getLoader(LOADER);
         if (loader == null || !loader.isStarted())
             getSupportLoaderManager().initLoader(LOADER, null, this);

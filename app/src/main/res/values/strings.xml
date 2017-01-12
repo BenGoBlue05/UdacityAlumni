@@ -50,10 +50,14 @@
     <string name="learn_more">Learn More</string>
     <string name="articles">Articles</string>
     <string name="success_stories">Success Stories</string>
+    <string name="profile_pic">Profile Pic</string>
 
     <!-- Notifications -->
     <string name="notification_title">New Spotlighted Content</string>
-    <string name="profile_pic">Profile Pic</string>
+
+    <string name="transition_name">image_transition</string>
+
+
 
 
 </resources>
