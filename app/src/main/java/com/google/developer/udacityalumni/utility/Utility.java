@@ -1,8 +1,10 @@
 package com.google.developer.udacityalumni.utility;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -17,6 +19,8 @@ import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.Trigger;
 import com.google.developer.udacityalumni.R;
+import com.google.developer.udacityalumni.activity.WebViewActivity;
+import com.google.developer.udacityalumni.fragment.WebViewFragment;
 import com.google.developer.udacityalumni.service.ArticleFirebaseJobService;
 
 import java.io.IOException;
@@ -109,5 +113,27 @@ public final class Utility {
                 .build();
         dispatcher.schedule(job);
         sInitialized = true;
+    }
+
+    /**
+     * Launches a new Activity with a webview component to display the url content
+     * @param url String page URL
+     */
+    public static void launchWebView(String url, Context context) {
+        Intent intent = new Intent(context, WebViewActivity.class);
+        intent.putExtra(WebViewFragment.ARG_URL, url);
+        context.startActivity(intent);
+    }
+
+    /**
+     * Launches common intent to open web page in a device browser app
+     * @param url String page URL
+     */
+    public static void launchBrowser(String url, Context context) {
+        Uri webpage = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+        if (intent.resolveActivity(context.getPackageManager()) != null) {
+            context.startActivity(intent);
+        }
     }
 }
