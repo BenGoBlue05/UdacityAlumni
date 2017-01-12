@@ -16,6 +16,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerActions.open;
 import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
 import static android.support.test.espresso.contrib.DrawerMatchers.isOpen;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
@@ -42,9 +43,10 @@ public class MainActivityNavViewTest {
         onView(withId(R.id.drawer))
                 .check(matches(isOpen(Gravity.START))); // Left drawer is open open.
 
-//        TODO: Check if Nav Drawer contains prof pic and the word 'Udacity'
-//        https://developer.android.com/training/testing/ui-testing/espresso-testing.html#locating-adpeterview-view
-//        https://google.github.io/android-testing-support-library/docs/espresso/cheatsheet/index.html
+        //Check if navigation drawer contains profile pic
+        onView(withContentDescription(R.string.profile_pic))
+                .check(matches(isDisplayed()));
+
     }
 
 
