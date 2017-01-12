@@ -51,7 +51,6 @@
             android:layout_height="match_parent"
             android:contentDescription="@string/article_image"
             android:scaleType="centerCrop"
-            android:transitionName="@string/transition_name"
             tools:src="@drawable/ud_alum_sample_image" />
 
         <TextView

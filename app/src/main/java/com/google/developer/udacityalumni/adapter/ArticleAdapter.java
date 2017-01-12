@@ -33,7 +33,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
     }
 
     public interface ArticleItemClickHandler {
-        void onArticleClick(ImageView imageView, long articleId, boolean isBookmarked, String tag);
+        void onArticleClick(long articleId, boolean isBookmarked, String tag);
 
         void onProfPicClick(long userId);
 
@@ -148,7 +148,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
                     mArticleClickHandler.onFollowUserClick(authorId, articleId,
                             mCursor.getInt(ArticleFragment.IND_FOLLOWING_AUTHOR) == 1, mFollowIV);
                 } else{
-                    mArticleClickHandler.onArticleClick(mImageView, articleId, isBookmarked,
+                    mArticleClickHandler.onArticleClick(articleId, isBookmarked,
                             mCursor.getString(ArticleFragment.IND_RANDOM_TAG));
                 }
             }

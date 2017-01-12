@@ -37,7 +37,6 @@
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/article_image"
                 android:scaleType="centerCrop"
-                android:transitionName="@string/transition_name"
                 tools:src="@drawable/sample_image_vr" />
 
             <TextView

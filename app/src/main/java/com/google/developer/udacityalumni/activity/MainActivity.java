@@ -1,6 +1,5 @@
 package com.google.developer.udacityalumni.activity;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
@@ -23,7 +22,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
 
 import com.facebook.stetho.Stetho;
 import com.google.developer.udacityalumni.R;
@@ -53,7 +51,6 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
     private List<String> mTags;
     private static final int LOADER = 101;
     private String mTitle;
-    private Bundle bundle;
 
     @BindView(R.id.drawer)
     DrawerLayout mDrawerLayout;
@@ -149,9 +146,15 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.nav_classroom: Utility.launchBrowser(URL_CLASSROOM, this); break;
-            case R.id.nav_catalog:   Utility.launchBrowser(URL_CATALOG, this);   break;
-            case R.id.nav_success:   Utility.launchWebView(URL_SUCCESS, this);   break;
+            case R.id.nav_classroom:
+                Utility.launchBrowser(URL_CLASSROOM, this);
+                break;
+            case R.id.nav_catalog:
+                Utility.launchBrowser(URL_CATALOG, this);
+                break;
+            case R.id.nav_success:
+                Utility.launchWebView(URL_SUCCESS, this);
+                break;
         }
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
@@ -187,17 +190,10 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
                 isBookmarked[i] = mBookmarks.get(i);
                 tags[i] = mTags.get(i);
             }
-            if (bundle != null) {
-                startActivity(new Intent(this, ArticleDetailActivity.class)
-                        .putExtra(getString(R.string.article_list_key), ids)
-                        .putExtra(getString(R.string.article_bookmarks_key), isBookmarked)
-                        .putExtra(getString(R.string.tag_key), tags), bundle);
-            } else {
-                startActivity(new Intent(this, ArticleDetailActivity.class)
-                        .putExtra(getString(R.string.article_list_key), ids)
-                        .putExtra(getString(R.string.article_bookmarks_key), isBookmarked)
-                        .putExtra(getString(R.string.tag_key), tags));
-            }
+            startActivity(new Intent(this, ArticleDetailActivity.class)
+                    .putExtra(getString(R.string.article_list_key), ids)
+                    .putExtra(getString(R.string.article_bookmarks_key), isBookmarked)
+                    .putExtra(getString(R.string.tag_key), tags));
         }
     }
 
@@ -207,19 +203,13 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
     }
 
     @Override
-    public void onArticleSelected(ImageView imageView, long articleId, boolean isBookmarked, String tag) {
+    public void onArticleSelected(long articleId, boolean isBookmarked, String tag) {
         mArticleIds = new ArrayList<>();
         mArticleIds.add(articleId);
         mBookmarks = new ArrayList<>();
         mBookmarks.add(isBookmarked ? 1 : 0);
         mTags = new ArrayList<>();
         mTags.add(tag);
-
-        bundle = ActivityOptions
-                .makeSceneTransitionAnimation(
-                        MainActivity.this,
-                        imageView,
-                        imageView.getTransitionName()).toBundle();
         Loader loader = getSupportLoaderManager().getLoader(LOADER);
         if (loader == null || !loader.isStarted())
             getSupportLoaderManager().initLoader(LOADER, null, this);
