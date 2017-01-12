@@ -146,9 +146,15 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.nav_classroom: Utility.launchBrowser(URL_CLASSROOM, this); break;
-            case R.id.nav_catalog:   Utility.launchBrowser(URL_CATALOG, this);   break;
-            case R.id.nav_success:   Utility.launchWebView(URL_SUCCESS, this);   break;
+            case R.id.nav_classroom:
+                Utility.launchBrowser(URL_CLASSROOM, this);
+                break;
+            case R.id.nav_catalog:
+                Utility.launchBrowser(URL_CATALOG, this);
+                break;
+            case R.id.nav_success:
+                Utility.launchWebView(URL_SUCCESS, this);
+                break;
         }
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
