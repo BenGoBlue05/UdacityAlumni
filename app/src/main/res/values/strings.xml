@@ -55,9 +55,4 @@
     <!-- Notifications -->
     <string name="notification_title">New Spotlighted Content</string>
 
-    <string name="transition_name">image_transition</string>
-
-
-
-
 </resources>
