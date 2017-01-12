@@ -19,6 +19,7 @@ import static android.support.test.espresso.contrib.DrawerMatchers.isOpen;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -45,6 +46,10 @@ public class MainActivityNavViewTest {
 
         //Check if navigation drawer contains profile pic
         onView(withContentDescription(R.string.profile_pic))
+                .check(matches(isDisplayed()));
+
+        //Check if navigation drawer contains the word 'Udacity'
+        onView(withText("Udacity"))
                 .check(matches(isDisplayed()));
 
     }
