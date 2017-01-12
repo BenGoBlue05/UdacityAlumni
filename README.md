@@ -3,14 +3,28 @@ Udacity Alumni Android App from web app started by Ryan Collins https://github.c
 
 The app will feature curated capstone projects from Udacity alumni including apps on the Google Play Store. It will also display alumni accomplishments and profiles, career opportunities, and meetups.
 
-If you are a Udacity ND graduate, or current or prospective student you are welcome to contribute and gain experience working on a group project. Just sign up for task below and get started! 
+Udacity's projects are great for improving your skills as a developer but once you've finished your ND you may still have little to no experience working on group projects. Contributing to this project is a valuable opportunity for you to show employers that you have experience working as a group and possess the teamwork skills needed to succeed in the workplace.
 
-https://waffle.io/BenGoBlue05/UdacityAlumni/join
-
-If you would like to learn how to use GitHub on Android Studio please check out this tutorial by Will Willis https://www.youtube.com/playlist?list=PLhO3X757HABdao5hv4HGQSWPX0tnN4lCO. If you have any questions feel free to contact bplewis5@gmail.com.
-
+If you are a Udacity ND graduate, or current or prospective student you are welcome to contribute! Read the instructions below on how to get started. 
 
 [![Demo](https://j.gifs.com/GZXDKJ.gif)]
+
+##How to Start
+
+1. Clone this repository. If you would like to learn how to use GitHub on Android Studio please check out this tutorial by Will Willis https://www.youtube.com/playlist?list=PLhO3X757HABdao5hv4HGQSWPX0tnN4lCO. 
+
+2. Click on TODO tab in bottom left corner of Android Studio to see available tasks. Choose as many or as few as you like and start coding!
+
+![TODO](https://github.com/BenGoBlue05/UdacityAlumni/blob/master/Todos/Todo.png)
+
+Once you've finished your TODO/s make a pull request and feel proud of your contribution!
+
+<img src="https://github.com/BenGoBlue05/UdacityAlumni/blob/master/Todos/pull-request.png" width = 400>
+
+Don't see any TODO's that interest you? Check back a little bit later - we're continually updating the repo with more exciting features that you can help build.
+
+Contact bplewis5@gmail.com if you have any questions.
+
 
 
 
