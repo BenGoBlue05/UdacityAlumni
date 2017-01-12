@@ -53,6 +53,7 @@
 
     <!-- Notifications -->
     <string name="notification_title">New Spotlighted Content</string>
+    <string name="profile_pic">Profile Pic</string>
 
 
 </resources>
