@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.app.LoaderManager;
@@ -39,9 +41,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements ArticleFragment.ArticleCallback,
-        LoaderManager.LoaderCallbacks<Cursor>, TabLayout.OnTabSelectedListener {
+        LoaderManager.LoaderCallbacks<Cursor>, TabLayout.OnTabSelectedListener, NavigationView.OnNavigationItemSelectedListener {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final String URL_CLASSROOM = "https://classroom.udacity.com/me";
+    private static final String URL_CATALOG = "https://www.udacity.com/courses/all";
+    private static final String URL_SUCCESS = "https://www.udacity.com/success";
 
     private List<Long> mArticleIds;
     private List<Integer> mBookmarks;
@@ -58,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
     TabLayout mTabs;
     @BindView(R.id.viewpager)
     ViewPager mViewPager;
+    @BindView(R.id.nav_view)
+    NavigationView mNavView;
 
     TabLayout.Tab mArticleTab, mCareersTab, mMentorshipTab, mMeetUpsTab;
 
@@ -85,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
             supportActionBar.setHomeAsUpIndicator(indicator);
             supportActionBar.setDisplayHomeAsUpEnabled(true);
         }
-
+        mNavView.setNavigationItemSelectedListener(this);
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -135,25 +142,20 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 break;
-            case R.id.nav_classroom:
-//                TODO: Open My Classroom in browser (https://classroom.udacity.com/me)
-//                https://developer.android.com/guide/components/intents-common.html
-
-                break;
-            case R.id.nav_catalog:
-//                TODO: Open My Catalog in browser (https://www.udacity.com/courses/all)
-
-                break;
-            case R.id.nav_success:
-//                TODO: Display catalog in WebView - different from browser - (https://www.udacity.com/success)
-//                https://developer.android.com/reference/android/webkit/WebView.html
-
-                break;
-
         }
         return true;
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_classroom: Utility.launchBrowser(URL_CLASSROOM, this); break;
+            case R.id.nav_catalog:   Utility.launchBrowser(URL_CATALOG, this);   break;
+            case R.id.nav_success:   Utility.launchWebView(URL_SUCCESS, this);   break;
+        }
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
