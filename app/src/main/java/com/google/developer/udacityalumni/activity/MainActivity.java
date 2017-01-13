@@ -257,4 +257,13 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
         super.onSaveInstanceState(outState);
         outState.putString(getString(R.string.title_key), mTitle);
     }
+
+    @Override
+    protected void onPause() {
+        Loader loader = getSupportLoaderManager().getLoader(LOADER);
+        if (loader != null) {
+            getSupportLoaderManager().destroyLoader(loader.getId());
+        }
+        super.onPause();
+    }
 }
