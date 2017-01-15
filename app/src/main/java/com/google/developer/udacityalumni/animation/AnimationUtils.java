@@ -16,7 +16,6 @@ import android.view.animation.OvershootInterpolator;
  */
 
 public class AnimationUtils {
-        private static int counter = 0;
 
         public static void scaleXY(RecyclerView.ViewHolder holder) {
             holder.itemView.setScaleX(0);
