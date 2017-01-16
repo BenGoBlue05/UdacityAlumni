@@ -24,6 +24,9 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.facebook.stetho.Stetho;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.developer.udacityalumni.R;
 import com.google.developer.udacityalumni.adapter.PageAdapter;
 import com.google.developer.udacityalumni.data.AlumContract;
@@ -33,8 +36,6 @@ import com.google.developer.udacityalumni.service.AlumIntentService;
 import com.google.developer.udacityalumni.utility.Utility;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -45,7 +46,8 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends BaseActivity implements ArticleFragment.ArticleCallback,
-        LoaderManager.LoaderCallbacks<Cursor>, TabLayout.OnTabSelectedListener, NavigationView.OnNavigationItemSelectedListener {
+        LoaderManager.LoaderCallbacks<Cursor>, TabLayout.OnTabSelectedListener, NavigationView.OnNavigationItemSelectedListener,
+        GoogleApiClient.OnConnectionFailedListener{
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String URL_CLASSROOM = "https://classroom.udacity.com/me";
@@ -57,6 +59,8 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
     private List<String> mTags;
     private static final int LOADER = 101;
     private String mTitle;
+    private FirebaseAuth mFirebaseAuth;
+    public GoogleApiClient mGoogleApiClient;
 
     @BindView(R.id.drawer)
     DrawerLayout mDrawerLayout;
@@ -79,8 +83,7 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
         ButterKnife.bind(this);
         startService(new Intent(this, AlumIntentService.class));
         Utility.scheduleArticleSync(this);
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
         if (user == null) {
             startActivity(new Intent(this, LoginActivity.class));
@@ -100,6 +103,11 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
 
         if (mToolbar != null && savedInstanceState != null)
             mToolbar.setTitle(mTitle);
+        if (mToolbar != null) {
+            Drawable overflowIcon = mToolbar.getOverflowIcon();
+            if (overflowIcon != null) overflowIcon.setTint(ContextCompat.getColor(this, R.color.colorAccent));
+            if (savedInstanceState != null) mToolbar.setTitle(mTitle);
+        }
         setSupportActionBar(mToolbar);
         setupViewPager(mViewPager);
         mTabs.setupWithViewPager(mViewPager);
@@ -110,10 +118,15 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
                     = VectorDrawableCompat.create(getResources(), R.drawable.ic_menu, getTheme());
             assert indicator != null;
             indicator.setTint(ResourcesCompat.getColor(getResources(), R.color.colorAccent, getTheme()));
+
             supportActionBar.setHomeAsUpIndicator(indicator);
             supportActionBar.setDisplayHomeAsUpEnabled(true);
         }
         mNavView.setNavigationItemSelectedListener(this);
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API)
+                .build();
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -138,7 +151,6 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
         mMeetUpsTab.setIcon(R.drawable.ic_meetups);
     }
 
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -154,14 +166,20 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
+                break;
+            case R.id.sign_out:
+                mFirebaseAuth.signOut();
+                Auth.GoogleSignInApi.signOut(mGoogleApiClient);
+                startActivity(new Intent(this, LoginActivity.class));
                 break;
         }
         return true;
@@ -289,5 +307,10 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
             getSupportLoaderManager().destroyLoader(loader.getId());
         }
         super.onPause();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.e(LOG_TAG, "CONNECTION FAILED");
     }
 }
