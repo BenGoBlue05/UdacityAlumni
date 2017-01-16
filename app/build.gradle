@@ -55,6 +55,9 @@ dependencies {
     androidTestCompile "com.android.support.test.espresso:espresso-contrib:$rootProject.ext.espressoVersion"
     androidTestCompile "com.android.support.test.espresso:espresso-intents:$rootProject.ext.espressoVersion"
     compile 'com.android.support:support-v4:25.1.0'
+    compile "com.google.android.gms:play-services-auth:$rootProject.ext.playServicesVersion"
+    compile "com.google.firebase:firebase-auth:$playServicesVersion"
+    compile "com.google.firebase:firebase-database:$playServicesVersion"
     testCompile 'junit:junit:4.12'
 }
 configurations.all {
@@ -67,3 +70,5 @@ configurations.compile.dependencies.each { compileDependency ->
         configurations.androidTestCompile.exclude module: "${compileDependency.getName()}"
     }
 }
+
+apply plugin: 'com.google.gms.google-services'

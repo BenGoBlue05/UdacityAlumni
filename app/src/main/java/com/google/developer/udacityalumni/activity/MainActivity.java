@@ -17,11 +17,11 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.facebook.stetho.Stetho;
 import com.google.developer.udacityalumni.R;
@@ -31,14 +31,20 @@ import com.google.developer.udacityalumni.fragment.ArticleFragment;
 import com.google.developer.udacityalumni.fragment.PlaceholderFragment;
 import com.google.developer.udacityalumni.service.AlumIntentService;
 import com.google.developer.udacityalumni.utility.Utility;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends AppCompatActivity implements ArticleFragment.ArticleCallback,
+public class MainActivity extends BaseActivity implements ArticleFragment.ArticleCallback,
         LoaderManager.LoaderCallbacks<Cursor>, TabLayout.OnTabSelectedListener, NavigationView.OnNavigationItemSelectedListener {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
@@ -62,7 +68,6 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
     ViewPager mViewPager;
     @BindView(R.id.nav_view)
     NavigationView mNavView;
-
     TabLayout.Tab mArticleTab, mCareersTab, mMentorshipTab, mMeetUpsTab;
 
 
@@ -73,11 +78,30 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
         Stetho.initializeWithDefaults(this);
         ButterKnife.bind(this);
         startService(new Intent(this, AlumIntentService.class));
+        Utility.scheduleArticleSync(this);
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mFirebaseAuth.getCurrentUser();
+        if (user == null) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+            return;
+        }
+
+        TextView tv = (TextView) mNavView.getHeaderView(0).findViewById(R.id.nav_header_name_tv);
+        tv.setText(user.getDisplayName());
+        CircleImageView cv  = (CircleImageView) mNavView.getHeaderView(0).findViewById(R.id.nav_header_prof_pic);
+        if (user.getPhotoUrl() != null){
+            Picasso.with(this).load(user.getPhotoUrl()).placeholder(R.drawable.placeholder)
+                    .error(R.drawable.ic_person).into(cv);
+        } else{
+            cv.setImageResource(R.drawable.ic_person);
+        }
+
         if (mToolbar != null && savedInstanceState != null)
             mToolbar.setTitle(mTitle);
         setSupportActionBar(mToolbar);
         setupViewPager(mViewPager);
-        Utility.scheduleArticleSync(this);
         mTabs.setupWithViewPager(mViewPager);
         setUpTabs();
         ActionBar supportActionBar = getSupportActionBar();
