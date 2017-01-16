@@ -103,8 +103,8 @@ public class ArticleFragment extends Fragment implements LoaderManager.LoaderCal
                     Intent i = new Intent(Intent.ACTION_SEND);
                     i.setType("text/plain");
                     i.putExtra(Intent.EXTRA_SUBJECT,title);
-                    i.putExtra(Intent.EXTRA_TEXT,R.string.share+url);
-                    startActivity(Intent.createChooser(i, "choose one"));
+                    i.putExtra(Intent.EXTRA_TEXT, getString(R.string.share, url));
+                    startActivity(Intent.createChooser(i,getString(R.string.choose_to)));
 
             }
 
