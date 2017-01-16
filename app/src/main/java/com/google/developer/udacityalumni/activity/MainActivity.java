@@ -17,13 +17,16 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.facebook.stetho.Stetho;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.developer.udacityalumni.R;
 import com.google.developer.udacityalumni.adapter.PageAdapter;
 import com.google.developer.udacityalumni.data.AlumContract;
@@ -31,15 +34,20 @@ import com.google.developer.udacityalumni.fragment.ArticleFragment;
 import com.google.developer.udacityalumni.fragment.PlaceholderFragment;
 import com.google.developer.udacityalumni.service.AlumIntentService;
 import com.google.developer.udacityalumni.utility.Utility;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends AppCompatActivity implements ArticleFragment.ArticleCallback,
-        LoaderManager.LoaderCallbacks<Cursor>, TabLayout.OnTabSelectedListener, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements ArticleFragment.ArticleCallback,
+        LoaderManager.LoaderCallbacks<Cursor>, TabLayout.OnTabSelectedListener, NavigationView.OnNavigationItemSelectedListener,
+        GoogleApiClient.OnConnectionFailedListener{
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String URL_CLASSROOM = "https://classroom.udacity.com/me";
@@ -51,6 +59,8 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
     private List<String> mTags;
     private static final int LOADER = 101;
     private String mTitle;
+    private FirebaseAuth mFirebaseAuth;
+    public GoogleApiClient mGoogleApiClient;
 
     @BindView(R.id.drawer)
     DrawerLayout mDrawerLayout;
@@ -62,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
     ViewPager mViewPager;
     @BindView(R.id.nav_view)
     NavigationView mNavView;
-
     TabLayout.Tab mArticleTab, mCareersTab, mMentorshipTab, mMeetUpsTab;
 
 
@@ -73,11 +82,34 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
         Stetho.initializeWithDefaults(this);
         ButterKnife.bind(this);
         startService(new Intent(this, AlumIntentService.class));
+        Utility.scheduleArticleSync(this);
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mFirebaseAuth.getCurrentUser();
+        if (user == null) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+            return;
+        }
+
+        TextView tv = (TextView) mNavView.getHeaderView(0).findViewById(R.id.nav_header_name_tv);
+        tv.setText(user.getDisplayName());
+        CircleImageView cv  = (CircleImageView) mNavView.getHeaderView(0).findViewById(R.id.nav_header_prof_pic);
+        if (user.getPhotoUrl() != null){
+            Picasso.with(this).load(user.getPhotoUrl()).placeholder(R.drawable.placeholder)
+                    .error(R.drawable.ic_person).into(cv);
+        } else{
+            cv.setImageResource(R.drawable.ic_person);
+        }
+
         if (mToolbar != null && savedInstanceState != null)
             mToolbar.setTitle(mTitle);
+        if (mToolbar != null) {
+            Drawable overflowIcon = mToolbar.getOverflowIcon();
+            if (overflowIcon != null) overflowIcon.setTint(ContextCompat.getColor(this, R.color.colorAccent));
+            if (savedInstanceState != null) mToolbar.setTitle(mTitle);
+        }
         setSupportActionBar(mToolbar);
         setupViewPager(mViewPager);
-        Utility.scheduleArticleSync(this);
         mTabs.setupWithViewPager(mViewPager);
         setUpTabs();
         ActionBar supportActionBar = getSupportActionBar();
@@ -86,10 +118,15 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
                     = VectorDrawableCompat.create(getResources(), R.drawable.ic_menu, getTheme());
             assert indicator != null;
             indicator.setTint(ResourcesCompat.getColor(getResources(), R.color.colorAccent, getTheme()));
+
             supportActionBar.setHomeAsUpIndicator(indicator);
             supportActionBar.setDisplayHomeAsUpEnabled(true);
         }
         mNavView.setNavigationItemSelectedListener(this);
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API)
+                .build();
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -114,7 +151,6 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
         mMeetUpsTab.setIcon(R.drawable.ic_meetups);
     }
 
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -130,14 +166,20 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
+                break;
+            case R.id.sign_out:
+                mFirebaseAuth.signOut();
+                Auth.GoogleSignInApi.signOut(mGoogleApiClient);
+                startActivity(new Intent(this, LoginActivity.class));
                 break;
         }
         return true;
@@ -265,5 +307,10 @@ public class MainActivity extends AppCompatActivity implements ArticleFragment.A
             getSupportLoaderManager().destroyLoader(loader.getId());
         }
         super.onPause();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.e(LOG_TAG, "CONNECTION FAILED");
     }
 }

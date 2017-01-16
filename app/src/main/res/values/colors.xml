@@ -10,4 +10,5 @@
     <color name="unselected_icon_dark">#607D8B</color>
     <color name="unselected_icon_light">#CFD8DC</color>
     <color name="placeholder_color">#EEEEEE</color>
+    <color name="white">#FFFFFF</color>
 </resources>

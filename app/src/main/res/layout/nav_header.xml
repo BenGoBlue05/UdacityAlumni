@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/nav_header_name_tv"
-        android:text="Ben Lewis"
+        tools:text="Ben Lewis"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
@@ -28,7 +28,7 @@
         android:id="@+id/nav_header_prof_pic"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:src="@drawable/ben_lewis_prof_pic"
+        tools:src="@drawable/ben_lewis_prof_pic"
         app:civ_border_width="2dp"
         app:civ_border_color="@android:color/white"
         android:layout_marginStart="16dp"
