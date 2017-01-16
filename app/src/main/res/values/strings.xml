@@ -55,4 +55,8 @@
     <!-- Notifications -->
     <string name="notification_title">New Spotlighted Content</string>
 
+
+    <!--On Share String-->
+    <string name="share">"\nLet me recommend this article:\n\n"<xliff:g id="url">%s</xliff:g></string>
+    <string name="choose_to">choose one</string>
 </resources>

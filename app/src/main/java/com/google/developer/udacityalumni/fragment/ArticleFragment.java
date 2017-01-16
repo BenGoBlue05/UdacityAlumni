@@ -2,6 +2,7 @@ package com.google.developer.udacityalumni.fragment;
 
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -99,6 +100,12 @@ public class ArticleFragment extends Fragment implements LoaderManager.LoaderCal
 //                ie: https://udacity-alumni-client.herokuapp.com/articles/medically-necessary-utilization-review-evidence-of-insurability
 //                TODO: Share DYNAMIC link to the article  (the 'url' above is a link to the article on the web app)
 //               Will implement later
+                    Intent i = new Intent(Intent.ACTION_SEND);
+                    i.setType("text/plain");
+                    i.putExtra(Intent.EXTRA_SUBJECT,title);
+                    i.putExtra(Intent.EXTRA_TEXT, getString(R.string.share, url));
+                    startActivity(Intent.createChooser(i,getString(R.string.choose_to)));
+
             }
 
             @Override

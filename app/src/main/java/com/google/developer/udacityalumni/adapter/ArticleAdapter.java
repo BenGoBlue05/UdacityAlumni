@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.developer.udacityalumni.R;
+import com.google.developer.udacityalumni.animation.AnimationUtils;
 import com.google.developer.udacityalumni.fragment.ArticleFragment;
 import com.google.developer.udacityalumni.utility.Utility;
 import com.squareup.picasso.Picasso;
@@ -22,7 +23,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder> {
 
-    private static final String LOG_TAG = ArticleAdapter.class.getSimpleName();
     private Cursor mCursor;
     final private Context mContext;
     final private ArticleItemClickHandler mArticleClickHandler;
@@ -58,6 +58,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
     @Override
     public void onBindViewHolder(ArticleViewHolder holder, int position) {
         mCursor.moveToPosition(position);
+
         String profPic = mCursor.getString(ArticleFragment.IND_USER_AVATAR);
         if (TextUtils.isEmpty(profPic) || profPic.equals("null")){
             holder.mProfPicCV.setImageResource(R.drawable.ic_person);
@@ -86,6 +87,10 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
         holder.mBookmarkIV.setImageResource(isBookmarked ? R.drawable.ic_bookmark : R.drawable.ic_bookmark_outline);
         boolean isFollowing = mCursor.getInt(ArticleFragment.IND_FOLLOWING_AUTHOR) == 1;
         holder.mFollowIV.setImageResource(isFollowing ? R.drawable.ic_following : R.drawable.ic_add_follow);
+
+        //Animation on Article
+        AnimationUtils.scaleXY(holder);
+
     }
 
     public void swapCursor(Cursor cursor) {
