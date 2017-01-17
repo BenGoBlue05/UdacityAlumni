@@ -26,8 +26,6 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.Map;
-
 /**
  * A login screen that offers login via email/password.
  */
@@ -63,28 +61,19 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    Log.i(LOG_TAG, "onAuthStateChanged:signed_in: " + user.getUid());
-                    String id = user.getUid();
-                    if (mDatabase.child("users").child(id) == null){
-                        createNewUser(user);
-                    }
-                } else {
-                    // User is signed out
-                    Log.i(LOG_TAG, "onAuthStateChanged:signed_out");
-                }
+                if (user != null) bindUserValues(user);
             }
         };
     }
 
-    private void createNewUser(@NonNull FirebaseUser user){
-        String id = user.getUid();
+    private void bindUserValues(@NonNull FirebaseUser user) {
+        DatabaseReference ref = mDatabase.child("users").child(user.getUid());
         String displayName = user.getDisplayName();
         String email = user.getEmail();
         String photoUrl = user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : null;
         User usr = new User(displayName, email, photoUrl);
-        Map<String, Object> values = usr.toMap();
-        mDatabase.child("users").child(id).setValue(values);
+        ref.setValue(usr);
+
     }
 
     @Override
