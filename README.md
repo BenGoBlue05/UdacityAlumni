@@ -13,7 +13,9 @@ If you are a Udacity ND graduate, or current or prospective student you are welc
 
 1. Clone this repository. If you would like to learn how to use GitHub on Android Studio please check out this tutorial by Will Willis https://www.youtube.com/playlist?list=PLhO3X757HABdao5hv4HGQSWPX0tnN4lCO. 
 
-2. Click on TODO tab in bottom left corner of Android Studio to see available tasks. Choose as many or as few as you like and start coding!
+2. Connect to Firebase. https://www.youtube.com/watch?v=2f3vHneM_qU&index=1&list=PLLmQeiok8LFExxI-OOgKR4SucpJP7z6rm&t=17s
+
+3. Click on TODO tab in bottom left corner of Android Studio to see available tasks. Choose as many or as few as you like and start coding!
 
 ![TODO](https://github.com/BenGoBlue05/UdacityAlumni/blob/master/Todos/Todo.png)
 
