@@ -24,9 +24,9 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.facebook.stetho.Stetho;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.developer.udacityalumni.R;
 import com.google.developer.udacityalumni.adapter.PageAdapter;
 import com.google.developer.udacityalumni.data.AlumContract;
@@ -46,8 +46,8 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends BaseActivity implements ArticleFragment.ArticleCallback,
-        LoaderManager.LoaderCallbacks<Cursor>, TabLayout.OnTabSelectedListener, NavigationView.OnNavigationItemSelectedListener,
-        GoogleApiClient.OnConnectionFailedListener{
+        LoaderManager.LoaderCallbacks<Cursor>, TabLayout.OnTabSelectedListener,
+        NavigationView.OnNavigationItemSelectedListener{
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String URL_CLASSROOM = "https://classroom.udacity.com/me";
@@ -59,8 +59,6 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
     private List<String> mTags;
     private static final int LOADER = 101;
     private String mTitle;
-    private FirebaseAuth mFirebaseAuth;
-    public GoogleApiClient mGoogleApiClient;
 
     @BindView(R.id.drawer)
     DrawerLayout mDrawerLayout;
@@ -78,55 +76,51 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         Stetho.initializeWithDefaults(this);
-        ButterKnife.bind(this);
-        startService(new Intent(this, AlumIntentService.class));
-        Utility.scheduleArticleSync(this);
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mFirebaseAuth.getCurrentUser();
-        if (user == null) {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() == null) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
-            return;
-        }
-
-        TextView tv = (TextView) mNavView.getHeaderView(0).findViewById(R.id.nav_header_name_tv);
-        tv.setText(user.getDisplayName());
-        CircleImageView cv  = (CircleImageView) mNavView.getHeaderView(0).findViewById(R.id.nav_header_prof_pic);
-        if (user.getPhotoUrl() != null){
-            Picasso.with(this).load(user.getPhotoUrl()).placeholder(R.drawable.placeholder)
-                    .error(R.drawable.ic_person).into(cv);
         } else{
-            cv.setImageResource(R.drawable.ic_person);
+            setContentView(R.layout.activity_main);
+            ButterKnife.bind(this);
+            startService(new Intent(this, AlumIntentService.class));
+            Utility.scheduleArticleSync(this);
+            FirebaseUser user = auth.getCurrentUser();
+            TextView tv = (TextView) mNavView.getHeaderView(0).findViewById(R.id.nav_header_name_tv);
+            tv.setText(user.getDisplayName());
+            CircleImageView cv  = (CircleImageView) mNavView.getHeaderView(0).findViewById(R.id.nav_header_prof_pic);
+            if (user.getPhotoUrl() != null){
+                Picasso.with(this).load(user.getPhotoUrl()).placeholder(R.drawable.placeholder)
+                        .error(R.drawable.ic_person).into(cv);
+            } else{
+                cv.setImageResource(R.drawable.ic_person);
+            }
+
+            if (mToolbar != null && savedInstanceState != null)
+                mToolbar.setTitle(mTitle);
+            if (mToolbar != null) {
+                Drawable overflowIcon = mToolbar.getOverflowIcon();
+                if (overflowIcon != null) overflowIcon.setTint(ContextCompat.getColor(this, R.color.colorAccent));
+                if (savedInstanceState != null) mToolbar.setTitle(mTitle);
+            }
+            setSupportActionBar(mToolbar);
+            setupViewPager(mViewPager);
+            mTabs.setupWithViewPager(mViewPager);
+            setUpTabs();
+            ActionBar supportActionBar = getSupportActionBar();
+            if (supportActionBar != null) {
+                VectorDrawableCompat indicator
+                        = VectorDrawableCompat.create(getResources(), R.drawable.ic_menu, getTheme());
+                assert indicator != null;
+                indicator.setTint(ResourcesCompat.getColor(getResources(), R.color.colorAccent, getTheme()));
+
+                supportActionBar.setHomeAsUpIndicator(indicator);
+                supportActionBar.setDisplayHomeAsUpEnabled(true);
+            }
+            mNavView.setNavigationItemSelectedListener(this);
         }
 
-        if (mToolbar != null && savedInstanceState != null)
-            mToolbar.setTitle(mTitle);
-        if (mToolbar != null) {
-            Drawable overflowIcon = mToolbar.getOverflowIcon();
-            if (overflowIcon != null) overflowIcon.setTint(ContextCompat.getColor(this, R.color.colorAccent));
-            if (savedInstanceState != null) mToolbar.setTitle(mTitle);
-        }
-        setSupportActionBar(mToolbar);
-        setupViewPager(mViewPager);
-        mTabs.setupWithViewPager(mViewPager);
-        setUpTabs();
-        ActionBar supportActionBar = getSupportActionBar();
-        if (supportActionBar != null) {
-            VectorDrawableCompat indicator
-                    = VectorDrawableCompat.create(getResources(), R.drawable.ic_menu, getTheme());
-            assert indicator != null;
-            indicator.setTint(ResourcesCompat.getColor(getResources(), R.color.colorAccent, getTheme()));
-
-            supportActionBar.setHomeAsUpIndicator(indicator);
-            supportActionBar.setDisplayHomeAsUpEnabled(true);
-        }
-        mNavView.setNavigationItemSelectedListener(this);
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this /* OnConnectionFailedListener */)
-                .addApi(Auth.GOOGLE_SIGN_IN_API)
-                .build();
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -177,9 +171,14 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 break;
             case R.id.sign_out:
-                mFirebaseAuth.signOut();
-                Auth.GoogleSignInApi.signOut(mGoogleApiClient);
-                startActivity(new Intent(this, LoginActivity.class));
+                AuthUI.getInstance()
+                        .signOut(this)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            public void onComplete(@NonNull Task<Void> task) {
+                                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                                finish();
+                            }
+                        });
                 break;
         }
         return true;
@@ -307,10 +306,5 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
             getSupportLoaderManager().destroyLoader(loader.getId());
         }
         super.onPause();
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.e(LOG_TAG, "CONNECTION FAILED");
     }
 }

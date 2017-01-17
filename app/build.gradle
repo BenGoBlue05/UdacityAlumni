@@ -58,6 +58,7 @@ dependencies {
     compile "com.google.android.gms:play-services-auth:$rootProject.ext.playServicesVersion"
     compile "com.google.firebase:firebase-auth:$playServicesVersion"
     compile "com.google.firebase:firebase-database:$playServicesVersion"
+    compile 'com.firebaseui:firebase-ui-auth:1.1.1'
     testCompile 'junit:junit:4.12'
 }
 configurations.all {
