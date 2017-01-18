@@ -3,6 +3,7 @@ package com.google.developer.udacityalumni.fragment;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -16,10 +17,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.developer.udacityalumni.R;
 import com.google.developer.udacityalumni.data.AlumContract;
 import com.google.developer.udacityalumni.utility.Utility;
+import com.google.developer.udacityalumni.view.slidingview.AvatarCardAdapter;
+import com.google.developer.udacityalumni.view.slidingview.SlidingViewManager;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -106,8 +110,6 @@ public class ArticleDetailFragment extends Fragment
                 }
             }
         }
-
-
         return rootView;
     }
 
@@ -211,7 +213,7 @@ public class ArticleDetailFragment extends Fragment
                 getContext().getContentResolver().update(AlumContract.ArticleEntry.buildUriWithId(mArticleId),
                         values, null, null);
                 break;
-            case (R.id.nav_header_prof_pic):
+            case R.id.detail_article_prof_pic:
                 //TODO: have user bio pane slide from bottom;
                 break;
             case R.id.detail_article_preview_ll:
