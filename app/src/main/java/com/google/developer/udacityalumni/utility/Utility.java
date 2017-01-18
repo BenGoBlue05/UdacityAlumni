@@ -1,11 +1,11 @@
 package com.google.developer.udacityalumni.utility;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.customtabs.CustomTabsIntent;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
@@ -19,8 +19,6 @@ import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.Trigger;
 import com.google.developer.udacityalumni.R;
-import com.google.developer.udacityalumni.activity.WebViewActivity;
-import com.google.developer.udacityalumni.fragment.WebViewFragment;
 import com.google.developer.udacityalumni.service.ArticleFirebaseJobService;
 
 import java.io.IOException;
@@ -116,24 +114,15 @@ public final class Utility {
     }
 
     /**
-     * Launches a new Activity with a webview component to display the url content
+     * Launches a new page in Chrome Custom Tab Activity
      * @param url String page URL
      */
-    public static void launchWebView(String url, Context context) {
-        Intent intent = new Intent(context, WebViewActivity.class);
-        intent.putExtra(WebViewFragment.ARG_URL, url);
-        context.startActivity(intent);
-    }
-
-    /**
-     * Launches common intent to open web page in a device browser app
-     * @param url String page URL
-     */
-    public static void launchBrowser(String url, Context context) {
-        Uri webpage = Uri.parse(url);
-        Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
-        if (intent.resolveActivity(context.getPackageManager()) != null) {
-            context.startActivity(intent);
-        }
+    public static void launchUrl(String url, Context context) {
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        builder.setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left);
+        builder.setExitAnimations(context, android.R.anim.slide_in_left,
+                android.R.anim.slide_out_right);
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(context, Uri.parse(url));
     }
 }
