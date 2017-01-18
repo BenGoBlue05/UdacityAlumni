@@ -8,8 +8,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/sliding_card_avatar"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="@dimen/sliding_view_avatar_size"
+        android:layout_height="@dimen/sliding_view_avatar_size"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:src="@drawable/ic_launcher"/>
@@ -17,7 +17,7 @@
     <TextView
         android:id="@+id/sliding_card_name"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="@dimen/sliding_view_avatar_size"
         android:gravity="start|center_vertical"
         android:layout_toEndOf="@+id/sliding_card_avatar"
         android:layout_toStartOf="@+id/sliding_card_dismiss"
@@ -29,8 +29,8 @@
 
     <ImageButton
         android:id="@+id/sliding_card_dismiss"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="@dimen/sliding_view_avatar_size"
+        android:layout_height="@dimen/sliding_view_avatar_size"
         android:tint="@color/colorAccent"
         android:src="@drawable/ic_close"
         android:layout_alignParentEnd="true"
