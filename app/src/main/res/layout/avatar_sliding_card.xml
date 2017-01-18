@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="?dialogPreferredPadding"
+    android:clickable="true">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/sliding_card_avatar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/ic_launcher"/>
+
+    <TextView
+        android:id="@+id/sliding_card_name"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:gravity="start|center_vertical"
+        android:layout_toEndOf="@+id/sliding_card_avatar"
+        android:layout_toStartOf="@+id/sliding_card_dismiss"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        tools:text="Oscar Wilde"/>
+
+    <ImageButton
+        android:id="@+id/sliding_card_dismiss"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:tint="@color/colorAccent"
+        android:src="@drawable/ic_close"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="@string/sliding_view_dismiss_content_desc"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored" />
+
+    <View
+        android:id="@+id/sliding_card_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_below="@+id/sliding_card_avatar"
+        android:layout_marginTop="@dimen/view_padding"
+        android:layout_marginBottom="@dimen/view_padding"/>
+
+    <TextView
+        android:id="@+id/sliding_card_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="4"
+        android:layout_below="@+id/sliding_card_divider"
+        tools:text="Here would be some text about Oscar.\n\nDid you know he makes apps? He isn't bad either."/>
+
+    <Button
+        android:id="@+id/sliding_card_see_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sliding_view_see_more"
+        android:layout_below="@id/sliding_card_content"
+        android:layout_centerHorizontal="true"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored" />
+
+</RelativeLayout>
