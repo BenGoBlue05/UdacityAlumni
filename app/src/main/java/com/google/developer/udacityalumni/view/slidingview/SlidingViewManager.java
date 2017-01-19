@@ -76,6 +76,10 @@ public final class SlidingViewManager implements View.OnTouchListener, ViewTreeO
 
     public void setAdapter(SlidingView adapter) {
         mAdapter = adapter;
+        final View contentView = mSlidingView.getChildAt(0);
+        if (contentView != null) {
+            mSlidingView.removeView(contentView);
+        }
         mSlidingView.addView(mAdapter.onCreateView(mSlidingView));
     }
 
