@@ -37,7 +37,7 @@ public final class SlidingViewManager implements View.OnTouchListener, ViewTreeO
     private static final String STATE_KEY = TAG + ".STATE_KEY";
     private static final String OPTIONS_KEY = TAG + ".OPTIONS_KEY";
     private static final int ANIMATION_DURATION = 500;
-    private static final int SLIDING_CARD_ELEVATION = ViewUtils.pxToDp(24);
+    private static final int SLIDING_CARD_ELEVATION = ViewUtils.dpToPx(16);
 
     private boolean isExpanded = false, isAnimating = false;
 
