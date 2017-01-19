@@ -4,6 +4,7 @@ package com.google.developer.udacityalumni.fragment;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,10 +17,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.developer.udacityalumni.R;
 import com.google.developer.udacityalumni.adapter.ArticleAdapter;
 import com.google.developer.udacityalumni.data.AlumContract;
+import com.google.developer.udacityalumni.view.slidingview.AvatarCardAdapter;
+import com.google.developer.udacityalumni.view.slidingview.SlidingViewManager;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 
 public class ArticleFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -56,13 +62,15 @@ public class ArticleFragment extends Fragment implements LoaderManager.LoaderCal
     private ArticleAdapter mArticleAdapter;
     private boolean mIsBookmarked;
 
+    private SlidingViewManager mManager;
+    private AvatarCardAdapter mAvatarCardAdapter;
+
     public interface ArticleCallback {
         void onArticleSelected(long articleId, boolean isBookmarked, String tag);
     }
 
     public ArticleFragment() {
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,6 +80,26 @@ public class ArticleFragment extends Fragment implements LoaderManager.LoaderCal
         RecyclerView mRecyclerView = (RecyclerView) rootView.findViewById(R.id.article_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setHasFixedSize(true);
+
+        final AvatarCardAdapter.OnClickListener listener = new AvatarCardAdapter.OnClickListener() {
+            @Override
+            public void onSeeMoreClick() {
+                Toast.makeText(getContext(), "See More Clicked", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onDismissClick() {
+                mManager.animate();
+            }
+        };
+
+        mManager = new SlidingViewManager(this);
+        mAvatarCardAdapter = new AvatarCardAdapter(listener);
+        mManager.setAdapter(mAvatarCardAdapter);
+        if(savedInstanceState != null) {
+            mManager.onRestoreInstanceState(savedInstanceState);
+        }
+
         mArticleAdapter = new ArticleAdapter(getContext(), new ArticleAdapter.ArticleItemClickHandler() {
 
             @Override
@@ -80,8 +108,21 @@ public class ArticleFragment extends Fragment implements LoaderManager.LoaderCal
             }
 
             @Override
-            public void onProfPicClick(long userId) {
+            public void onProfPicClick(long userId, int position) {
                 //TODO: Pull up users profile from bottom pane: https://github.com/BenGoBlue05/UdacityAlumni/blob/master/Todos/prof-pic-click.md
+                final Cursor c = mArticleAdapter.getCursor();
+                c.moveToPosition(position);
+
+                final String name = c.getString(ArticleFragment.IND_USER_NAME);
+                final String image = c.getString(ArticleFragment.IND_USER_AVATAR);
+                final String content = c.getString(ArticleFragment.IND_TITLE);
+
+                mAvatarCardAdapter.setName(name);
+                mAvatarCardAdapter.setImageUri(Uri.parse(image));
+                mAvatarCardAdapter.setContent(content);
+
+                mManager.animate();
+
             }
 
             @Override
@@ -129,6 +170,12 @@ public class ArticleFragment extends Fragment implements LoaderManager.LoaderCal
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         getLoaderManager().initLoader(ARTICLE_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mManager.onSaveInstanceState(outState);
     }
 
 

@@ -14,4 +14,8 @@
     <dimen name="line_spacing">2dp</dimen>
     <dimen name="detail_content_text_size">18sp</dimen>
     <dimen name="detail_title_text_size">24sp</dimen>
+
+    <!-- Sliding View -->
+    <dimen name="sliding_view_avatar_size">48dp</dimen>
+
 </resources>

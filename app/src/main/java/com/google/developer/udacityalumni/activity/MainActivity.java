@@ -72,7 +72,6 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
     NavigationView mNavView;
     TabLayout.Tab mArticleTab, mCareersTab, mMentorshipTab, mMeetUpsTab;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

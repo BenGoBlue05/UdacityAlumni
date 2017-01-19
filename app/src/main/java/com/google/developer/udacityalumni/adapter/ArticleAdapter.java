@@ -35,7 +35,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
     public interface ArticleItemClickHandler {
         void onArticleClick(long articleId, boolean isBookmarked, String tag);
 
-        void onProfPicClick(long userId);
+        void onProfPicClick(long userId, int position);
 
         void onFollowUserClick(long userId, long articleId, boolean wasFollowingBeforeClick, ImageView icon);
 
@@ -98,6 +98,10 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
         notifyDataSetChanged();
     }
 
+    public Cursor getCursor() {
+        return mCursor;
+    }
+
     @Override
     public int getItemCount() {
         if (mCursor == null) return 0;
@@ -144,7 +148,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
                 boolean isBookmarked = mCursor.getInt(ArticleFragment.IND_BOOKMARKED) == 1;
                 //for some reason switch statement doesn't work for this
                 if (viewId == mProfPicCV.getId()){
-                    mArticleClickHandler.onProfPicClick(authorId);
+                    mArticleClickHandler.onProfPicClick(authorId, getAdapterPosition());
                 } else if (viewId == mBookmarkIV.getId()){
                     mArticleClickHandler.onBookmarkClick(articleId, isBookmarked, mBookmarkIV);
                 } else if (viewId == mShareIV.getId()){

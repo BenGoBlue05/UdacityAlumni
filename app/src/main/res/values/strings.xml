@@ -74,8 +74,12 @@
         completions."
     </string>
 
-
     <!--On Share String-->
     <string name="share">"\nLet me recommend this article:\n\n"<xliff:g id="url">%s</xliff:g></string>
     <string name="choose_to">choose one</string>
+
+    <!-- Sliding View -->
+    <string name="sliding_view_see_more">See More…</string>
+    <string name="sliding_view_dismiss_content_desc">Dismiss</string>
+
 </resources>
