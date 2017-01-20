@@ -126,6 +126,7 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
             }
             mNavView.setNavigationItemSelectedListener(this);
             mBottomNav.setOnNavigationItemSelectedListener(this);
+            mBottomNav.setVisibility((mViewPager.getCurrentItem()==1)?View.VISIBLE:View.GONE);
         }
 
     }
