@@ -73,7 +73,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         String photoUrl = user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : null;
         User usr = new User(displayName, email, photoUrl);
         ref.setValue(usr);
-
     }
 
     @Override

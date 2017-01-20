@@ -40,6 +40,17 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/nav_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:itemBackground="@color/white"
+            app:itemTextColor="@color/checkable_colors"
+            app:itemIconTint="@color/checkable_colors"
+            app:menu="@menu/nav_bottom" />
+
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView
@@ -50,5 +61,7 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/nav_side" />
+
+
 
 </android.support.v4.widget.DrawerLayout>

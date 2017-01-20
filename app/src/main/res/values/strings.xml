@@ -57,6 +57,13 @@
     <string name="notification_title">New Spotlighted Content</string>
     <string name="title_activity_login">Sign in</string>
     <string name="udacity_alumni_logo">Udacity Alumni logo</string>
+    <string name="android">Android</string>
+    <string name="web">Web</string>
+    <string name="trending">Trending</string>
+    <string name="featured">Featured</string>
+    <string name="apps">Apps</string>
+
+
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>

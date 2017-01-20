@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.graphics.drawable.VectorDrawableCompat;
@@ -18,9 +19,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.facebook.stetho.Stetho;
@@ -47,7 +50,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends BaseActivity implements ArticleFragment.ArticleCallback,
         LoaderManager.LoaderCallbacks<Cursor>, TabLayout.OnTabSelectedListener,
-        NavigationView.OnNavigationItemSelectedListener{
+        NavigationView.OnNavigationItemSelectedListener, BottomNavigationView.OnNavigationItemSelectedListener {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String URL_CLASSROOM = "https://classroom.udacity.com/me";
@@ -71,6 +74,9 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
     @BindView(R.id.nav_view)
     NavigationView mNavView;
     TabLayout.Tab mArticleTab, mCareersTab, mMentorshipTab, mMeetUpsTab;
+    @BindView(R.id.nav_bottom)
+    BottomNavigationView mBottomNav;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +86,7 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
         if (auth.getCurrentUser() == null) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
-        } else{
+        } else {
             setContentView(R.layout.activity_main);
             ButterKnife.bind(this);
             startService(new Intent(this, AlumIntentService.class));
@@ -88,11 +94,11 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
             FirebaseUser user = auth.getCurrentUser();
             TextView tv = (TextView) mNavView.getHeaderView(0).findViewById(R.id.nav_header_name_tv);
             tv.setText(user.getDisplayName());
-            CircleImageView cv  = (CircleImageView) mNavView.getHeaderView(0).findViewById(R.id.nav_header_prof_pic);
-            if (user.getPhotoUrl() != null){
+            CircleImageView cv = (CircleImageView) mNavView.getHeaderView(0).findViewById(R.id.nav_header_prof_pic);
+            if (user.getPhotoUrl() != null) {
                 Picasso.with(this).load(user.getPhotoUrl()).placeholder(R.drawable.placeholder)
                         .error(R.drawable.ic_person).into(cv);
-            } else{
+            } else {
                 cv.setImageResource(R.drawable.ic_person);
             }
 
@@ -100,7 +106,8 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
                 mToolbar.setTitle(mTitle);
             if (mToolbar != null) {
                 Drawable overflowIcon = mToolbar.getOverflowIcon();
-                if (overflowIcon != null) overflowIcon.setTint(ContextCompat.getColor(this, R.color.colorAccent));
+                if (overflowIcon != null)
+                    overflowIcon.setTint(ContextCompat.getColor(this, R.color.colorAccent));
                 if (savedInstanceState != null) mToolbar.setTitle(mTitle);
             }
             setSupportActionBar(mToolbar);
@@ -118,6 +125,7 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
                 supportActionBar.setDisplayHomeAsUpEnabled(true);
             }
             mNavView.setNavigationItemSelectedListener(this);
+            mBottomNav.setOnNavigationItemSelectedListener(this);
         }
 
     }
@@ -136,10 +144,8 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
         mCareersTab = mTabs.getTabAt(1);
         mMentorshipTab = mTabs.getTabAt(2);
         mMeetUpsTab = mTabs.getTabAt(3);
-        Drawable homeIcon = ContextCompat.getDrawable(this, R.drawable.ic_home);
-        homeIcon.setTint(ContextCompat.getColor(this, R.color.colorAccent));
         mArticleTab.setIcon(R.drawable.ic_home);
-        mCareersTab.setIcon(R.drawable.ic_careers);
+        mCareersTab.setIcon(R.drawable.ic_apps);
         mMentorshipTab.setIcon(R.drawable.ic_mentorship);
         mMeetUpsTab.setIcon(R.drawable.ic_meetups);
     }
@@ -185,20 +191,35 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.nav_classroom:
-                Utility.launchUrl(URL_CLASSROOM, this);
-                break;
-            case R.id.nav_catalog:
-                Utility.launchUrl(URL_CATALOG, this);
-                break;
-            case R.id.nav_success:
-                Utility.launchUrl(URL_SUCCESS, this);
-                break;
+        int id = item.getItemId();
+        if (id == R.id.nav_classroom || id == R.id.nav_catalog || id == R.id.nav_success) {
+            String url = null;
+            switch (id) {
+                case R.id.nav_classroom:
+                    url = URL_CLASSROOM;
+                    break;
+                case R.id.nav_catalog:
+                    url = URL_CATALOG;
+                    break;
+                case R.id.nav_success:
+                    url = URL_SUCCESS;
+                    break;
+            }
+            if (!TextUtils.isEmpty(url)) Utility.launchUrl(url, this);
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            Log.i(LOG_TAG, "ICON SELECTED");
+            Drawable icon = item.getIcon();
+            if (icon != null) {
+                icon.setTint(ContextCompat.getColor(MainActivity.this, R.color.colorAccent));
+                Log.i(LOG_TAG, "TINT SET");
+            }
         }
-        mDrawerLayout.closeDrawer(GravityCompat.START);
+
         return true;
     }
+
+
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -262,12 +283,13 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
         Drawable icon = tab.getIcon();
         assert icon != null;
         icon.setTint(ContextCompat.getColor(MainActivity.this, R.color.colorAccent));
-        switch (tab.getPosition()) {
+        int pos = tab.getPosition();
+        switch (pos) {
             case 0:
                 mTitle = getString(R.string.home);
                 break;
             case 1:
-                mTitle = getString(R.string.careers);
+                mTitle = getString(R.string.apps);
                 break;
             case 2:
                 mTitle = getString(R.string.mentorship);
@@ -278,6 +300,7 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
             default:
                 Log.e(LOG_TAG, "TAB POSITION UNRECOGINIZED");
         }
+        mBottomNav.setVisibility(pos == 1 ? View.VISIBLE : View.GONE);
         if (mTitle != null) setTitle(mTitle);
     }
 

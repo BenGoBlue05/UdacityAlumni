@@ -1,8 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/feed"
-        android:title="@string/feed"
-        android:icon="@drawable/ic_feed" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/android"
+            android:icon="@drawable/ic_android"
+            android:title="@string/android"
+            android:tint="@color/unselected_icon_dark"/>
+        <item
+            android:id="@+id/web"
+            android:icon="@drawable/ic_web"
+            android:title="@string/web"
+            android:tint="@color/unselected_icon_dark"/>
+
+        <item
+            android:id="@+id/trending"
+            android:icon="@drawable/ic_trending"
+            android:title="@string/trending"
+            android:tint="@color/unselected_icon_dark"/>
+    </group>
 
 </menu>
