@@ -207,15 +207,7 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
             }
             if (!TextUtils.isEmpty(url)) Utility.launchUrl(url, this);
             mDrawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            Log.i(LOG_TAG, "ICON SELECTED");
-            Drawable icon = item.getIcon();
-            if (icon != null) {
-                icon.setTint(ContextCompat.getColor(MainActivity.this, R.color.colorAccent));
-                Log.i(LOG_TAG, "TINT SET");
-            }
         }
-
         return true;
     }
 
