@@ -106,6 +106,7 @@ public final class AvatarCardAdapter implements SlidingView, View.OnClickListene
 
     @Override
     public void setParcelableData(Parcelable data) {
+        if(data == null) return;
         final Options options = (Options) data;
         setContent(options.content);
         setName(options.name);

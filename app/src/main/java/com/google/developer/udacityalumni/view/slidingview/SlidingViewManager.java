@@ -165,7 +165,9 @@ public final class SlidingViewManager implements View.OnTouchListener, ViewTreeO
 
     public void onSaveInstanceState(@NonNull Bundle bundle) {
         bundle.putBoolean(STATE_KEY, isExpanded);
-        bundle.putParcelable(OPTIONS_KEY, mAdapter.getParcelableData());
+        if (mAdapter != null) {
+            bundle.putParcelable(OPTIONS_KEY, mAdapter.getParcelableData());
+        }
     }
 
     public void onRestoreInstanceState(@NonNull Bundle bundle) {
