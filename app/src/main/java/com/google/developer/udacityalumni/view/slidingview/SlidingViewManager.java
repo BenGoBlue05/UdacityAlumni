@@ -225,10 +225,10 @@ public final class SlidingViewManager implements View.OnTouchListener, ViewTreeO
                 mScrim.setVisibility(View.VISIBLE);
                 mScrim.setBackgroundColor(endColor);
             } else {
-                ViewCompat.setTranslationY(mSlidingView, mSlidingView.getHeight());
+                ViewCompat.setTranslationY(mSlidingView, height);
                 mSlidingView.setVisibility(View.GONE);
                 mScrim.setVisibility(View.GONE);
-                mScrim.setBackgroundColor(Color.TRANSPARENT);
+                mScrim.setBackgroundColor(startColor);
             }
             mSlidingView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
         }
