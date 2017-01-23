@@ -101,11 +101,12 @@ public final class AvatarCardAdapter implements SlidingView, View.OnClickListene
                 .setName(name)
                 .setImageUri(imageUri)
                 .setContent(content)
-                .setSeeMoreClickListener(listener);
+                .setClickListener(listener);
     }
 
     @Override
     public void setParcelableData(Parcelable data) {
+        if(data == null) return;
         final Options options = (Options) data;
         setContent(options.content);
         setName(options.name);
@@ -161,7 +162,7 @@ public final class AvatarCardAdapter implements SlidingView, View.OnClickListene
             return this;
         }
 
-        public Options setSeeMoreClickListener(@NonNull OnClickListener listener) {
+        public Options setClickListener(@NonNull OnClickListener listener) {
             this.listener = listener;
             return this;
         }

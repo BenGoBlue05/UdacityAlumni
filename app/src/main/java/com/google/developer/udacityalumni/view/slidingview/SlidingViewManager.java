@@ -37,7 +37,7 @@ public final class SlidingViewManager implements View.OnTouchListener, ViewTreeO
     private static final String STATE_KEY = TAG + ".STATE_KEY";
     private static final String OPTIONS_KEY = TAG + ".OPTIONS_KEY";
     private static final int ANIMATION_DURATION = 500;
-    private static final int SLIDING_CARD_ELEVATION = ViewUtils.pxToDp(24);
+    private static final int SLIDING_CARD_ELEVATION = ViewUtils.dpToPx(16);
 
     private boolean isExpanded = false, isAnimating = false;
 
@@ -76,6 +76,10 @@ public final class SlidingViewManager implements View.OnTouchListener, ViewTreeO
 
     public void setAdapter(SlidingView adapter) {
         mAdapter = adapter;
+        final View contentView = mSlidingView.getChildAt(0);
+        if (contentView != null) {
+            mSlidingView.removeView(contentView);
+        }
         mSlidingView.addView(mAdapter.onCreateView(mSlidingView));
     }
 
@@ -161,7 +165,9 @@ public final class SlidingViewManager implements View.OnTouchListener, ViewTreeO
 
     public void onSaveInstanceState(@NonNull Bundle bundle) {
         bundle.putBoolean(STATE_KEY, isExpanded);
-        bundle.putParcelable(OPTIONS_KEY, mAdapter.getParcelableData());
+        if (mAdapter != null) {
+            bundle.putParcelable(OPTIONS_KEY, mAdapter.getParcelableData());
+        }
     }
 
     public void onRestoreInstanceState(@NonNull Bundle bundle) {
@@ -221,10 +227,10 @@ public final class SlidingViewManager implements View.OnTouchListener, ViewTreeO
                 mScrim.setVisibility(View.VISIBLE);
                 mScrim.setBackgroundColor(endColor);
             } else {
-                ViewCompat.setTranslationY(mSlidingView, mSlidingView.getHeight());
+                ViewCompat.setTranslationY(mSlidingView, height);
                 mSlidingView.setVisibility(View.GONE);
                 mScrim.setVisibility(View.GONE);
-                mScrim.setBackgroundColor(Color.TRANSPARENT);
+                mScrim.setBackgroundColor(startColor);
             }
             mSlidingView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
         }

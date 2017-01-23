@@ -43,6 +43,9 @@ public class ArticleDetailFragment extends Fragment
     private long mArticleId, mNextArticleId;
     private boolean mIsFollowing;
 
+    private SlidingViewManager mSlidingViewManager;
+    private AvatarCardAdapter mSlidingViewAdapter;
+
     @BindView(R.id.detail_article_title_tv)
     TextView mTitleTV;
     @BindView(R.id.detail_article_image)
@@ -110,7 +113,21 @@ public class ArticleDetailFragment extends Fragment
                 }
             }
         }
+
+        mSlidingViewManager = new SlidingViewManager(this);
+        mSlidingViewAdapter = new AvatarCardAdapter(slidingCardClickListener);
+        mSlidingViewManager.setAdapter(mSlidingViewAdapter);
+        if (savedInstanceState != null) {
+            mSlidingViewManager.onRestoreInstanceState(savedInstanceState);
+        }
+
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mSlidingViewManager.onSaveInstanceState(outState);
     }
 
     @Override
@@ -165,7 +182,8 @@ public class ArticleDetailFragment extends Fragment
                     Picasso.with(getContext()).load(image).placeholder(R.drawable.placeholder)
                             .error(R.drawable.udacity_logo_banner).into(mImageView);
                 }
-                mArticleTV.setText(data.getString(ArticleFragment.IND_CONTENT));
+                String content = data.getString(ArticleFragment.IND_CONTENT);
+                mArticleTV.setText(content);
                 String profPic = data.getString(ArticleFragment.IND_USER_AVATAR);
                 if (profPic == null || TextUtils.isEmpty(image) || profPic.equals("null")) {
                     mProfPicCV.setImageResource(R.drawable.ic_person);
@@ -177,6 +195,10 @@ public class ArticleDetailFragment extends Fragment
                         data.getLong(ArticleFragment.IND_CREATED_AT)));
                 mIsFollowing = data.getInt(ArticleFragment.IND_FOLLOWING_AUTHOR) == 1;
                 setFollowingIcon();
+
+                mSlidingViewAdapter.setName(author);
+                mSlidingViewAdapter.setImageUri(Uri.parse(profPic));
+                mSlidingViewAdapter.setContent(content);
             }
 
         }
@@ -215,6 +237,7 @@ public class ArticleDetailFragment extends Fragment
                 break;
             case R.id.detail_article_prof_pic:
                 //TODO: have user bio pane slide from bottom;
+                mSlidingViewManager.animate();
                 break;
             case R.id.detail_article_preview_ll:
                 ((DetailArticleCallbacks) getActivity()).onNextArticleClicked();
@@ -225,4 +248,18 @@ public class ArticleDetailFragment extends Fragment
     private void setFollowingIcon() {
         mFollowIV.setImageResource(mIsFollowing ? R.drawable.ic_following : R.drawable.ic_add_follow);
     }
+
+    private final AvatarCardAdapter.OnClickListener slidingCardClickListener =
+            new AvatarCardAdapter.OnClickListener() {
+        @Override
+        public void onSeeMoreClick() {
+            Toast.makeText(getContext(), "See More Clicked", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onDismissClick() {
+            mSlidingViewManager.animate();
+        }
+    };
+
 }
