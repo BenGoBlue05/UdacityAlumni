@@ -35,6 +35,8 @@ import com.google.developer.udacityalumni.adapter.PageAdapter;
 import com.google.developer.udacityalumni.data.AlumContract;
 import com.google.developer.udacityalumni.fragment.ArticleFragment;
 import com.google.developer.udacityalumni.fragment.PlaceholderFragment;
+import com.google.developer.udacityalumni.fragment.PostFragment;
+import com.google.developer.udacityalumni.service.AlumIntentService;
 import com.google.developer.udacityalumni.utility.Utility;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -61,7 +63,6 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
     private List<Integer> mBookmarks;
     private List<String> mTags;
     private static final int LOADER = 101;
-    private String mTitle;
 
     @BindView(R.id.drawer)
     DrawerLayout mDrawerLayout;
@@ -73,7 +74,6 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
     ViewPager mViewPager;
     @BindView(R.id.nav_view)
     NavigationView mNavView;
-    TabLayout.Tab mArticleTab, mCareersTab, mMentorshipTab, mMeetUpsTab;
     @BindView(R.id.nav_bottom)
     BottomNavigationView mBottomNv;
     @BindView(R.id.main_fab)
@@ -91,8 +91,8 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
         } else {
             setContentView(R.layout.activity_main);
             ButterKnife.bind(this);
-//            startService(new Intent(this, AlumIntentService.class));
-//            Utility.scheduleArticleSync(this);
+            startService(new Intent(this, AlumIntentService.class));
+            Utility.scheduleArticleSync(this);
             FirebaseUser user = auth.getCurrentUser();
             TextView tv = (TextView) mNavView.getHeaderView(0).findViewById(R.id.nav_header_name_tv);
             tv.setText(user.getDisplayName());
@@ -103,9 +103,6 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
             } else {
                 cv.setImageResource(R.drawable.ic_person);
             }
-
-            if (mToolbar != null && savedInstanceState != null)
-                mToolbar.setTitle(mTitle);
             if (mToolbar != null) {
                 Drawable overflowIcon = mToolbar.getOverflowIcon();
                 if (overflowIcon != null)
@@ -114,7 +111,6 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
             setSupportActionBar(mToolbar);
             setupViewPager(mViewPager);
             mTabs.setupWithViewPager(mViewPager);
-            setUpTabs();
             ActionBar supportActionBar = getSupportActionBar();
             if (supportActionBar != null) {
                 VectorDrawableCompat indicator
@@ -134,19 +130,14 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
 
     private void setupViewPager(ViewPager viewPager) {
         PageAdapter mPageAdapter = new PageAdapter(getSupportFragmentManager());
-        mPageAdapter.addFragment(new PlaceholderFragment(), getString(R.string.home));
+        mPageAdapter.addFragment(new PostFragment(), getString(R.string.home));
         mPageAdapter.addFragment(new PlaceholderFragment(), getString(R.string.apps));
-        mPageAdapter.addFragment(new PlaceholderFragment(), getString(R.string.articles));
+        mPageAdapter.addFragment(new ArticleFragment(), getString(R.string.articles));
         mPageAdapter.addFragment(new PlaceholderFragment(), getString(R.string.community));
         viewPager.setAdapter(mPageAdapter);
     }
 
-    private void setUpTabs() {
-        mArticleTab = mTabs.getTabAt(0);
-        mCareersTab = mTabs.getTabAt(1);
-        mMentorshipTab = mTabs.getTabAt(2);
-        mMeetUpsTab = mTabs.getTabAt(3);
-    }
+
 
     @Override
     protected void onStart() {
@@ -280,12 +271,6 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString(getString(R.string.title_key), mTitle);
     }
 
     @Override

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/view_padding">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/view_padding"
+        android:orientation="vertical">
+
+        <include layout="@layout/include_item_post_author"/>
+
+        <TextView
+            android:id="@+id/item_post_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/view_padding"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            tools:text="I can't wait until Udacity Intersect" />
+
+        <ImageView
+            android:id="@+id/item_post_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/view_padding"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/post_photo"
+            android:maxHeight="@dimen/item_large_image_height"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/sample_image_vr" />
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

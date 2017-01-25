@@ -55,7 +55,7 @@ public final class Utility {
         }
     }
 
-    private static String formatTimeAgo(Context context, long date) {
+    public static String formatTimeAgo(Context context, long date) {
         long timeDiffMillis = Calendar.getInstance().getTimeInMillis() - date;
         if (timeDiffMillis < TimeUnit.MINUTES.toMillis(1))
             return context.getString(R.string.seconds_ago, TimeUnit.MILLISECONDS.toSeconds(timeDiffMillis));

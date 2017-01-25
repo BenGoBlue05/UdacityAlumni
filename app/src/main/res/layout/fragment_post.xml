@@ -13,6 +13,6 @@
         android:clipToPadding="false"
         android:padding="5dp"
         android:scrollbars="vertical"
-        tools:listitem="@layout/post" />
+        tools:listitem="@layout/item_post" />
 
 </android.support.design.widget.CoordinatorLayout>

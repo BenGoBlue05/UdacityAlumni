@@ -49,4 +49,5 @@ ext {
     constraintLayoutVersion = '1.0.0-beta4'
     okHttpVersion = '3.5.0'
     picassoVersion = '2.5.2'
+    firebaseUiVersion = '1.1.1'
 }

@@ -47,7 +47,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
     @Override
     public ArticleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (parent instanceof RecyclerView) {
-            View view = LayoutInflater.from(mContext).inflate(R.layout.item, parent, false);
+            View view = LayoutInflater.from(mContext).inflate(R.layout.item_article, parent, false);
             view.setFocusable(true);
             return new ArticleViewHolder(view);
         } else {

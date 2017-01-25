@@ -76,7 +76,7 @@ public class NewPostActivity extends BaseActivity {
                 addPost();
                 startActivity(new Intent(this, MainActivity.class));
                 break;
-            case R.id.post_photo_menu:
+            case R.id.item_post_image:
 //                TODO: Get photo from phone and store it in Fb Storage
                 break;
         }
@@ -103,7 +103,7 @@ public class NewPostActivity extends BaseActivity {
             Toast.makeText(this, getString(R.string.post_is_empty), Toast.LENGTH_LONG).show();
         } else{
             final String uId = getUid();
-            mDb.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+            mDb.child("users").child(uId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     User user = dataSnapshot.getValue(User.class);
@@ -111,7 +111,7 @@ public class NewPostActivity extends BaseActivity {
                         Log.e(LOG_TAG, "USER IS NULL");
                         Toast.makeText(NewPostActivity.this, getString(R.string.user_null), Toast.LENGTH_LONG).show();
                     } else{
-                        submitPost(uId, user.name, text, image);
+                        submitPost(uId, user.name, user.photoUrl, text, image);
                     }
                 }
 
@@ -127,15 +127,15 @@ public class NewPostActivity extends BaseActivity {
         //        TODO: get permission to access photos on phone then add to fb storage and add url to fb db
     }
 
-    private void submitPost(String userId, String userName, String text, String photoUrl){
+    private void submitPost(String userId, String userName, String userProfPic, String text, String photoUrl){
         if (mDb != null){
             String key= mDb.child("posts").push().getKey();
-            Post post = new Post(userId, userName, text, photoUrl);
+            Post post = new Post(userId, userName, userProfPic, text, photoUrl);
             Map<String, Object> postValues = post.toMap();
 
             Map<String, Object> childUpdates = new HashMap<>();
             childUpdates.put("/posts/" + key, postValues);
-            childUpdates.put("/user-posts/" + userId + "/" + key, postValues);
+            childUpdates.put("/userName-posts/" + userId + "/" + key, postValues);
 
             mDb.updateChildren(childUpdates);
         }

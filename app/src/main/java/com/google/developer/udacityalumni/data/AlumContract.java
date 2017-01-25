@@ -39,7 +39,7 @@ public class AlumContract {
         public static final String COL_RANDOM_TAG_ID = "tag_id";
         public static final String COL_RANDOM_TAG = "tag";
         public static final String COL_BOOKMARKED = "bookmarked";
-        public static final String COL_FOLLOWING_AUTHOR = "user";
+        public static final String COL_FOLLOWING_AUTHOR = "userName";
 
 
         public static Uri buildUriWithId(long id){

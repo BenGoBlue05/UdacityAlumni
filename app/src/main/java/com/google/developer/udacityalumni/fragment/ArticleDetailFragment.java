@@ -236,7 +236,7 @@ public class ArticleDetailFragment extends Fragment
                         values, null, null);
                 break;
             case R.id.detail_article_prof_pic:
-                //TODO: have user bio pane slide from bottom;
+                //TODO: have userName bio pane slide from bottom;
                 mSlidingViewManager.animate();
                 break;
             case R.id.detail_article_preview_ll:

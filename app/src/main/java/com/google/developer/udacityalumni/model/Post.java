@@ -14,15 +14,19 @@ import java.util.Map;
 public class Post {
 
     public String uid;
-    public String user;
+    public String userName;
+    public String userProfPic;
     public String text;
     public String photoUrl;
     public int numLikes = 0;
     public Map<String, Boolean> likes = new HashMap<>();
 
-    public Post(String uid, String userName, String text, String photoUrl) {
+    public Post(){}
+
+    public Post(String uid, String userName, String userProfPic, String text, String photoUrl) {
         this.uid = uid;
-        this.user = userName;
+        this.userName = userName;
+        this.userProfPic = userProfPic;
         this.text = text;
         this.photoUrl = photoUrl;
     }
@@ -31,7 +35,8 @@ public class Post {
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("uid", uid);
-        result.put("user", user);
+        result.put("userName", userName);
+        result.put("userProfPic", userProfPic);
         result.put("text", text);
         result.put("photoUrl", photoUrl);
         result.put("numLikes", numLikes);

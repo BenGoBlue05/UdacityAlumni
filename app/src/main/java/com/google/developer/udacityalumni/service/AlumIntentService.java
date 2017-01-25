@@ -50,9 +50,17 @@ public class AlumIntentService extends IntentService {
                     ContentValues values = new ContentValues();
                     int isSpotlighted = article.getBoolean(KEY_SPOTLIGHTED) ? 1 : 0;
                     JSONObject user = article.getJSONObject(KEY_USER);
-                    JSONArray tags = article.getJSONArray(KEY_TAGS);
-                    int ind = new Random().nextInt(tags.length());
-                    JSONObject tag = tags.getJSONObject(ind);
+                    Object tagObjects = article.get(KEY_TAGS);
+                    if (tagObjects != null && tagObjects instanceof JSONArray && ((JSONArray) tagObjects).length() > 0){
+                        JSONArray tags = (JSONArray) tagObjects;
+                        int ind = new Random().nextInt(tags.length());
+                        JSONObject tag = tags.getJSONObject(ind);
+                        values.put(AlumContract.ArticleEntry.COL_RANDOM_TAG_ID, tag.getLong("id"));
+                        values.put(AlumContract.ArticleEntry.COL_RANDOM_TAG, tag.getString("tag"));
+
+                    }
+
+
                     values.put(AlumContract.ArticleEntry.COL_ARTICLE_ID, articleId);
                     values.put(AlumContract.ArticleEntry.COL_TITLE, article.getString("title"));
                     values.put(AlumContract.ArticleEntry.COL_SPOTLIGHTED, isSpotlighted);
@@ -64,8 +72,6 @@ public class AlumIntentService extends IntentService {
                     if (user.get("avatar") != null) values.put(AlumContract.ArticleEntry.COL_USER_AVATAR, user.getString("avatar"));
                     values.put(AlumContract.ArticleEntry.COL_CREATED_AT, Utility.getTimeInMillis(article.getString("created_at")));
                     values.put(AlumContract.ArticleEntry.COL_UPDATED_AT, Utility.getTimeInMillis(article.getString("updated_at")));
-                    values.put(AlumContract.ArticleEntry.COL_RANDOM_TAG_ID, tag.getLong("id"));
-                    values.put(AlumContract.ArticleEntry.COL_RANDOM_TAG, tag.getString("tag"));
                     values.put(AlumContract.ArticleEntry.COL_BOOKMARKED, 0);
                     values.put(AlumContract.ArticleEntry.COL_FOLLOWING_AUTHOR, 0);
                     articleCvVector.add(values);
