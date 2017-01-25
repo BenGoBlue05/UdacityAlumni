@@ -21,6 +21,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +38,7 @@ import com.google.developer.udacityalumni.fragment.ArticleFragment;
 import com.google.developer.udacityalumni.fragment.PlaceholderFragment;
 import com.google.developer.udacityalumni.fragment.PostFragment;
 import com.google.developer.udacityalumni.service.AlumIntentService;
+import com.google.developer.udacityalumni.service.NavMenuServiceConnection;
 import com.google.developer.udacityalumni.utility.Utility;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -55,14 +57,13 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
         View.OnClickListener{
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
-    private static final String URL_CLASSROOM = "https://classroom.udacity.com/me";
-    private static final String URL_CATALOG = "https://www.udacity.com/courses/all";
-    private static final String URL_SUCCESS = "https://www.udacity.com/success";
 
     private List<Long> mArticleIds;
     private List<Integer> mBookmarks;
     private List<String> mTags;
     private static final int LOADER = 101;
+
+    private NavMenuServiceConnection mNavMenuCustomTabs;
 
     @BindView(R.id.drawer)
     DrawerLayout mDrawerLayout;
@@ -121,8 +122,9 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
                 supportActionBar.setDisplayHomeAsUpEnabled(true);
             }
             mNavView.setNavigationItemSelectedListener(this);
-            mBottomNv.setOnNavigationItemSelectedListener(this);
-            mBottomNv.setVisibility(mViewPager.getCurrentItem() == 1 ? View.VISIBLE : View.GONE);
+            mBottomNav.setOnNavigationItemSelectedListener(this);
+            mBottomNav.setVisibility((mViewPager.getCurrentItem()==1)?View.VISIBLE:View.GONE);
+            mNavMenuCustomTabs = new NavMenuServiceConnection(this);
             mFab.setOnClickListener(this);
         }
 
@@ -143,12 +145,14 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
     protected void onStart() {
         super.onStart();
         mTabs.addOnTabSelectedListener(this);
+        mNavMenuCustomTabs.bindService();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         mTabs.removeOnTabSelectedListener(this);
+        mNavMenuCustomTabs.unbindService();
     }
 
     @Override
@@ -182,19 +186,19 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.nav_classroom || id == R.id.nav_catalog || id == R.id.nav_success) {
-            String url = null;
+            @NavMenuServiceConnection.Urls String url = null;
             switch (id) {
                 case R.id.nav_classroom:
-                    url = URL_CLASSROOM;
+                    url = NavMenuServiceConnection.CLASSROOM;
                     break;
                 case R.id.nav_catalog:
-                    url = URL_CATALOG;
+                    url = NavMenuServiceConnection.CATALOG;
                     break;
                 case R.id.nav_success:
-                    url = URL_SUCCESS;
+                    url = NavMenuServiceConnection.SUCCESS;
                     break;
             }
-            if (!TextUtils.isEmpty(url)) Utility.launchUrl(url, this);
+            mNavMenuCustomTabs.launchUrl(url);
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
         return true;

@@ -113,16 +113,4 @@ public final class Utility {
         sInitialized = true;
     }
 
-    /**
-     * Launches a new page in Chrome Custom Tab Activity
-     * @param url String page URL
-     */
-    public static void launchUrl(String url, Context context) {
-        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-        builder.setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left);
-        builder.setExitAnimations(context, android.R.anim.slide_in_left,
-                android.R.anim.slide_out_right);
-        CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(context, Uri.parse(url));
-    }
 }
