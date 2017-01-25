@@ -22,7 +22,7 @@ public class Project {
         result.put("name", name);
         result.put("uid", uid);
         result.put("star_count", starCount);
-        result.put("stars", stars);
+        result.put("likes", stars);
         result.put("links", links);
         result.put("publisher_names", publisherNames);
         return result;

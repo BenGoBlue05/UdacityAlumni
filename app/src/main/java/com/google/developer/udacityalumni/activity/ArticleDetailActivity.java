@@ -96,7 +96,7 @@ public class ArticleDetailActivity extends AppCompatActivity
             args.putLong(getString(R.string.article_id_key), articleIds[i]);
             Fragment frag = new ArticleDetailFragment();
             frag.setArguments(args);
-            mPageAdapter.addFragment(frag);
+            mPageAdapter.addFragment(frag, "hello");
         }
         viewPager.setAdapter(mPageAdapter);
     }

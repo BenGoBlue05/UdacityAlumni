@@ -10,6 +10,9 @@
     <string name="sign_out">Sign Out</string>
     <string name="article_image">Article Image</string>
     <string name="share_article">Share article</string>
+    <string name="post_photo">Photo of Post</string>
+    <string name="post">Post</string>
+    <string name="add_photo_video">Add Photo or Video</string>
 
     <!--keys-->
     <string name="article_id_key" translatable="false">articleIdKey</string>
@@ -52,6 +55,12 @@
     <string name="success_stories">Success Stories</string>
     <string name="profile_pic">Profile Pic</string>
     <string name="loading">Loading…</string>
+    <string name="community">Community</string>
+    <string name="search">Search</string>
+    <string name="new_post">New post</string>
+    <string name="image">Image</string>
+    <string name="post_is_empty">Post is empty</string>
+    <string name="user_null">User is unexpectedly null</string>
 
     <!-- Notifications -->
     <string name="notification_title">New Spotlighted Content</string>
@@ -62,7 +71,6 @@
     <string name="trending">Trending</string>
     <string name="featured">Featured</string>
     <string name="apps">Apps</string>
-
 
 
     <!-- Strings related to login -->
@@ -88,5 +96,9 @@
     <!-- Sliding View -->
     <string name="sliding_view_see_more">See More…</string>
     <string name="sliding_view_dismiss_content_desc">Dismiss</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_new_post">NewPostActivity</string>
 
 </resources>

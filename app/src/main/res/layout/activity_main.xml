@@ -30,7 +30,9 @@
             <android.support.design.widget.TabLayout
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                app:tabSelectedTextColor="@color/colorAccent"
+                app:tabTextColor="@color/unselected_icon_dark"/>
 
         </android.support.design.widget.AppBarLayout>
 
@@ -39,6 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
 
 
         <android.support.design.widget.BottomNavigationView
@@ -50,6 +53,14 @@
             app:itemTextColor="@color/checkable_colors"
             app:itemIconTint="@color/checkable_colors"
             app:menu="@menu/nav_bottom" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/main_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add_post"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="@dimen/fab_margin"/>
 
     </android.support.design.widget.CoordinatorLayout>
 

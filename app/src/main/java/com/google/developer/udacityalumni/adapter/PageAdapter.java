@@ -10,6 +10,7 @@ import java.util.List;
 
 public class PageAdapter extends FragmentStatePagerAdapter{
     private final List<Fragment> mFragmentList = new ArrayList<>();
+    private final List<String> mFragmentTitles = new ArrayList<>();
 
     public PageAdapter(FragmentManager manager) {
         super(manager);
@@ -25,9 +26,13 @@ public class PageAdapter extends FragmentStatePagerAdapter{
         return mFragmentList.size();
     }
 
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return mFragmentTitles.get(position);
+    }
 
-
-    public void addFragment(Fragment fragment) {
+    public void addFragment(Fragment fragment, String title) {
         mFragmentList.add(fragment);
+        mFragmentTitles.add(title);
     }
 }
