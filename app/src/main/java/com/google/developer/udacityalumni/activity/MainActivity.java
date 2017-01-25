@@ -20,8 +20,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -122,8 +120,8 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
                 supportActionBar.setDisplayHomeAsUpEnabled(true);
             }
             mNavView.setNavigationItemSelectedListener(this);
-            mBottomNav.setOnNavigationItemSelectedListener(this);
-            mBottomNav.setVisibility((mViewPager.getCurrentItem()==1)?View.VISIBLE:View.GONE);
+            mBottomNv.setOnNavigationItemSelectedListener(this);
+            mBottomNv.setVisibility((mViewPager.getCurrentItem()==1)?View.VISIBLE:View.GONE);
             mNavMenuCustomTabs = new NavMenuServiceConnection(this);
             mFab.setOnClickListener(this);
         }
