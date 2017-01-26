@@ -41,7 +41,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-//TODO: Fix memory leak
 //credit Firebase Database example from official Firebase site
 public class NewPostActivity extends BaseActivity {
 
