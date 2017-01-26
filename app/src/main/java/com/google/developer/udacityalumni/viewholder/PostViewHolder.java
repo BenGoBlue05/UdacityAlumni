@@ -15,9 +15,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-/**
- * Created by benjaminlewis on 1/25/17.
- */
 
 public class PostViewHolder extends RecyclerView.ViewHolder{
 
@@ -44,13 +41,17 @@ public class PostViewHolder extends RecyclerView.ViewHolder{
             if (post.userName != null && !post.userName.isEmpty()) mUserNameTv.setText(post.userName);
 //            TODO: Add TimeAgo
 //            TODO: Add Comments
-//            TODO: Add Image Attachment
 //            TODO: Add OnClickListener
             if (post.userProfPic != null && !post.userProfPic.isEmpty()) {
                 Picasso.with(context).load(post.userProfPic).placeholder(R.drawable.placeholder)
                         .error(R.drawable.ic_person).into(mProfPicIv);
             } else{
                 mProfPicIv.setImageResource(R.drawable.ic_person);
+            }
+            if (post.photoUrl != null && !post.photoUrl.isEmpty()){
+                mProfPicIv.setVisibility(View.VISIBLE);
+                Picasso.with(context).load(post.photoUrl)
+                        .placeholder(R.drawable.placeholder).into(mImageIv);
             }
         } else{
             Log.i(LOG_TAG, "Post is null");

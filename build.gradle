@@ -50,4 +50,5 @@ ext {
     okHttpVersion = '3.5.0'
     picassoVersion = '2.5.2'
     firebaseUiVersion = '1.1.1'
+    glideVersion = '3.7.0'
 }

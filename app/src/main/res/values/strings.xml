@@ -61,6 +61,8 @@
     <string name="image">Image</string>
     <string name="post_is_empty">Post is empty</string>
     <string name="user_null">User is unexpectedly null</string>
+    <string name="choose_photo">Choose a photo</string>
+    <string name="upload_failed">Upload failed</string>
 
     <!-- Notifications -->
     <string name="notification_title">New Spotlighted Content</string>

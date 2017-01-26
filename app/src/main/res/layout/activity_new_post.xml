@@ -39,7 +39,7 @@
         android:maxHeight="@dimen/item_large_image_height"
         tools:src="@drawable/sample_image_vr"
         android:adjustViewBounds="true"
-        android:scaleType="centerCrop"
+        android:scaleType="centerInside"
         android:contentDescription="@string/image"
         android:visibility="gone"/>
 

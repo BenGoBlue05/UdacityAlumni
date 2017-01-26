@@ -56,7 +56,11 @@ public class PostFragment extends Fragment {
             }
         };
         mRecycler.setAdapter(mAdapter);
-
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        mAdapter.cleanup();
+    }
 }
