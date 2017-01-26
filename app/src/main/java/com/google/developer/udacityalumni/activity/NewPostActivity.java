@@ -17,6 +17,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.developer.udacityalumni.R;
@@ -28,9 +30,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,7 +49,7 @@ public class NewPostActivity extends BaseActivity {
 
     private static final int RC_PHOTO = 100;
     private DatabaseReference mDb;
-    private StorageReference mStorageRef;
+    private StorageReference mPhotoRef;
     private String mImageUrl;
 
     @BindView(R.id.new_post_image)
@@ -63,7 +65,6 @@ public class NewPostActivity extends BaseActivity {
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.status_bar_color));
         ButterKnife.bind(this);
         mDb = FirebaseDatabase.getInstance().getReference();
-        mStorageRef = FirebaseStorage.getInstance().getReference().child("post_photos");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -105,7 +106,7 @@ public class NewPostActivity extends BaseActivity {
         } else {
             text = null;
         }
-        if (text == null && mImageView.getVisibility() != View.VISIBLE) {
+        if (text == null && mImageUrl == null) {
             Toast.makeText(this, getString(R.string.post_is_empty), Toast.LENGTH_LONG).show();
         } else {
             final String uId = getUid();
@@ -145,7 +146,6 @@ public class NewPostActivity extends BaseActivity {
             Map<String, Object> childUpdates = new HashMap<>();
             childUpdates.put("/posts/" + key, postValues);
             childUpdates.put("/user-posts/" + userId + "/" + key, postValues);
-
             mDb.updateChildren(childUpdates);
         }
     }
@@ -155,31 +155,44 @@ public class NewPostActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_PHOTO && resultCode == RESULT_OK) {
             Uri imageUri = data.getData();
-            final StorageReference imageRef = mStorageRef.child(imageUri.getLastPathSegment());
-            imageRef.putFile(imageUri)
-                    .addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            Uri uri = taskSnapshot.getDownloadUrl();
-                            if (uri != null) mImageUrl = uri.toString();
-                            mImageView.setVisibility(View.VISIBLE);
-                            Picasso.with(NewPostActivity.this).load(mImageUrl)
-                                    .placeholder(R.drawable.placeholder).into(mImageView);
-                        }
-                    })
-                    .addOnFailureListener(this, new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            mImageView.setVisibility(View.GONE);
-                            Toast.makeText(NewPostActivity.this, getString(R.string.upload_failed), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+            if (imageUri != null) {
+                Log.i(LOG_TAG, "IMAGE URI: " + imageUri);
+                uploadImage(imageUri);
+            }
+//            if (mImageUrl != null) displayImage();
         }
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
+
+
+
+    private void displayImage(){
+        mImageView.setVisibility(View.VISIBLE);
+        Glide.with(this)
+                .using(new FirebaseImageLoader())
+                .load(mPhotoRef)
+                .into(mImageView);
+    }
+
+    private void uploadImage(Uri uri){
+        mPhotoRef = FirebaseStorage.getInstance().getReference().child("post_photos").child(uri.getLastPathSegment());
+        mPhotoRef.putFile(uri)
+                .addOnSuccessListener(NewPostActivity.this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        StorageMetadata metadata = taskSnapshot.getMetadata();
+                        mImageUrl = metadata != null && metadata.getDownloadUrl() != null ?
+                                metadata.getDownloadUrl().toString() : null;
+                    }
+                })
+                .addOnFailureListener(NewPostActivity.this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(NewPostActivity.this, "Upload failed",
+                                Toast.LENGTH_SHORT).show();
+                        Log.e(LOG_TAG, "UPLOAD FAILED");
+                    }
+                });
     }
 }
 

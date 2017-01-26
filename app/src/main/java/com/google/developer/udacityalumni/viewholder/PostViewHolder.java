@@ -7,8 +7,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.developer.udacityalumni.R;
 import com.google.developer.udacityalumni.model.Post;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -35,7 +39,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder{
         ButterKnife.bind(this, itemView);
     }
 
-    public void bindToPost(Post post, Context context){
+    public void bindToPost(Post post, Context context, FirebaseStorage storage){
         if (post != null){
             if (post.text != null && !post.text.isEmpty()) mTextTv.setText(post.text);
             if (post.userName != null && !post.userName.isEmpty()) mUserNameTv.setText(post.userName);
@@ -49,12 +53,20 @@ public class PostViewHolder extends RecyclerView.ViewHolder{
                 mProfPicIv.setImageResource(R.drawable.ic_person);
             }
             if (post.photoUrl != null && !post.photoUrl.isEmpty()){
-                mProfPicIv.setVisibility(View.VISIBLE);
-                Picasso.with(context).load(post.photoUrl)
-                        .placeholder(R.drawable.placeholder).into(mImageIv);
+                Log.i(LOG_TAG, post.photoUrl);
+                StorageReference ref = storage.getReferenceFromUrl(post.photoUrl);
+                Glide.with(context)
+                        .using(new FirebaseImageLoader())
+                        .load(ref)
+                        .into(mImageIv);
             }
-        } else{
-            Log.i(LOG_TAG, "Post is null");
+//            if (post.photoUrl != null && !post.photoUrl.isEmpty()){
+//                mProfPicIv.setVisibility(View.VISIBLE);
+//                Picasso.with(context).load(post.photoUrl)
+//                        .placeholder(R.drawable.placeholder).into(mImageIv);
+//            }
+//        } else{
+//            Log.i(LOG_TAG, "Post is null");
         }
     }
 }

@@ -16,6 +16,7 @@ import com.google.developer.udacityalumni.viewholder.PostViewHolder;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.storage.FirebaseStorage;
 
 //Credit to Firebase's Database Sample
 
@@ -26,6 +27,7 @@ public class PostFragment extends Fragment {
     private DatabaseReference mDatabase;
     private RecyclerView mRecycler;
     private LinearLayoutManager mManager;
+    private FirebaseStorage mStorage;
     private FirebaseRecyclerAdapter<Post, PostViewHolder> mAdapter;
 
     public PostFragment() {
@@ -35,7 +37,9 @@ public class PostFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView =  inflater.inflate(R.layout.fragment_post, container, false);
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        mStorage = FirebaseStorage.getInstance();
         mRecycler = (RecyclerView) rootView.findViewById(R.id.post_rv);
+        mRecycler.setHasFixedSize(true);
         return  rootView;
     }
 
@@ -52,7 +56,7 @@ public class PostFragment extends Fragment {
                 PostViewHolder.class, query) {
             @Override
             protected void populateViewHolder(PostViewHolder viewHolder, Post model, int position) {
-                viewHolder.bindToPost(model, getContext());
+                viewHolder.bindToPost(model, getContext(), mStorage);
             }
         };
         mRecycler.setAdapter(mAdapter);
