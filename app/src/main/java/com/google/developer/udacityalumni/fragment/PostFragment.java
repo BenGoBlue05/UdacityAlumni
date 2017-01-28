@@ -1,5 +1,6 @@
 package com.google.developer.udacityalumni.fragment;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,27 +9,30 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.developer.udacityalumni.R;
+import com.google.developer.udacityalumni.adapter.PostFirebaseAdapter;
 import com.google.developer.udacityalumni.model.Post;
-import com.google.developer.udacityalumni.viewholder.PostViewHolder;
+import com.google.developer.udacityalumni.view.slidingview.AvatarCardAdapter;
+import com.google.developer.udacityalumni.view.slidingview.SlidingViewManager;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.storage.FirebaseStorage;
 
 //Credit to Firebase's Database Sample
 
-public class PostFragment extends Fragment {
+public class PostFragment extends Fragment implements PostFirebaseAdapter.OnClickListener {
 
     private static final String LOG_TAG = PostFragment.class.getSimpleName();
 
     private DatabaseReference mDatabase;
     private RecyclerView mRecycler;
     private LinearLayoutManager mManager;
-    private FirebaseStorage mStorage;
-    private FirebaseRecyclerAdapter<Post, PostViewHolder> mAdapter;
+    private PostFirebaseAdapter mAdapter;
+
+    private SlidingViewManager mSlidingViewManager;
+    private AvatarCardAdapter mSlidingViewAdapter;
 
     public PostFragment() {
     }
@@ -37,9 +41,18 @@ public class PostFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView =  inflater.inflate(R.layout.fragment_post, container, false);
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        mStorage = FirebaseStorage.getInstance();
         mRecycler = (RecyclerView) rootView.findViewById(R.id.post_rv);
         mRecycler.setHasFixedSize(true);
+
+        mSlidingViewManager = new SlidingViewManager(this);
+        mSlidingViewAdapter = new AvatarCardAdapter(
+                new AvatarCardAdapter.SimpleOnClickListener(mSlidingViewManager)
+        );
+        mSlidingViewManager.setAdapter(mSlidingViewAdapter);
+        if (savedInstanceState != null) {
+            mSlidingViewManager.onRestoreInstanceState(savedInstanceState);
+        }
+
         return  rootView;
     }
 
@@ -51,15 +64,15 @@ public class PostFragment extends Fragment {
         mManager.setStackFromEnd(true);
         mRecycler.setLayoutManager(mManager);
 
-        Query query = mDatabase.child("posts").limitToFirst(100);
-        mAdapter = new FirebaseRecyclerAdapter<Post, PostViewHolder>(Post.class, R.layout.item_post,
-                PostViewHolder.class, query) {
-            @Override
-            protected void populateViewHolder(PostViewHolder viewHolder, Post model, int position) {
-                viewHolder.bindToPost(model, getContext(), mStorage);
-            }
-        };
+        final Query query = mDatabase.child("posts").limitToFirst(100);
+        mAdapter = new PostFirebaseAdapter(query, this);
         mRecycler.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mSlidingViewManager.onSaveInstanceState(outState);
     }
 
     @Override
@@ -67,4 +80,14 @@ public class PostFragment extends Fragment {
         super.onPause();
         mAdapter.cleanup();
     }
+
+    @Override
+    public void onAvatarClicked(Post post) {
+        //todo Replace 'Content' with User Bio
+        mSlidingViewAdapter.setContent(post.text);
+        mSlidingViewAdapter.setImageUri(Uri.parse(post.userProfPic));
+        mSlidingViewAdapter.setName(post.userName);
+        mSlidingViewManager.animate();
+    }
+
 }

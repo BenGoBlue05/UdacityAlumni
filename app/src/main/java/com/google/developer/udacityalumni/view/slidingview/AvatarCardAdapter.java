@@ -4,6 +4,8 @@ import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.developer.udacityalumni.R;
 import com.squareup.picasso.Picasso;
@@ -30,8 +33,6 @@ public final class AvatarCardAdapter implements SlidingView, View.OnClickListene
 
     private ImageView mAvatarImageView;
     private TextView mNameTextView, mContentTextView;
-    private Button mSeeMoreButton;
-    private ImageButton mDismissButton;
 
     public AvatarCardAdapter(OnClickListener listener) {
         this.listener = listener;
@@ -46,6 +47,13 @@ public final class AvatarCardAdapter implements SlidingView, View.OnClickListene
 
     public void setListener(OnClickListener listener) {
         this.listener = listener;
+    }
+
+    public void setImageUri(String imageUri) {
+        if (imageUri == null) {
+            setImageUri(Uri.EMPTY);
+        }
+        setImageUri(Uri.parse(imageUri));
     }
 
     public void setImageUri(Uri imageUri) {
@@ -78,19 +86,16 @@ public final class AvatarCardAdapter implements SlidingView, View.OnClickListene
         mAvatarImageView = (ImageView) view.findViewById(R.id.sliding_card_avatar);
         mNameTextView = (TextView) view.findViewById(R.id.sliding_card_name);
         mContentTextView = (TextView) view.findViewById(R.id.sliding_card_content);
-        mSeeMoreButton = (Button) view.findViewById(R.id.sliding_card_see_more);
-        mDismissButton = (ImageButton) view.findViewById(R.id.sliding_card_dismiss);
 
-        Picasso.with(parent.getContext())
-                .load(imageUri)
-                .placeholder(R.drawable.ic_person)
-                .error(R.drawable.ic_person)
-                .into(mAvatarImageView);
+        final Button seeMoreButton = (Button) view.findViewById(R.id.sliding_card_see_more);
+        final ImageButton dismissButton = (ImageButton) view.findViewById(R.id.sliding_card_dismiss);
 
-        mNameTextView.setText(name);
-        mContentTextView.setText(content);
-        mSeeMoreButton.setOnClickListener(this);
-        mDismissButton.setOnClickListener(this);
+        setImageUri(imageUri);
+        setName(name);
+        setContent(content);
+
+        seeMoreButton.setOnClickListener(this);
+        dismissButton.setOnClickListener(this);
 
         return view;
     }
@@ -128,6 +133,37 @@ public final class AvatarCardAdapter implements SlidingView, View.OnClickListene
     public interface OnClickListener {
         void onSeeMoreClick();
         void onDismissClick();
+    }
+
+    /**
+     * {@link OnClickListener} implementations that simply Logs click events. Supplying a
+     * {@link SlidingViewManager} will animate the sliding view during an {@link #onDismissClick()}
+     */
+    @SuppressWarnings("unused")
+    public static class SimpleOnClickListener implements OnClickListener {
+
+        @Nullable
+        private final SlidingViewManager mManager;
+
+        public SimpleOnClickListener() {
+            this(null);
+        }
+
+        public SimpleOnClickListener(@Nullable SlidingViewManager manager) {
+            mManager = manager;
+        }
+
+        @Override
+        public void onSeeMoreClick() {
+            Log.i(getClass().getSimpleName(), "See More Clicked");
+        }
+
+        @Override
+        public void onDismissClick() {
+            Log.i(getClass().getSimpleName(), "Dismiss Clicked");
+            if (mManager != null) mManager.animate();
+        }
+
     }
 
     public static final class Options implements Parcelable {
