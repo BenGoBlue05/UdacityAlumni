@@ -85,7 +85,7 @@ public class PostFragment extends Fragment implements PostFirebaseAdapter.OnClic
     public void onAvatarClicked(Post post) {
         //todo Replace 'Content' with User Bio
         mSlidingViewAdapter.setContent(post.text);
-        mSlidingViewAdapter.setImageUri(Uri.parse(post.userProfPic));
+        mSlidingViewAdapter.setImageUri(post.userProfPic);
         mSlidingViewAdapter.setName(post.userName);
         mSlidingViewManager.animate();
     }
