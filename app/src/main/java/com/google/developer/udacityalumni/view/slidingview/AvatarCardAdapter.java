@@ -50,10 +50,8 @@ public final class AvatarCardAdapter implements SlidingView, View.OnClickListene
     }
 
     public void setImageUri(String imageUri) {
-        if (imageUri == null) {
-            setImageUri(Uri.EMPTY);
-        }
-        setImageUri(Uri.parse(imageUri));
+        final Uri uri = (imageUri == null) ? Uri.EMPTY : Uri.parse(imageUri);
+        setImageUri(uri);
     }
 
     public void setImageUri(Uri imageUri) {
