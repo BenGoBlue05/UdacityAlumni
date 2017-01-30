@@ -161,11 +161,6 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
     protected void onStop() {
         super.onStop();
         mTabs.removeOnTabSelectedListener(this);
@@ -281,7 +276,6 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         final int pos = tab.getPosition();
-        //mBottomNv.setVisibility(pos == 1 ? View.VISIBLE : View.GONE);
         if (pos == 1) {
             mBottomNavManager.show();
         } else {

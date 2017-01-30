@@ -1,5 +1,7 @@
 package com.google.developer.udacityalumni.view.slidingview;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
@@ -10,6 +12,7 @@ import android.view.ViewTreeObserver;
 import android.view.animation.Interpolator;
 
 /**
+ * Animates a {@link BottomNavigationView}
  *
  * Created by Tom Calver on 30/01/17.
  */
@@ -25,11 +28,16 @@ public final class BottomNavBarManager implements ViewTreeObserver.OnGlobalLayou
     private boolean isExpanded;
 
     @SuppressWarnings("unused")
-    public BottomNavBarManager(BottomNavigationView view) {
+    public BottomNavBarManager(@NonNull BottomNavigationView view) {
         this(view,null);
     }
 
-    public BottomNavBarManager(BottomNavigationView view, OnBottomNavBarLaidOutListener listener) {
+    /**
+     *
+     * @param view The view to manage
+     * @param listener Notifies caller when view is laid out
+     */
+    public BottomNavBarManager(@NonNull BottomNavigationView view, @Nullable OnBottomNavBarLaidOutListener listener) {
         checkParentIsCoordinatorLayoutOrThrow(view);
         mView = view;
         mListener = listener;
@@ -39,6 +47,9 @@ public final class BottomNavBarManager implements ViewTreeObserver.OnGlobalLayou
 
     }
 
+    /**
+     * Hides the {@link BottomNavigationView}. with an animation
+     */
     public void hide() {
 
         if(!isExpanded) return;
@@ -58,6 +69,9 @@ public final class BottomNavBarManager implements ViewTreeObserver.OnGlobalLayou
 
     }
 
+    /**
+     * Shows the {@link BottomNavigationView}, with an animation
+     */
     public void show() {
 
         if (isExpanded) return;
@@ -80,11 +94,17 @@ public final class BottomNavBarManager implements ViewTreeObserver.OnGlobalLayou
 
     }
 
+    /**
+     * Shows the {@link BottomNavigationView} immediately, without animation
+     */
     public void setShown() {
         ViewCompat.setTranslationY(mView, 0f);
         mView.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Hides the {@link BottomNavigationView} immediately, without animation
+     */
     public void setHidden() {
         ViewCompat.setTranslationY(mView, mView.getHeight());
         mView.setVisibility(View.GONE);
@@ -108,6 +128,9 @@ public final class BottomNavBarManager implements ViewTreeObserver.OnGlobalLayou
         }
     }
 
+    /**
+     * Callback for when {@link BottomNavigationView} has completed its layout
+     */
     public interface OnBottomNavBarLaidOutListener {
         void onBottomNavBarLaidOut();
     }
