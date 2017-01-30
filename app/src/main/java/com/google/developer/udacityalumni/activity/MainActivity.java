@@ -38,6 +38,8 @@ import com.google.developer.udacityalumni.fragment.PostFragment;
 import com.google.developer.udacityalumni.service.AlumIntentService;
 import com.google.developer.udacityalumni.service.NavMenuServiceConnection;
 import com.google.developer.udacityalumni.utility.Utility;
+import com.google.developer.udacityalumni.view.slidingview.BottomNavBarManager;
+import com.google.developer.udacityalumni.view.slidingview.BottomNavBarManager.OnBottomNavBarLaidOutListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
@@ -62,6 +64,7 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
     private static final int LOADER = 101;
 
     private NavMenuServiceConnection mNavMenuCustomTabs;
+    private BottomNavBarManager mBottomNavManager;
 
     @BindView(R.id.drawer)
     DrawerLayout mDrawerLayout;
@@ -120,8 +123,19 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
                 supportActionBar.setDisplayHomeAsUpEnabled(true);
             }
             mNavView.setNavigationItemSelectedListener(this);
+
             mBottomNv.setOnNavigationItemSelectedListener(this);
-            mBottomNv.setVisibility((mViewPager.getCurrentItem()==1)?View.VISIBLE:View.GONE);
+            mBottomNavManager = new BottomNavBarManager(mBottomNv, new OnBottomNavBarLaidOutListener() {
+                @Override
+                public void onBottomNavBarLaidOut() {
+                    if (mViewPager.getCurrentItem() == 1) {
+                        mBottomNavManager.setShown();
+                    } else {
+                        mBottomNavManager.setHidden();
+                    }
+                }
+            });
+
             mNavMenuCustomTabs = new NavMenuServiceConnection(this);
             mFab.setOnClickListener(this);
         }
@@ -147,6 +161,11 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         mTabs.removeOnTabSelectedListener(this);
@@ -158,7 +177,6 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -262,9 +280,13 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        int pos = tab.getPosition();
-        mBottomNv.setVisibility(pos == 1 ? View.VISIBLE : View.GONE);
-
+        final int pos = tab.getPosition();
+        //mBottomNv.setVisibility(pos == 1 ? View.VISIBLE : View.GONE);
+        if (pos == 1) {
+            mBottomNavManager.show();
+        } else {
+            mBottomNavManager.hide();
+        }
     }
 
     @Override
