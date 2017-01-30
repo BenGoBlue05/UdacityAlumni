@@ -42,13 +42,13 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-
-
         <android.support.design.widget.BottomNavigationView
             android:id="@+id/nav_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:paddingTop="@dimen/fab_margin"
             app:itemBackground="@color/white"
             app:itemTextColor="@color/checkable_colors"
             app:itemIconTint="@color/checkable_colors"
@@ -59,8 +59,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_add_post"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="@dimen/fab_margin"/>
+            android:layout_margin="@dimen/fab_margin"
+            android:layout_gravity="top|end"
+            app:layout_anchor="@+id/nav_bottom"
+            app:layout_anchorGravity="end"/>
 
     </android.support.design.widget.CoordinatorLayout>
 
@@ -72,7 +74,5 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/nav_side" />
-
-
 
 </android.support.v4.widget.DrawerLayout>
