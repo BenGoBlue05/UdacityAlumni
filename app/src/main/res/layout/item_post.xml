@@ -8,6 +8,20 @@
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/item_post_prof_pic"
+            android:layout_width="@dimen/profile_image_diameter"
+            android:layout_height="@dimen/profile_image_diameter"
+            tools:src="@drawable/ben_lewis_prof_pic" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/view_padding"
         android:orientation="vertical">

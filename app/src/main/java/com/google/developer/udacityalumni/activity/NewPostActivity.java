@@ -70,7 +70,7 @@ public class NewPostActivity extends BaseActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             Drawable close = ContextCompat.getDrawable(this, R.drawable.ic_close);
-            close.setTint(ContextCompat.getColor(this, android.R.color.black));
+            close.setTint(ContextCompat.getColor(this, R.color.colorAccent));
             actionBar.setHomeAsUpIndicator(close);
         }
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
@@ -182,6 +182,7 @@ public class NewPostActivity extends BaseActivity {
                         StorageMetadata metadata = taskSnapshot.getMetadata();
                         mImageUrl = metadata != null && metadata.getDownloadUrl() != null ?
                                 metadata.getDownloadUrl().toString() : null;
+                        displayImage();
                     }
                 })
                 .addOnFailureListener(NewPostActivity.this, new OnFailureListener() {

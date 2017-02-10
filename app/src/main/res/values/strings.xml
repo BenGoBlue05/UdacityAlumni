@@ -63,6 +63,9 @@
     <string name="user_null">User is unexpectedly null</string>
     <string name="choose_photo">Choose a photo</string>
     <string name="upload_failed">Upload failed</string>
+    <string name="app_name_hint">App Name (Facebook, Twitter…)</string>
+    <string name="app_title">App Name</string>
+    <string name="add_image">Add Image</string>
 
     <!-- Notifications -->
     <string name="notification_title">New Spotlighted Content</string>
@@ -70,6 +73,7 @@
     <string name="udacity_alumni_logo">Udacity Alumni logo</string>
     <string name="android">Android</string>
     <string name="web">Web</string>
+    <string name="web_icon">Web Icon</string>
     <string name="trending">Trending</string>
     <string name="featured">Featured</string>
     <string name="apps">Apps</string>

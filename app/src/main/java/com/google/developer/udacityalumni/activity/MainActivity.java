@@ -306,6 +306,10 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
         switch(mTabs.getSelectedTabPosition()){
             case 0:                 //home frag
                 startActivity(new Intent(MainActivity.this, NewPostActivity.class));
+                break;
+            case 1:
+                startActivity(new Intent(MainActivity.this, NewAppActivity.class));
+                break;
         }
     }
 }
