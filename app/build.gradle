@@ -23,23 +23,24 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    apt "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
+    apt "com.jakewharton:butterknife-compiler:$rootProject.ext.butterKnifeVersion"
 
-    compile "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
-    compile "com.android.support:design:$rootProject.supportLibraryVersion"
-    compile "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
-    compile "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
-    compile "com.android.support:support-v4:$rootProject.supportLibraryVersion"
-    compile "com.android.support:support-v13:$rootProject.supportLibraryVersion"
-    compile "com.android.support:customtabs:$rootProject.supportLibraryVersion"
-    compile "com.facebook.stetho:stetho:$rootProject.stethoVersion"
-    compile "com.facebook.stetho:stetho-okhttp:$rootProject.stethoVersion"
-    compile "com.firebase:firebase-jobdispatcher:$rootProject.firebaseJobDispatcherVersion"
-    compile "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
-    compile "de.hdodenhof:circleimageview:$rootProject.circleImageVersion"
-    compile "com.android.support.constraint:constraint-layout:$rootProject.constraintLayoutVersion"
-    compile "com.squareup.okhttp3:okhttp:$rootProject.okHttpVersion"
-    compile "com.squareup.picasso:picasso:$rootProject.picassoVersion"
+    compile "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
+    compile "com.android.support:design:$rootProject.ext.supportLibraryVersion"
+    compile "com.android.support:cardview-v7:$rootProject.ext.supportLibraryVersion"
+    compile "com.android.support:recyclerview-v7:$rootProject.ext.supportLibraryVersion"
+    compile "com.android.support:palette-v7:$rootProject.ext.supportLibraryVersion"
+    compile "com.android.support:support-v4:$rootProject.ext.supportLibraryVersion"
+    compile "com.android.support:support-v13:$rootProject.ext.supportLibraryVersion"
+    compile "com.android.support:customtabs:$rootProject.ext.supportLibraryVersion"
+    compile "com.facebook.stetho:stetho:$rootProject.ext.stethoVersion"
+    compile "com.facebook.stetho:stetho-okhttp:$rootProject.ext.stethoVersion"
+    compile "com.firebase:firebase-jobdispatcher:$rootProject.ext.firebaseJobDispatcherVersion"
+    compile "com.jakewharton:butterknife:$rootProject.ext.butterKnifeVersion"
+    compile "de.hdodenhof:circleimageview:$rootProject.ext.circleImageVersion"
+    compile "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintLayoutVersion"
+    compile "com.squareup.okhttp3:okhttp:$rootProject.ext.okHttpVersion"
+    compile "com.squareup.picasso:picasso:$rootProject.ext.picassoVersion"
 
     // Dependencies for local unit tests
     testCompile "org.mockito:mockito-all:$rootProject.ext.mockitoVersion"
@@ -56,16 +57,16 @@ dependencies {
     androidTestCompile "com.android.support.test.espresso:espresso-contrib:$rootProject.ext.espressoVersion"
     androidTestCompile "com.android.support.test.espresso:espresso-intents:$rootProject.ext.espressoVersion"
     compile "com.google.android.gms:play-services-auth:$rootProject.ext.playServicesVersion"
-    compile "com.google.firebase:firebase-auth:$playServicesVersion"
-    compile "com.google.firebase:firebase-database:$playServicesVersion"
-    compile "com.google.firebase:firebase-storage:$playServicesVersion"
-    compile 'com.android.support:support-v4:25.1.0'
-    compile "com.github.bumptech.glide:glide:$rootProject.glideVersion"
-    compile "com.firebaseui:firebase-ui:$rootProject.firebaseUiVersion"
+    compile "com.google.firebase:firebase-auth:$rootProject.ext.playServicesVersion"
+    compile "com.google.firebase:firebase-database:$rootProject.ext.playServicesVersion"
+    compile "com.google.firebase:firebase-storage:$rootProject.ext.playServicesVersion"
+    compile "com.android.support:support-v4:$rootProject.supportLibraryVersion"
+    compile "com.github.bumptech.glide:glide:$rootProject.ext.glideVersion"
+    compile "com.firebaseui:firebase-ui:$rootProject.ext.firebaseUiVersion"
     testCompile 'junit:junit:4.12'
 }
 configurations.all {
-    resolutionStrategy.force "com.android.support:support-annotations:$rootProject.supportLibraryVersion"
+    resolutionStrategy.force "com.android.support:support-annotations:$rootProject.ext.supportLibraryVersion"
 }
 
 configurations.compile.dependencies.each { compileDependency ->

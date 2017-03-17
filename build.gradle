@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.android.tools.build:gradle:2.3.0'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -29,10 +29,10 @@ ext {
     minSdkVersion = 21
     targetSdkVersion = 25
     compileSdkVersion = 25
-    buildToolsVersion = '25.0.1'
+    buildToolsVersion = '25.0.2'
 
     // App dependencies
-    supportLibraryVersion = '25.1.0'
+    supportLibraryVersion = '25.3.0'
     guavaVersion = '18.0'
     junitVersion = '4.12'
     mockitoVersion = '1.10.19'
@@ -41,12 +41,12 @@ ext {
     runnerVersion = '0.5'
     rulesVersion = '0.5'
     espressoVersion = '2.2.2'
-    playServicesVersion = '10.0.1'
+    playServicesVersion = '10.2.0'
     stethoVersion = '1.4.1'
     butterKnifeVersion = '8.4.0'
     firebaseJobDispatcherVersion = '0.5.0'
     circleImageVersion = '2.1.0'
-    constraintLayoutVersion = '1.0.0-beta4'
+    constraintLayoutVersion = '1.0.1'
     okHttpVersion = '3.5.0'
     picassoVersion = '2.5.2'
     firebaseUiVersion = '1.1.1'
