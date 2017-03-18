@@ -7,29 +7,21 @@ import android.database.Cursor;
 import android.util.Log;
 
 import com.google.developer.udacityalumni.data.AlumContract;
+import com.google.developer.udacityalumni.model.Article;
+import com.google.developer.udacityalumni.model.Articles;
 import com.google.developer.udacityalumni.notification.SpotlightNotificationFactory;
 import com.google.developer.udacityalumni.notification.SpotlightNotificationManager;
 import com.google.developer.udacityalumni.notification.SpotlightNotificationUtils;
 import com.google.developer.udacityalumni.utility.Utility;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Vector;
 
 public class AlumIntentService extends IntentService {
 
     private static final String LOG_TAG = AlumIntentService.class.getSimpleName();
-
-    private static final String KEY_ARTICLES = "articles";
-    private static final String KEY_ID = "id";
-    private static final String KEY_SPOTLIGHTED = "spotlighted";
-    private static final String KEY_USER = "user";
-    private static final String KEY_TAGS = "tags";
 
     HashSet<Long> mSet;
 
@@ -37,57 +29,47 @@ public class AlumIntentService extends IntentService {
         super(LOG_TAG);
     }
 
-    public void addArticles(String json){
-        try {
-            JSONObject object = new JSONObject(json);
-            JSONArray articles = object.getJSONArray(KEY_ARTICLES);
-            int numArticles = articles != null ? articles.length() : 0;
-            Vector<ContentValues> articleCvVector = new Vector<>();
-            for (int i=0;i<numArticles;i++){
-                JSONObject article = articles.getJSONObject(i);
-                long articleId = article.getLong(KEY_ID);
-                if (!mSet.contains(articleId)){
-                    ContentValues values = new ContentValues();
-                    int isSpotlighted = article.getBoolean(KEY_SPOTLIGHTED) ? 1 : 0;
-                    JSONObject user = article.getJSONObject(KEY_USER);
-                    JSONArray tags = article.getJSONArray(KEY_TAGS);
-                    int ind = new Random().nextInt((tags.length() + 1));
-                    JSONObject tag = tags.getJSONObject(ind);
-                    values.put(AlumContract.ArticleEntry.COL_RANDOM_TAG_ID, tag.getLong("id"));
-                    values.put(AlumContract.ArticleEntry.COL_RANDOM_TAG, tag.getString("tag"));
-                    values.put(AlumContract.ArticleEntry.COL_ARTICLE_ID, articleId);
-                    values.put(AlumContract.ArticleEntry.COL_TITLE, article.getString("title"));
-                    values.put(AlumContract.ArticleEntry.COL_SPOTLIGHTED, isSpotlighted);
-                    values.put(AlumContract.ArticleEntry.COL_CONTENT, article.getString("content"));
-                    values.put(AlumContract.ArticleEntry.COL_IMAGE, article.getString("feature_image"));
-                    values.put(AlumContract.ArticleEntry.COL_SLUG, article.getString("slug"));
-                    values.put(AlumContract.ArticleEntry.COL_USER_ID, user.getLong("id"));
-                    values.put(AlumContract.ArticleEntry.COL_USER_NAME, user.getString("name"));
-                    if (user.get("avatar") != null)
-                        values.put(AlumContract.ArticleEntry.COL_USER_AVATAR, user.getString("avatar"));
-                    values.put(AlumContract.ArticleEntry.COL_CREATED_AT, Utility.getTimeInMillis(article.getString("created_at")));
-                    values.put(AlumContract.ArticleEntry.COL_UPDATED_AT, Utility.getTimeInMillis(article.getString("updated_at")));
-                    values.put(AlumContract.ArticleEntry.COL_BOOKMARKED, 0);
-                    values.put(AlumContract.ArticleEntry.COL_FOLLOWING_AUTHOR, 0);
-                    articleCvVector.add(values);
+    public void addArticles(String json) {
+        Articles articles = Utility.jsonStringToJavaObject(new TypeToken<Articles>() {}, json);
+        Vector<ContentValues> articleCvVector = new Vector<>();
+        for (int i = 0; i < articles.getArticles().size(); ++i) {
+            Article article = articles.getArticles().get(i);
+            if (!mSet.contains(article.getId())) {
+                ContentValues values = new ContentValues();
+                int isSpotlighted = article.getSpotlighted() ? 1 : 0;
+                if (article.getTags().size() != 0) {
+                    values.put(AlumContract.ArticleEntry.COL_RANDOM_TAG_ID, article.getTags().get(0).getId());
+                    values.put(AlumContract.ArticleEntry.COL_RANDOM_TAG, article.getTags().get(0).getTag());
                 }
+                values.put(AlumContract.ArticleEntry.COL_ARTICLE_ID, article.getId());
+                values.put(AlumContract.ArticleEntry.COL_TITLE, article.getTitle());
+                values.put(AlumContract.ArticleEntry.COL_SPOTLIGHTED, isSpotlighted);
+                values.put(AlumContract.ArticleEntry.COL_CONTENT, article.getContent());
+                values.put(AlumContract.ArticleEntry.COL_IMAGE, article.getFeatureImage());
+                values.put(AlumContract.ArticleEntry.COL_SLUG, article.getSlug());
+                values.put(AlumContract.ArticleEntry.COL_USER_ID, article.getUser().getId());
+                values.put(AlumContract.ArticleEntry.COL_USER_NAME, article.getUser().getName());
+                if (article.getUser().getAvatar() != null) {
+                    values.put(AlumContract.ArticleEntry.COL_USER_AVATAR, article.getUser().getAvatar());
+                }
+                values.put(AlumContract.ArticleEntry.COL_CREATED_AT, Utility.getTimeInMillis(article.getCreatedAt()));
+                values.put(AlumContract.ArticleEntry.COL_UPDATED_AT, Utility.getTimeInMillis(article.getUpdatedAt()));
+                values.put(AlumContract.ArticleEntry.COL_BOOKMARKED, 0);
+                values.put(AlumContract.ArticleEntry.COL_FOLLOWING_AUTHOR, 0);
+                articleCvVector.add(values);
             }
-
-            if (articleCvVector.size() > 0){
-                ContentValues[] cvArray = new ContentValues[articleCvVector.size()];
-                articleCvVector.toArray(cvArray);
-                getContentResolver().bulkInsert(AlumContract.ArticleEntry.CONTENT_URI, cvArray);
-                // Send notifications for any new Spotlighted articles
-                Log.i(LOG_TAG, "Sending Notifications...");
-                final SpotlightNotificationManager manager =
-                        SpotlightNotificationFactory.newInstance(this);
-                manager.sendNotifications(SpotlightNotificationUtils.toSpotlightedModels(cvArray));
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
 
+        if (articleCvVector.size() > 0) {
+            ContentValues[] cvArray = new ContentValues[articleCvVector.size()];
+            articleCvVector.toArray(cvArray);
+            getContentResolver().bulkInsert(AlumContract.ArticleEntry.CONTENT_URI, cvArray);
+            // Send notifications for any new Spotlighted articles
+            Log.i(LOG_TAG, "Sending Notifications...");
+            final SpotlightNotificationManager manager =
+                    SpotlightNotificationFactory.newInstance(this);
+            manager.sendNotifications(SpotlightNotificationUtils.toSpotlightedModels(cvArray));
+        }
     }
 
     @Override
@@ -98,7 +80,7 @@ public class AlumIntentService extends IntentService {
                 AlumContract.ArticleEntry.COL_CREATED_AT + " DESC");
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToPosition(-1);
-            while (cursor.moveToNext()){
+            while (cursor.moveToNext()) {
                 mSet.add(cursor.getLong(0));
             }
             cursor.close();
