@@ -3,9 +3,7 @@ package com.google.developer.udacityalumni.utility;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.customtabs.CustomTabsIntent;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
@@ -20,6 +18,8 @@ import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.Trigger;
 import com.google.developer.udacityalumni.R;
 import com.google.developer.udacityalumni.service.ArticleFirebaseJobService;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -113,4 +113,7 @@ public final class Utility {
         sInitialized = true;
     }
 
+    public static <T> T jsonStringToJavaObject(TypeToken<T> type, String jsonString) {
+        return new Gson().fromJson(jsonString, type.getType());
+    }
 }
