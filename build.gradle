@@ -46,7 +46,7 @@ ext {
     butterKnifeVersion = '8.4.0'
     firebaseJobDispatcherVersion = '0.5.0'
     circleImageVersion = '2.1.0'
-    constraintLayoutVersion = '1.0.1'
+    constraintLayoutVersion = '1.0.0'
     okHttpVersion = '3.5.0'
     picassoVersion = '2.5.2'
     firebaseUiVersion = '1.1.1'

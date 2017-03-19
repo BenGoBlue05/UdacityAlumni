@@ -175,7 +175,7 @@ public class ArticleDetailFragment extends Fragment
                 String image = data.getString(ArticleFragment.IND_IMAGE);
                 if (data.getInt(ArticleFragment.IND_SPOTLIGHTED) == 0)
                     mSpotlightTV.setVisibility(View.GONE);
-                if (image == null || image.equals("null")) {
+                if (image == null || image.equals("null") || image.isEmpty()) {
                     mImageView.setVisibility(View.GONE);
                 } else {
                     mImageView.setVisibility(View.VISIBLE);
@@ -197,7 +197,8 @@ public class ArticleDetailFragment extends Fragment
                 setFollowingIcon();
 
                 mSlidingViewAdapter.setName(author);
-                mSlidingViewAdapter.setImageUri(Uri.parse(profPic));
+                if (profPic != null)
+                    mSlidingViewAdapter.setImageUri(Uri.parse(profPic));
                 mSlidingViewAdapter.setContent(content);
             }
 
@@ -207,7 +208,7 @@ public class ArticleDetailFragment extends Fragment
                 Log.i(LOG_TAG, "SECOND LOAD: " + data.getString(ArticleFragment.IND_TITLE));
                 mNextArticleTV.setText(data.getString(ArticleFragment.IND_TITLE));
                 String nextImage = data.getString(ArticleFragment.IND_IMAGE);
-                if (nextImage == null || nextImage.equals("null")) {
+                if (nextImage == null || nextImage.equals("null") || nextImage.isEmpty()) {
                     mNextImageView.setVisibility(View.GONE);
                 } else {
                     mNextImageView.setVisibility(View.VISIBLE);
