@@ -1,5 +1,23 @@
 package com.google.developer.udacityalumni.activity;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.developer.udacityalumni.R;
+import com.google.developer.udacityalumni.model.Post;
+import com.google.developer.udacityalumni.model.User;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -16,23 +34,6 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.developer.udacityalumni.R;
-import com.google.developer.udacityalumni.model.Post;
-import com.google.developer.udacityalumni.model.User;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageMetadata;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -117,7 +118,7 @@ public class NewPostActivity extends BaseActivity {
                         Log.e(LOG_TAG, "USER IS NULL");
                         Toast.makeText(NewPostActivity.this, getString(R.string.user_null), Toast.LENGTH_LONG).show();
                     } else {
-                        submitPost(uId, user.name, user.photoUrl, text);
+                        submitPost(uId, user.name, user.photoUrl, user.getBio(), text);
                     }
                 }
 
@@ -136,10 +137,11 @@ public class NewPostActivity extends BaseActivity {
         startActivityForResult(Intent.createChooser(intent, "Complete action using"), RC_PHOTO);
     }
 
-    private void submitPost(String userId, String userName, String userProfPic, String text) {
+    private void submitPost(String userId, String userName, String userProfPic,
+                            String userBio, String text) {
         if (mDb != null) {
             String key = mDb.child("posts").push().getKey();
-            Post post = new Post(userId, userName, userProfPic, text, mImageUrl);
+            Post post = new Post(userId, userName, userProfPic, userBio, text, mImageUrl);
             Map<String, Object> postValues = post.toMap();
 
             Map<String, Object> childUpdates = new HashMap<>();
@@ -173,6 +175,7 @@ public class NewPostActivity extends BaseActivity {
                 .into(mImageView);
     }
 
+    @SuppressWarnings("VisibleForTests")
     private void uploadImage(Uri uri){
         mPhotoRef = FirebaseStorage.getInstance().getReference().child("post_photos").child(uri.getLastPathSegment());
         mPhotoRef.putFile(uri)

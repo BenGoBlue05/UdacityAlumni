@@ -16,6 +16,7 @@ public class Post {
     public String uid;
     public String userName;
     public String userProfPic;
+    public String userBio;
     public String text;
     public String photoUrl;
     public int numLikes = 0;
@@ -23,7 +24,8 @@ public class Post {
 
     public Post(){}
 
-    public Post(String uid, String userName, String userProfPic, String text, String photoUrl) {
+    public Post(String uid, String userName, String userProfPic, String userBio,
+                String text, String photoUrl) {
         this.uid = uid;
         this.userName = userName;
         this.userProfPic = userProfPic;
@@ -37,6 +39,7 @@ public class Post {
         result.put("uid", uid);
         result.put("userName", userName);
         result.put("userProfPic", userProfPic);
+        result.put("userBio", userBio);
         result.put("text", text);
         result.put("photoUrl", photoUrl);
         result.put("numLikes", numLikes);
