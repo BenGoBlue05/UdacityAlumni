@@ -19,7 +19,7 @@ public class NewAppActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_app);
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.status_bar_color));
-        Toolbar toolbar = (Toolbar) findViewById(R.id.new_app_toolbar);
+        Toolbar toolbar = findViewById(R.id.new_app_toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null){

@@ -1,23 +1,5 @@
 package com.google.developer.udacityalumni.activity;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.developer.udacityalumni.R;
-import com.google.developer.udacityalumni.model.Post;
-import com.google.developer.udacityalumni.model.User;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageMetadata;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-
-import com.bumptech.glide.Glide;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
-
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -34,6 +16,21 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.developer.udacityalumni.R;
+import com.google.developer.udacityalumni.model.Post;
+import com.google.developer.udacityalumni.model.User;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -65,7 +62,7 @@ public class NewPostActivity extends BaseActivity {
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.status_bar_color));
         ButterKnife.bind(this);
         mDb = FirebaseDatabase.getInstance().getReference();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -101,7 +98,7 @@ public class NewPostActivity extends BaseActivity {
 
     private void addPost() {
         final String text;
-        if (mEditText != null && mEditText.getText() != null && !mEditText.getText().toString().isEmpty()) {
+        if (mEditText.getText() != null && !mEditText.getText().toString().isEmpty()) {
             text = mEditText.getText().toString();
         } else {
             text = null;
@@ -169,8 +166,7 @@ public class NewPostActivity extends BaseActivity {
 
     private void displayImage(){
         mImageView.setVisibility(View.VISIBLE);
-        Glide.with(this)
-                .using(new FirebaseImageLoader())
+        GlideApp.with(this)
                 .load(mPhotoRef)
                 .into(mImageView);
     }

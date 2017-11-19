@@ -61,10 +61,8 @@ public class ArticleDetailActivity extends AppCompatActivity
             mTags = intent.getStringArrayExtra(getString(R.string.tag_key));
 
             Log.i(LOG_TAG, Arrays.toString(mArticleIds));
-            if (mToolbar != null) {
-                String title = mPosition == null ? mTags[0] : mTags[mPosition];
-                mToolbarTitleTV.setText(formatToolbarTitle(title));
-            }
+            String title = mPosition == null ? mTags[0] : mTags[mPosition];
+            mToolbarTitleTV.setText(formatToolbarTitle(title));
         }
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.status_bar_color));
         setSupportActionBar(mToolbar);
@@ -78,7 +76,7 @@ public class ArticleDetailActivity extends AppCompatActivity
         }
 
         mPageAdapter = new PageAdapter(getSupportFragmentManager());
-        mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        mViewPager = findViewById(R.id.viewpager);
         setUpViewpager(mViewPager, mArticleIds);
 
     }
@@ -167,7 +165,7 @@ public class ArticleDetailActivity extends AppCompatActivity
             if (mMenu != null) {
                 MenuItem item = mMenu.findItem(R.id.menu_detail_bookmark);
                 if (item != null) setBookmarkIcon(item, mBookMarks[position] == 1);
-            } if (mToolbar != null && mTags.length > 0){
+            } if (mTags.length > 0){
                 mToolbarTitleTV.setText(formatToolbarTitle(mTags[position]));
             }
         }

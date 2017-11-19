@@ -23,7 +23,7 @@ public class PlaceholderFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_placeholder, container, false);
-        Button button = (Button) view.findViewById(R.id.placeholder_button);
+        Button button = view.findViewById(R.id.placeholder_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

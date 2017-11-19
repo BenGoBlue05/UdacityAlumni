@@ -22,7 +22,8 @@ public class WebViewFragment extends Fragment {
 
     private String mParamUrl;
 
-    public WebViewFragment() { }
+    public WebViewFragment() {
+    }
 
     public static WebViewFragment newInstance(String paramUrl) {
         WebViewFragment fragment = new WebViewFragment();
@@ -62,6 +63,6 @@ public class WebViewFragment extends Fragment {
 
     private void hideWebPageToolbar() {
         mWebView.loadUrl("javascript:(function() { " +
-            "document.getElementsByClassName('header__navbar')[1].style.display='none'; })()");
+                "document.getElementsByClassName('header__navbar')[1].style.display='none'; })()");
     }
 }

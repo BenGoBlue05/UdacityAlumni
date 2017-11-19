@@ -60,9 +60,9 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
         mCursor.moveToPosition(position);
 
         String profPic = mCursor.getString(ArticleFragment.IND_USER_AVATAR);
-        if (TextUtils.isEmpty(profPic) || profPic.equals("null")){
+        if (TextUtils.isEmpty(profPic) || profPic.equals("null")) {
             holder.mProfPicCV.setImageResource(R.drawable.ic_person);
-        } else{
+        } else {
             Picasso.with(mContext).load(profPic).placeholder(R.drawable.placeholder)
                     .error(R.drawable.ic_person).into(holder.mProfPicCV);
         }
@@ -141,22 +141,22 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
 
         @Override
         public void onClick(View v) {
-            if (mCursor != null && mCursor.moveToPosition(getAdapterPosition())){
+            if (mCursor != null && mCursor.moveToPosition(getAdapterPosition())) {
                 int viewId = v.getId();
                 long articleId = mCursor.getLong(ArticleFragment.IND_ARTICLE_ID);
                 long authorId = mCursor.getLong(ArticleFragment.IND_USER_ID);
                 boolean isBookmarked = mCursor.getInt(ArticleFragment.IND_BOOKMARKED) == 1;
                 //for some reason switch statement doesn't work for this
-                if (viewId == mProfPicCV.getId()){
+                if (viewId == mProfPicCV.getId()) {
                     mArticleClickHandler.onProfPicClick(authorId, getAdapterPosition());
-                } else if (viewId == mBookmarkIV.getId()){
+                } else if (viewId == mBookmarkIV.getId()) {
                     mArticleClickHandler.onBookmarkClick(articleId, isBookmarked, mBookmarkIV);
-                } else if (viewId == mShareIV.getId()){
+                } else if (viewId == mShareIV.getId()) {
                     mArticleClickHandler.onShareClick(mCursor.getString(ArticleFragment.IND_TITLE));
-                } else if (viewId == mFollowIV.getId()){
+                } else if (viewId == mFollowIV.getId()) {
                     mArticleClickHandler.onFollowUserClick(authorId, articleId,
                             mCursor.getInt(ArticleFragment.IND_FOLLOWING_AUTHOR) == 1, mFollowIV);
-                } else{
+                } else {
                     mArticleClickHandler.onArticleClick(articleId, isBookmarked,
                             mCursor.getString(ArticleFragment.IND_RANDOM_TAG));
                 }

@@ -89,7 +89,7 @@ public final class NavMenuServiceConnection extends CustomTabsServiceConnection 
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder(session);
         builder.setShowTitle(true);
         builder.setToolbarColor(Color.WHITE);
-        builder.setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_out_left);
+        builder.setStartAnimations(context, R.anim.fui_slide_in_right, R.anim.fui_slide_out_left);
         builder.setExitAnimations(
                 context, android.R.anim.slide_in_left, android.R.anim.slide_out_right
         );

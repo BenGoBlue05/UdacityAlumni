@@ -1,14 +1,5 @@
 package com.google.developer.udacityalumni.fragment;
 
-import com.google.developer.udacityalumni.R;
-import com.google.developer.udacityalumni.adapter.PostFirebaseAdapter;
-import com.google.developer.udacityalumni.model.Post;
-import com.google.developer.udacityalumni.view.slidingview.AvatarCardAdapter;
-import com.google.developer.udacityalumni.view.slidingview.SlidingViewManager;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,6 +9,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.developer.udacityalumni.R;
+import com.google.developer.udacityalumni.adapter.PostFirebaseAdapter;
+import com.google.developer.udacityalumni.model.Post;
+import com.google.developer.udacityalumni.view.slidingview.AvatarCardAdapter;
+import com.google.developer.udacityalumni.view.slidingview.SlidingViewManager;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+
 //Credit to Firebase's Database Sample
 
 public class PostFragment extends Fragment implements PostFirebaseAdapter.OnClickListener {
@@ -26,8 +26,6 @@ public class PostFragment extends Fragment implements PostFirebaseAdapter.OnClic
 
     private DatabaseReference mDatabase;
     private RecyclerView mRecycler;
-    private LinearLayoutManager mManager;
-    private PostFirebaseAdapter mAdapter;
 
     private SlidingViewManager mSlidingViewManager;
     private AvatarCardAdapter mSlidingViewAdapter;
@@ -39,7 +37,7 @@ public class PostFragment extends Fragment implements PostFirebaseAdapter.OnClic
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView =  inflater.inflate(R.layout.fragment_post, container, false);
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        mRecycler = (RecyclerView) rootView.findViewById(R.id.post_rv);
+        mRecycler = rootView.findViewById(R.id.post_rv);
         mRecycler.setHasFixedSize(true);
 
         mSlidingViewManager = new SlidingViewManager(this);
@@ -57,26 +55,20 @@ public class PostFragment extends Fragment implements PostFirebaseAdapter.OnClic
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mManager = new LinearLayoutManager(getActivity());
-        mManager.setReverseLayout(true);
-        mManager.setStackFromEnd(true);
-        mRecycler.setLayoutManager(mManager);
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+        manager.setReverseLayout(true);
+        manager.setStackFromEnd(true);
+        mRecycler.setLayoutManager(manager);
 
         final Query query = mDatabase.child("posts").limitToFirst(100);
-        mAdapter = new PostFirebaseAdapter(query, this);
-        mRecycler.setAdapter(mAdapter);
+        PostFirebaseAdapter adapter = new PostFirebaseAdapter(query, getActivity(), this);
+        mRecycler.setAdapter(adapter);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mSlidingViewManager.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mAdapter.cleanup();
     }
 
     @Override

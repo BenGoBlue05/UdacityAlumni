@@ -1,13 +1,12 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.3"
     defaultConfig {
         applicationId "com.google.developer.udacityalumni"
         minSdkVersion 21
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -23,7 +22,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    apt "com.jakewharton:butterknife-compiler:$rootProject.ext.butterKnifeVersion"
+
 
     compile "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
     compile "com.android.support:design:$rootProject.ext.supportLibraryVersion"
@@ -36,7 +35,7 @@ dependencies {
     compile "com.facebook.stetho:stetho:$rootProject.ext.stethoVersion"
     compile "com.facebook.stetho:stetho-okhttp:$rootProject.ext.stethoVersion"
     compile "com.firebase:firebase-jobdispatcher:$rootProject.ext.firebaseJobDispatcherVersion"
-    compile "com.jakewharton:butterknife:$rootProject.ext.butterKnifeVersion"
+
     compile "de.hdodenhof:circleimageview:$rootProject.ext.circleImageVersion"
     compile "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintLayoutVersion"
     compile "com.squareup.okhttp3:okhttp:$rootProject.ext.okHttpVersion"
@@ -57,11 +56,15 @@ dependencies {
     androidTestCompile "com.android.support.test.espresso:espresso-contrib:$rootProject.ext.espressoVersion"
     androidTestCompile "com.android.support.test.espresso:espresso-intents:$rootProject.ext.espressoVersion"
     compile "com.google.android.gms:play-services-auth:$rootProject.ext.playServicesVersion"
+    compile 'com.google.code.gson:gson:2.8.2'
     compile "com.google.firebase:firebase-auth:$rootProject.ext.playServicesVersion"
     compile "com.google.firebase:firebase-database:$rootProject.ext.playServicesVersion"
     compile "com.google.firebase:firebase-storage:$rootProject.ext.playServicesVersion"
     compile "com.android.support:support-v4:$rootProject.supportLibraryVersion"
-    compile "com.github.bumptech.glide:glide:$rootProject.ext.glideVersion"
+    compile "com.jakewharton:butterknife:$rootProject.ext.butterKnifeVersion"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.ext.butterKnifeVersion"
+    compile 'com.github.bumptech.glide:glide:4.3.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.3.1'
     compile "com.firebaseui:firebase-ui:$rootProject.ext.firebaseUiVersion"
     testCompile 'junit:junit:4.12'
 }

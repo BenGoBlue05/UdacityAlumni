@@ -7,9 +7,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.developer.udacityalumni.R;
+import com.google.developer.udacityalumni.activity.GlideApp;
 import com.google.developer.udacityalumni.model.Post;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -53,8 +52,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder{
             if (post.photoUrl != null && !post.photoUrl.isEmpty()){
                 Log.i(LOG_TAG, post.photoUrl);
                 StorageReference ref = storage.getReferenceFromUrl(post.photoUrl);
-                Glide.with(context)
-                        .using(new FirebaseImageLoader())
+                GlideApp.with(context)
                         .load(ref)
                         .into(mImageIv);
             }

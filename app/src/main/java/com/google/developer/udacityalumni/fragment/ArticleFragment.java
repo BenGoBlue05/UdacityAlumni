@@ -24,8 +24,6 @@ import com.google.developer.udacityalumni.adapter.ArticleAdapter;
 import com.google.developer.udacityalumni.data.AlumContract;
 import com.google.developer.udacityalumni.view.slidingview.AvatarCardAdapter;
 import com.google.developer.udacityalumni.view.slidingview.SlidingViewManager;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 
 public class ArticleFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -77,7 +75,7 @@ public class ArticleFragment extends Fragment implements LoaderManager.LoaderCal
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_article, container, false);
-        RecyclerView mRecyclerView = (RecyclerView) rootView.findViewById(R.id.article_recycler_view);
+        RecyclerView mRecyclerView = rootView.findViewById(R.id.article_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setHasFixedSize(true);
 

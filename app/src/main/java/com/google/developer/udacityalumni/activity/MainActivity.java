@@ -54,9 +54,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends BaseActivity implements ArticleFragment.ArticleCallback,
         LoaderManager.LoaderCallbacks<Cursor>, TabLayout.OnTabSelectedListener,
         NavigationView.OnNavigationItemSelectedListener, BottomNavigationView.OnNavigationItemSelectedListener,
-        View.OnClickListener{
-
-    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+        View.OnClickListener {
 
     private List<Long> mArticleIds;
     private List<Integer> mBookmarks;
@@ -96,20 +94,18 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
             startService(new Intent(this, AlumIntentService.class));
             Utility.scheduleArticleSync(this);
             FirebaseUser user = auth.getCurrentUser();
-            TextView tv = (TextView) mNavView.getHeaderView(0).findViewById(R.id.nav_header_name_tv);
+            TextView tv = mNavView.getHeaderView(0).findViewById(R.id.nav_header_name_tv);
             tv.setText(user.getDisplayName());
-            CircleImageView cv = (CircleImageView) mNavView.getHeaderView(0).findViewById(R.id.nav_header_prof_pic);
+            CircleImageView cv = mNavView.getHeaderView(0).findViewById(R.id.nav_header_prof_pic);
             if (user.getPhotoUrl() != null) {
                 Picasso.with(this).load(user.getPhotoUrl()).placeholder(R.drawable.placeholder)
                         .error(R.drawable.ic_person).into(cv);
             } else {
                 cv.setImageResource(R.drawable.ic_person);
             }
-            if (mToolbar != null) {
-                Drawable overflowIcon = mToolbar.getOverflowIcon();
-                if (overflowIcon != null)
-                    overflowIcon.setTint(ContextCompat.getColor(this, R.color.colorAccent));
-            }
+            Drawable overflowIcon = mToolbar.getOverflowIcon();
+            if (overflowIcon != null)
+                overflowIcon.setTint(ContextCompat.getColor(this, R.color.colorAccent));
             setSupportActionBar(mToolbar);
             setupViewPager(mViewPager);
             mTabs.setupWithViewPager(mViewPager);
@@ -150,7 +146,6 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
         mPageAdapter.addFragment(new PlaceholderFragment(), getString(R.string.community));
         viewPager.setAdapter(mPageAdapter);
     }
-
 
 
     @Override
@@ -302,8 +297,8 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
 
     @Override
     public void onClick(View v) {
-        if (mTabs == null || mTabs.getTabCount() == 0) return;
-        switch(mTabs.getSelectedTabPosition()){
+        if (mTabs.getTabCount() == 0) return;
+        switch (mTabs.getSelectedTabPosition()) {
             case 0:                 //home frag
                 startActivity(new Intent(MainActivity.this, NewPostActivity.class));
                 break;

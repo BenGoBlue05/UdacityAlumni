@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.developer.udacityalumni.R;
 import com.squareup.picasso.Picasso;
@@ -81,12 +80,12 @@ public final class AvatarCardAdapter implements SlidingView, View.OnClickListene
         final ViewGroup view =
                 (ViewGroup) inflater.inflate(R.layout.avatar_sliding_card, parent, false);
 
-        mAvatarImageView = (ImageView) view.findViewById(R.id.sliding_card_avatar);
-        mNameTextView = (TextView) view.findViewById(R.id.sliding_card_name);
-        mContentTextView = (TextView) view.findViewById(R.id.sliding_card_content);
+        mAvatarImageView = view.findViewById(R.id.sliding_card_avatar);
+        mNameTextView = view.findViewById(R.id.sliding_card_name);
+        mContentTextView = view.findViewById(R.id.sliding_card_content);
 
-        final Button seeMoreButton = (Button) view.findViewById(R.id.sliding_card_see_more);
-        final ImageButton dismissButton = (ImageButton) view.findViewById(R.id.sliding_card_dismiss);
+        final Button seeMoreButton = view.findViewById(R.id.sliding_card_see_more);
+        final ImageButton dismissButton = view.findViewById(R.id.sliding_card_dismiss);
 
         setImageUri(imageUri);
         setName(name);
