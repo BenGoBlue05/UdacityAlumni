@@ -12,7 +12,7 @@ import com.google.developer.udacityalumni.model.Articles;
 import com.google.developer.udacityalumni.notification.SpotlightNotificationFactory;
 import com.google.developer.udacityalumni.notification.SpotlightNotificationManager;
 import com.google.developer.udacityalumni.notification.SpotlightNotificationUtils;
-import com.google.developer.udacityalumni.utility.Utility;
+import com.google.developer.udacityalumni.utils.Utility;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;

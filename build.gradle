@@ -6,10 +6,10 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0'
+        classpath 'com.android.tools.build:gradle:3.0.1'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
-        classpath 'com.google.gms:google-services:3.1.0'
+        classpath 'com.google.gms:google-services:3.1.1'
     }
 }
 
@@ -29,12 +29,12 @@ task clean(type: Delete) {
 ext {
     // Sdk and tools
     minSdkVersion = 21
-    targetSdkVersion = 26
-    compileSdkVersion = 26
-    buildToolsVersion = '26.0.3'
+    targetSdkVersion = 27
+    compileSdkVersion = 27
+    buildToolsVersion = '27.0.2'
 
     // App dependencies
-    supportLibraryVersion = '26.1.0'
+    supportLibraryVersion = '27.0.2'
     guavaVersion = '23.4'
     junitVersion = '4.12'
     mockitoVersion = '1.10.19'
@@ -43,7 +43,7 @@ ext {
     runnerVersion = '0.5'
     rulesVersion = '0.5'
     espressoVersion = '2.2.2'
-    playServicesVersion = '11.4.2'
+    playServicesVersion = '11.8.0'
     stethoVersion = '1.5.0'
     butterKnifeVersion = '8.8.1'
     firebaseJobDispatcherVersion = '0.7.0'
@@ -51,6 +51,7 @@ ext {
     constraintLayoutVersion = '1.0.2'
     okHttpVersion = '3.9.1'
     picassoVersion = '2.5.2'
-    firebaseUiVersion = '3.1.0'
-    glideVersion = '4.1.1'
+    firebaseUiVersion = '3.1.3'
+    glideVersion = '4.4.0'
+    archcVersion = '1.0.0'
 }

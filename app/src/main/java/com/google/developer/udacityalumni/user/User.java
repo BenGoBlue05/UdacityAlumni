@@ -1,44 +1,40 @@
-package com.google.developer.udacityalumni.model;
-
-import com.google.firebase.database.IgnoreExtraProperties;
-import com.google.gson.annotations.SerializedName;
+package com.google.developer.udacityalumni.user;
 
 /**
  * Created by benjaminlewis on 1/14/17.
  */
 
-@IgnoreExtraProperties
 public class User {
 
-    @SerializedName("id")
-    private Long id;
+    private String id;
 
-    @SerializedName("email")
     public String email;
 
-    @SerializedName("created_at")
     private String createdAt;
 
-    @SerializedName("updated_at")
     private String updatedAt;
 
-    @SerializedName("name")
     public String name;
 
-    @SerializedName("avatar")
     private String avatar;
 
-    @SerializedName("role")
     private String role;
 
-    @SerializedName("bio")
     private String bio;
 
-    @SerializedName("public")
     private Boolean publicStatus;
 
-    @SerializedName("photoUrl")
     public String photoUrl;
+
+    public User() {
+    }
+
+    public User(String id, String name, String email, String photoUrl) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.photoUrl = photoUrl;
+    }
 
     public String getAvatar() {
         return avatar;
@@ -48,11 +44,11 @@ public class User {
         this.avatar = avatar;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -120,12 +116,4 @@ public class User {
         this.photoUrl = photoUrl;
     }
 
-    public User() {
-    }
-
-    public User(String name, String email, String photoUrl) {
-        this.name = name;
-        this.email = email;
-        this.photoUrl = photoUrl;
-    }
 }

@@ -1,5 +1,6 @@
 package com.google.developer.udacityalumni.model;
 
+import com.google.developer.udacityalumni.user.User;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;

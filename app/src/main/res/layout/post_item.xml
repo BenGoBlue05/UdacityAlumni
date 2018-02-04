@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="post"
+            type="com.google.developer.udacityalumni.post.Post" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/item_post_prof_pic"
+            android:layout_width="@dimen/profile_image_diameter"
+            android:layout_height="@dimen/profile_image_diameter"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:userProfPicUrl="@{post.userProfPicUrl}"
+            tools:src="@drawable/ben_lewis_prof_pic" />
+
+        <TextView
+            android:id="@+id/nameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@{post.userDisplayName}"
+            app:layout_constraintStart_toEndOf="@+id/item_post_prof_pic"
+            app:layout_constraintTop_toTopOf="@+id/item_post_prof_pic"
+            tools:text="Ben Lewis" />
+
+        <TextView
+            android:id="@+id/timeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@android:style/TextAppearance.Material.Small"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/nameTextView"
+            app:layout_constraintTop_toBottomOf="@+id/nameTextView"
+            tools:text="2 hrs" />
+
+        <TextView
+            android:id="@+id/postTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@{post.textContent}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/item_post_prof_pic"
+            app:layout_constraintTop_toBottomOf="@+id/item_post_prof_pic"
+            tools:text="Self driving cars are the best!" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/a11y_posted_image"
+            android:maxHeight="256dp"
+            android:scaleType="centerInside"
+            app:photoContentUrl="@{post.photoContentUrl}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/postTextView"
+            tools:src="@drawable/sample_image_vr" />
+
+
+        <ImageView
+            android:id="@+id/likeImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/a11y_like_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            app:srcCompat="@drawable/ic_like" />
+
+        <ImageView
+            android:id="@+id/commentImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:contentDescription="@string/a11y_comment_button"
+            app:layout_constraintStart_toEndOf="@+id/likeImageView"
+            app:layout_constraintTop_toTopOf="@+id/likeImageView"
+            app:srcCompat="@drawable/ic_comment_black" />
+
+        <ImageView
+            android:id="@+id/flagImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="@string/a11y_flag_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/commentImageView"
+            app:srcCompat="@drawable/ic_flag_black" />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+</layout>

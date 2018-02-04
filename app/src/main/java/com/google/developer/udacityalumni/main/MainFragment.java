@@ -1,15 +1,19 @@
-package com.google.developer.udacityalumni.activity;
+package com.google.developer.udacityalumni.main;
+
 
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.graphics.drawable.VectorDrawableCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
@@ -19,27 +23,26 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.facebook.stetho.Stetho;
 import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.developer.udacityalumni.R;
-import com.google.developer.udacityalumni.adapter.PageAdapter;
+import com.google.developer.udacityalumni.activity.ArticleDetailActivity;
+import com.google.developer.udacityalumni.login.LoginActivity;
+import com.google.developer.udacityalumni.activity.NewAppActivity;
+import com.google.developer.udacityalumni.post.NewPostActivity;
 import com.google.developer.udacityalumni.data.AlumContract;
 import com.google.developer.udacityalumni.fragment.ArticleFragment;
-import com.google.developer.udacityalumni.fragment.PlaceholderFragment;
-import com.google.developer.udacityalumni.fragment.PostFragment;
-import com.google.developer.udacityalumni.service.AlumIntentService;
 import com.google.developer.udacityalumni.service.NavMenuServiceConnection;
-import com.google.developer.udacityalumni.utility.Utility;
 import com.google.developer.udacityalumni.view.slidingview.BottomNavBarManager;
-import com.google.developer.udacityalumni.view.slidingview.BottomNavBarManager.OnBottomNavBarLaidOutListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
@@ -51,10 +54,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends BaseActivity implements ArticleFragment.ArticleCallback,
+/**
+ * A simple {@link Fragment} subclass.
+ */
+@Deprecated
+public class MainFragment extends Fragment
+        implements ArticleFragment.ArticleCallback,
         LoaderManager.LoaderCallbacks<Cursor>, TabLayout.OnTabSelectedListener,
         NavigationView.OnNavigationItemSelectedListener, BottomNavigationView.OnNavigationItemSelectedListener,
-        View.OnClickListener {
+        View.OnClickListener
+{
+
 
     private List<Long> mArticleIds;
     private List<Integer> mBookmarks;
@@ -79,94 +89,91 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
     @BindView(R.id.main_fab)
     FloatingActionButton mFab;
 
+    public MainFragment() {
+        // Required empty public constructor
+    }
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Stetho.initializeWithDefaults(this);
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        if (auth.getCurrentUser() == null) {
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-        } else {
-            setContentView(R.layout.activity_main);
-            ButterKnife.bind(this);
-            startService(new Intent(this, AlumIntentService.class));
-            Utility.scheduleArticleSync(this);
-            FirebaseUser user = auth.getCurrentUser();
-            TextView tv = mNavView.getHeaderView(0).findViewById(R.id.nav_header_name_tv);
-            tv.setText(user.getDisplayName());
-            CircleImageView cv = mNavView.getHeaderView(0).findViewById(R.id.nav_header_prof_pic);
-            if (user.getPhotoUrl() != null) {
-                Picasso.with(this).load(user.getPhotoUrl()).placeholder(R.drawable.placeholder)
-                        .error(R.drawable.ic_person).into(cv);
-            } else {
-                cv.setImageResource(R.drawable.ic_person);
-            }
-            Drawable overflowIcon = mToolbar.getOverflowIcon();
-            if (overflowIcon != null)
-                overflowIcon.setTint(ContextCompat.getColor(this, R.color.colorAccent));
-            setSupportActionBar(mToolbar);
-            setupViewPager(mViewPager);
-            mTabs.setupWithViewPager(mViewPager);
-            ActionBar supportActionBar = getSupportActionBar();
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        ButterKnife.bind(rootView);
+
+//        mFab.setOnClickListener(this);
+        return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        FragmentActivity fragmentActivity = getActivity();
+        if (fragmentActivity instanceof AppCompatActivity) {
+            AppCompatActivity activity = (AppCompatActivity) fragmentActivity;
+            activity.setSupportActionBar(mToolbar);
+            ActionBar supportActionBar = activity.getSupportActionBar();
             if (supportActionBar != null) {
                 VectorDrawableCompat indicator
-                        = VectorDrawableCompat.create(getResources(), R.drawable.ic_menu, getTheme());
+                        = VectorDrawableCompat.create(getResources(), R.drawable.ic_menu, activity.getTheme());
                 assert indicator != null;
-                indicator.setTint(ResourcesCompat.getColor(getResources(), R.color.colorAccent, getTheme()));
+                indicator.setTint(ResourcesCompat.getColor(getResources(), R.color.colorAccent, activity.getTheme()));
                 supportActionBar.setHomeAsUpIndicator(indicator);
                 supportActionBar.setDisplayHomeAsUpEnabled(true);
             }
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+            FirebaseUser user = auth.getCurrentUser();
+            TextView tv = mNavView.getHeaderView(0).findViewById(R.id.nav_header_name_tv);
+            CircleImageView cv = mNavView.getHeaderView(0).findViewById(R.id.nav_header_prof_pic);
+            if (user != null){
+                tv.setText(user.getDisplayName());
+                if (user.getPhotoUrl() != null) {
+                    Picasso.with(getContext()).load(user.getPhotoUrl()).placeholder(R.drawable.placeholder)
+                            .error(R.drawable.ic_person).into(cv);
+                } else {
+                    cv.setImageResource(R.drawable.ic_person);
+                }
+            }
+
+            Drawable overflowIcon = mToolbar.getOverflowIcon();
+            if (overflowIcon != null && getContext() != null)
+                overflowIcon.setTint(ContextCompat.getColor(getContext(), R.color.colorAccent));
+            mTabs.setupWithViewPager(mViewPager);
+
             mNavView.setNavigationItemSelectedListener(this);
 
             mBottomNv.setOnNavigationItemSelectedListener(this);
-            mBottomNavManager = new BottomNavBarManager(mBottomNv, new OnBottomNavBarLaidOutListener() {
-                @Override
-                public void onBottomNavBarLaidOut() {
-                    if (mViewPager.getCurrentItem() == 1) {
-                        mBottomNavManager.setShown();
-                    } else {
-                        mBottomNavManager.setHidden();
-                    }
+            mBottomNavManager = new BottomNavBarManager(mBottomNv, () -> {
+                if (mViewPager.getCurrentItem() == 1) {
+                    mBottomNavManager.setShown();
+                } else {
+                    mBottomNavManager.setHidden();
                 }
             });
-
-            mNavMenuCustomTabs = new NavMenuServiceConnection(this);
-            mFab.setOnClickListener(this);
+        } else {
+            throw new IllegalStateException("Host Activity not instance of FragmentActivity");
         }
-
     }
-
-    private void setupViewPager(ViewPager viewPager) {
-        PageAdapter mPageAdapter = new PageAdapter(getSupportFragmentManager());
-        mPageAdapter.addFragment(new PostFragment(), getString(R.string.home));
-        mPageAdapter.addFragment(new PlaceholderFragment(), getString(R.string.apps));
-        mPageAdapter.addFragment(new ArticleFragment(), getString(R.string.articles));
-        mPageAdapter.addFragment(new PlaceholderFragment(), getString(R.string.community));
-        viewPager.setAdapter(mPageAdapter);
-    }
-
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
         mTabs.addOnTabSelectedListener(this);
-        mNavMenuCustomTabs.bindService();
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
         mTabs.removeOnTabSelectedListener(this);
-        mNavMenuCustomTabs.unbindService();
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        if (getActivity() != null) {
+            getActivity().getMenuInflater().inflate(R.menu.main, menu);
+        }
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -175,14 +182,16 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 break;
             case R.id.sign_out:
-                AuthUI.getInstance()
-                        .signOut(this)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            public void onComplete(@NonNull Task<Void> task) {
-                                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                                finish();
-                            }
-                        });
+                FragmentActivity activity = getActivity();
+                if (activity != null) {
+                    AuthUI.getInstance()
+                            .signOut(activity)
+                            .addOnCompleteListener(task -> {
+                                startActivity(new Intent(activity, LoginActivity.class));
+                                activity.finish();
+                            });
+                }
+
                 break;
         }
         return true;
@@ -213,10 +222,13 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(this, AlumContract.ArticleEntry.CONTENT_URI,
-                new String[]{AlumContract.ArticleEntry.COL_ARTICLE_ID, AlumContract.ArticleEntry.COL_BOOKMARKED,
-                        AlumContract.ArticleEntry.COL_RANDOM_TAG},
-                null, null, AlumContract.ArticleEntry.COL_CREATED_AT + " DESC");
+        if (getContext() != null) {
+            return new CursorLoader(getContext(), AlumContract.ArticleEntry.CONTENT_URI,
+                    new String[]{AlumContract.ArticleEntry.COL_ARTICLE_ID, AlumContract.ArticleEntry.COL_BOOKMARKED,
+                            AlumContract.ArticleEntry.COL_RANDOM_TAG},
+                    null, null, AlumContract.ArticleEntry.COL_CREATED_AT + " DESC");
+        }
+        return null;
     }
 
     @Override
@@ -241,7 +253,7 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
                 isBookmarked[i] = mBookmarks.get(i);
                 tags[i] = mTags.get(i);
             }
-            startActivity(new Intent(this, ArticleDetailActivity.class)
+            startActivity(new Intent(getActivity(), ArticleDetailActivity.class)
                     .putExtra(getString(R.string.article_list_key), ids)
                     .putExtra(getString(R.string.article_bookmarks_key), isBookmarked)
                     .putExtra(getString(R.string.tag_key), tags));
@@ -261,11 +273,11 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
         mBookmarks.add(isBookmarked ? 1 : 0);
         mTags = new ArrayList<>();
         mTags.add(tag);
-        Loader loader = getSupportLoaderManager().getLoader(LOADER);
+        Loader loader = getLoaderManager().getLoader(LOADER);
         if (loader == null || !loader.isStarted())
-            getSupportLoaderManager().initLoader(LOADER, null, this);
+            getLoaderManager().initLoader(LOADER, null, this);
         else
-            getSupportLoaderManager().restartLoader(LOADER, null, this);
+            getLoaderManager().restartLoader(LOADER, null, this);
     }
 
     @Override
@@ -287,23 +299,24 @@ public class MainActivity extends BaseActivity implements ArticleFragment.Articl
     }
 
     @Override
-    protected void onPause() {
-        Loader loader = getSupportLoaderManager().getLoader(LOADER);
+    public void onPause() {
+        Loader loader = getLoaderManager().getLoader(LOADER);
         if (loader != null) {
-            getSupportLoaderManager().destroyLoader(loader.getId());
+            getLoaderManager().destroyLoader(loader.getId());
         }
         super.onPause();
     }
+
 
     @Override
     public void onClick(View v) {
         if (mTabs.getTabCount() == 0) return;
         switch (mTabs.getSelectedTabPosition()) {
             case 0:                 //home frag
-                startActivity(new Intent(MainActivity.this, NewPostActivity.class));
+                startActivity(new Intent(getActivity(), NewPostActivity.class));
                 break;
             case 1:
-                startActivity(new Intent(MainActivity.this, NewAppActivity.class));
+                startActivity(new Intent(getActivity(), NewAppActivity.class));
                 break;
         }
     }

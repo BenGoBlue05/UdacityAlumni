@@ -1,5 +1,6 @@
-package com.google.developer.udacityalumni.activity;
+package com.google.developer.udacityalumni.post;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -17,11 +18,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.developer.udacityalumni.R;
-import com.google.developer.udacityalumni.model.Post;
-import com.google.developer.udacityalumni.model.User;
+import com.google.developer.udacityalumni.base.BaseActivity;
+import com.google.developer.udacityalumni.user.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,10 +29,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,6 +49,10 @@ public class NewPostActivity extends BaseActivity {
     @BindView(R.id.new_post_et)
     EditText mEditText;
 
+    public static Intent getLaunchIntent(@NonNull Context context) {
+        return new Intent(context, NewPostActivity.class);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,12 +62,12 @@ public class NewPostActivity extends BaseActivity {
         ButterKnife.bind(this);
         mDb = FirebaseDatabase.getInstance().getReference();
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_close);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             Drawable close = ContextCompat.getDrawable(this, R.drawable.ic_close);
-            close.setTint(ContextCompat.getColor(this, R.color.colorAccent));
             actionBar.setHomeAsUpIndicator(close);
         }
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
@@ -86,10 +85,13 @@ public class NewPostActivity extends BaseActivity {
         switch (item.getItemId()) {
             case R.id.post:
                 addPost();
-                startActivity(new Intent(NewPostActivity.this, MainActivity.class));
+                finish();
                 break;
             case R.id.item_post_image:
                 addPhoto();
+                break;
+            case android.R.id.home:
+                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -136,16 +138,16 @@ public class NewPostActivity extends BaseActivity {
 
     private void submitPost(String userId, String userName, String userProfPic,
                             String userBio, String text) {
-        if (mDb != null) {
-            String key = mDb.child("posts").push().getKey();
-            Post post = new Post(userId, userName, userProfPic, userBio, text, mImageUrl);
-            Map<String, Object> postValues = post.toMap();
-
-            Map<String, Object> childUpdates = new HashMap<>();
-            childUpdates.put("/posts/" + key, postValues);
-            childUpdates.put("/user-posts/" + userId + "/" + key, postValues);
-            mDb.updateChildren(childUpdates);
-        }
+//        if (mDb != null) {
+//            String key = mDb.child("posts").push().getKey();
+////            Post post = new Post(userId, userName, userProfPic, userBio, text, mImageUrl);
+//            Map<String, Object> postValues = post.toMap();
+//
+//            Map<String, Object> childUpdates = new HashMap<>();
+//            childUpdates.put("/posts/" + key, postValues);
+//            childUpdates.put("/user-posts/" + userId + "/" + key, postValues);
+//            mDb.updateChildren(childUpdates);
+//        }
     }
 
     @Override
@@ -162,35 +164,24 @@ public class NewPostActivity extends BaseActivity {
     }
 
 
-
-
-    private void displayImage(){
+    private void displayImage() {
         mImageView.setVisibility(View.VISIBLE);
-        GlideApp.with(this)
-                .load(mPhotoRef)
-                .into(mImageView);
     }
 
     @SuppressWarnings("VisibleForTests")
-    private void uploadImage(Uri uri){
+    private void uploadImage(Uri uri) {
         mPhotoRef = FirebaseStorage.getInstance().getReference().child("post_photos").child(uri.getLastPathSegment());
         mPhotoRef.putFile(uri)
-                .addOnSuccessListener(NewPostActivity.this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        StorageMetadata metadata = taskSnapshot.getMetadata();
-                        mImageUrl = metadata != null && metadata.getDownloadUrl() != null ?
-                                metadata.getDownloadUrl().toString() : null;
-                        displayImage();
-                    }
+                .addOnSuccessListener(NewPostActivity.this, taskSnapshot -> {
+                    StorageMetadata metadata = taskSnapshot.getMetadata();
+                    mImageUrl = metadata != null && metadata.getDownloadUrl() != null ?
+                            metadata.getDownloadUrl().toString() : null;
+                    displayImage();
                 })
-                .addOnFailureListener(NewPostActivity.this, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(NewPostActivity.this, "Upload failed",
-                                Toast.LENGTH_SHORT).show();
-                        Log.e(LOG_TAG, "UPLOAD FAILED");
-                    }
+                .addOnFailureListener(NewPostActivity.this, e -> {
+                    Toast.makeText(NewPostActivity.this, "Upload failed",
+                            Toast.LENGTH_SHORT).show();
+                    Log.e(LOG_TAG, "UPLOAD FAILED");
                 });
     }
 }

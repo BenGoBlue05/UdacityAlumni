@@ -25,7 +25,8 @@
     <string name="viewpager_position_key" translatable="false">viewpagerKey</string>
     <string name="tag_key" translatable="false">tagKey</string>
     <string name="title_key" translatable="false">titleKey</string>
-
+    <string name="preference_file_key" translatable="false">preferencesKey</string>
+    <string name="fake_data_key" translatable="false">fakeDataKey</string>
     <string name="seconds_ago"><xliff:g id="seconds">%d</xliff:g> secs ago</string>
     <string name="minutes_ago"><xliff:g id="minutes">%d</xliff:g> mins ago</string>
     <string name="hours_ago"><xliff:g id="hours">%d</xliff:g> hours ago</string>
@@ -94,6 +95,8 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="login_failed">Failed to log in</string>
+    <string name="login_error_connecting_google_play_services">There was an error connecting to Google Play Services</string>
 
     <!--On Share String-->
     <string name="share">"\nLet me recommend this article:\n\n"<xliff:g id="url">%s</xliff:g></string>
@@ -104,5 +107,23 @@
     <string name="sliding_view_dismiss_content_desc">Dismiss</string>
 
     <string name="title_activity_new_post">NewPostActivity</string>
+    <string name="title_activity_main_v2">MainActivityV2</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <!-- Posts -->
+    <string name="posts_send">Send</string>
+
+    <!-- a11y -->
+    <string name="a11y_like_button">Like button</string>
+    <string name="a11y_posted_image">Picture posted</string>
+    <string name="a11y_user_photo">Picture of user</string>
+    <string name="a11y_comment_button">Add comment</string>
+    <string name="a11y_flag_icon">Report this post</string>
+    <string name="a11y_posts_send_button">Send this post</string>
+    <string name="a11y_posts_add_image_button">Add an image to this post</string>
+    <string name="a11y_posts_take_photo_button">Take a photo and add it to this post</string>
+
 
 </resources>

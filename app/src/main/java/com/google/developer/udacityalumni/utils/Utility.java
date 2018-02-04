@@ -1,4 +1,4 @@
-package com.google.developer.udacityalumni.utility;
+package com.google.developer.udacityalumni.utils;
 
 import android.content.Context;
 import android.graphics.Color;

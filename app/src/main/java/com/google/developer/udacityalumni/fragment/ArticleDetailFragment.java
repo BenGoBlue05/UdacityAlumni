@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import com.google.developer.udacityalumni.R;
 import com.google.developer.udacityalumni.data.AlumContract;
-import com.google.developer.udacityalumni.utility.Utility;
+import com.google.developer.udacityalumni.utils.Utility;
 import com.google.developer.udacityalumni.view.slidingview.AvatarCardAdapter;
 import com.google.developer.udacityalumni.view.slidingview.SlidingViewManager;
 import com.squareup.picasso.Picasso;

@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.google.developer.udacityalumni.R;
 import com.google.developer.udacityalumni.animation.AnimationUtils;
 import com.google.developer.udacityalumni.fragment.ArticleFragment;
-import com.google.developer.udacityalumni.utility.Utility;
+import com.google.developer.udacityalumni.utils.Utility;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
