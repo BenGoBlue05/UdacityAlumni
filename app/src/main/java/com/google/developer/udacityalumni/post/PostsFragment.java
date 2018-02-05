@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.google.developer.udacityalumni.BuildConfig;
 import com.google.developer.udacityalumni.R;
 import com.google.developer.udacityalumni.base.BaseFragment;
 import com.google.developer.udacityalumni.base.BaseView;
@@ -29,13 +28,10 @@ import java.util.List;
  */
 public class PostsFragment extends BaseFragment implements BaseView<List<Post>> {
 
-    private ProgressBar progressBar;
-
-    private PostAdapter adapter;
-
-    private PostsPresenter presenter;
-
     private static final int LIMIT = 50;
+    private ProgressBar progressBar;
+    private PostAdapter adapter;
+    private PostsPresenter presenter;
 
     public PostsFragment() {
     }
@@ -75,9 +71,7 @@ public class PostsFragment extends BaseFragment implements BaseView<List<Post>> 
         super.onActivityCreated(savedInstanceState);
         PostsViewModel viewModel = ViewModelProviders.of(this).get(PostsViewModel.class);
         viewModel.setQuery(getPostsQuery());
-        viewModel.getPosts().observe(this, posts -> {
-            presenter.processPosts(posts, this, getResources());
-        });
+        viewModel.getPosts().observe(this, posts -> presenter.processPosts(posts, this, getResources()));
     }
 
     private Query getPostsQuery() {
@@ -88,14 +82,10 @@ public class PostsFragment extends BaseFragment implements BaseView<List<Post>> 
 
     @Override
     public void showError() {
-
     }
 
     @Override
     public void displayData(List<Post> data) {
-        if (data == null && BuildConfig.DEBUG) {
-            data = presenter.getFakePosts(getResources());
-        }
         adapter.setPosts(data);
     }
 

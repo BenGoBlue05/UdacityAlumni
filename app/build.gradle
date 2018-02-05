@@ -69,6 +69,7 @@ dependencies {
     compile "com.google.firebase:firebase-database:$rootProject.ext.playServicesVersion"
     compile "com.google.firebase:firebase-storage:$rootProject.ext.playServicesVersion"
     compile "com.jakewharton:butterknife:$rootProject.ext.butterKnifeVersion"
+    implementation "com.jakewharton.timber:timber:$rootProject.ext.timberVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.ext.butterKnifeVersion"
     implementation "com.github.bumptech.glide:glide:$rootProject.ext.glideVersion"
     annotationProcessor "com.github.bumptech.glide:compiler:$rootProject.ext.glideVersion"

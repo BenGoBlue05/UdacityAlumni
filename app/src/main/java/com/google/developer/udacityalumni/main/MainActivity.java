@@ -4,20 +4,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.developer.udacityalumni.R;
-import com.google.developer.udacityalumni.animation.BottomNavigationViewBehavior;
 import com.google.developer.udacityalumni.apps.AppsFragment;
 import com.google.developer.udacityalumni.base.BaseActivity;
 import com.google.developer.udacityalumni.login.LoginActivity;
 import com.google.developer.udacityalumni.post.NewPostActivity;
 import com.google.developer.udacityalumni.post.PostsFragment;
+import com.google.developer.udacityalumni.session.UASession;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends BaseActivity
@@ -39,6 +40,7 @@ public class MainActivity extends BaseActivity
         if (savedInstanceState == null) {
             postsFragment = PostsFragment.newInstance();
             addFragment(R.id.fragmentContainer, postsFragment);
+            UASession.init(getApplication());
         }
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             goToLoginScreen();
@@ -50,14 +52,15 @@ public class MainActivity extends BaseActivity
     }
 
     private void setUpViews() {
-        setSupportActionBar(findViewById(R.id.toolbar));
+        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("");
+        toolbar.setNavigationIcon(R.drawable.ic_menu);
+        setSupportActionBar(toolbar);
         BottomNavigationView bottomNavigationView = findViewById(R.id.navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, NewPostActivity.class)));
-        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) bottomNavigationView.getLayoutParams();
-        layoutParams.setBehavior(new BottomNavigationViewBehavior());
-        bottomNavigationView.setLayoutParams(layoutParams);
     }
 
     @Override
@@ -65,6 +68,9 @@ public class MainActivity extends BaseActivity
         Fragment fragment;
         switch (item.getItemId()) {
             case R.id.navigation_home:
+                if (postsFragment == null) {
+                    postsFragment = PostsFragment.newInstance();
+                }
                 fragment = postsFragment;
                 fab.show();
                 break;
