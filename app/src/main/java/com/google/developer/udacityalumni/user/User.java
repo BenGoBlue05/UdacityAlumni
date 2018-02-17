@@ -1,30 +1,25 @@
 package com.google.developer.udacityalumni.user;
 
+import java.util.List;
+
 /**
  * Created by benjaminlewis on 1/14/17.
  */
 
 public class User {
 
-    private String id;
-
     public String email;
-
-    private String createdAt;
-
-    private String updatedAt;
-
     public String name;
-
-    private String avatar;
-
-    private String role;
-
-    private String bio;
-
-    private Boolean publicStatus;
-
     public String photoUrl;
+    private String id;
+    private String createdAt;
+    private String updatedAt;
+    private String avatar;
+    private String role;
+    private String bio;
+    private List<String> posts;
+    private List<String> apps;
+    private Boolean publicStatus;
 
     public User() {
     }
@@ -34,6 +29,38 @@ public class User {
         this.name = name;
         this.email = email;
         this.photoUrl = photoUrl;
+    }
+
+    public List<String> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<String> posts) {
+        this.posts = posts;
+    }
+
+    public void addPost(String postId) {
+        posts.add(postId);
+    }
+
+    public void addPosts(List<String> posts) {
+        this.posts.addAll(posts);
+    }
+
+    public List<String> getApps() {
+        return apps;
+    }
+
+    public void setApps(List<String> apps) {
+        this.apps = apps;
+    }
+
+    public void addApp(String app) {
+        apps.add(app);
+    }
+
+    public void addApps(List<String> apps) {
+        this.apps.addAll(apps);
     }
 
     public String getAvatar() {

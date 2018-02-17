@@ -2,7 +2,6 @@ package com.google.developer.udacityalumni.login;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,7 +14,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.developer.udacityalumni.BuildConfig;
 import com.google.developer.udacityalumni.R;
 import com.google.developer.udacityalumni.base.BaseActivity;
 import com.google.developer.udacityalumni.constants.CollectionNames;
@@ -31,16 +29,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
  */
 public class LoginActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String LOG_TAG = LoginActivity.class.getSimpleName();
-
     private static final int RC_SIGN_IN = 9001;
-
-    private static final int RC_FAKE_DATA = 123;
-
-    private ProgressBar progressBar;
-
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
-
+    private ProgressBar progressBar;
     private FirebaseAuth.AuthStateListener authStateListener;
 
     public static Intent getLaunchIntent(@NonNull Context context) {
@@ -81,8 +72,6 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.OnCon
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             handleGoogleSignInResult(data);
-        } else if (requestCode == RC_FAKE_DATA) {
-            finish();
         }
     }
 
@@ -111,13 +100,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.OnCon
             FirebaseFirestore.getInstance().collection(CollectionNames.USERS)
                     .document(user.getUid())
                     .set(new User(user.getUid(), user.getDisplayName(), user.getEmail(), photoUrl))
-                    .addOnSuccessListener(aVoid -> {
-//                        if (shouldAddFakeData()) {
-                            startActivityForResult(FakeDataActivity.getLaunchIntent(LoginActivity.this), RC_FAKE_DATA);
-//                        } else {
-//                            finish();
-//                        }
-                    })
+                    .addOnSuccessListener(aVoid -> finish())
                     .addOnFailureListener(e -> {
                         progressBar.setVisibility(View.GONE);
                         showErrorSnackbar();
@@ -151,11 +134,6 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.OnCon
 
     private void showErrorSnackbar() {
         showSnackbar(R.id.sign_in_layout, R.string.login_failed);
-    }
-
-    private boolean shouldAddFakeData() {
-        SharedPreferences prefs = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        return BuildConfig.DEBUG && !prefs.getBoolean(getString(R.string.fake_data_key), false);
     }
 }
 

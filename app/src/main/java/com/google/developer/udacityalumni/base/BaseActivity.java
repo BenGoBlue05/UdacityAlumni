@@ -2,11 +2,13 @@ package com.google.developer.udacityalumni.base;
 
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.google.developer.udacityalumni.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,6 +43,10 @@ public class BaseActivity extends AppCompatActivity {
                 .commit();
     }
 
+    public Snackbar getSnackBar(@NonNull View container, @StringRes int message) {
+        return Snackbar.make(container, message, Snackbar.LENGTH_LONG);
+    }
+
     public Snackbar getSnackBar(@IdRes int container, @StringRes int message) {
         return Snackbar.make(findViewById(container), message, Snackbar.LENGTH_LONG);
     }
@@ -52,6 +58,13 @@ public class BaseActivity extends AppCompatActivity {
     public void showSnackbar(@IdRes int container, @StringRes int message) {
         Snackbar snackbar = getSnackBar(container, message);
         if (snackbar != null){
+            snackbar.show();
+        }
+    }
+
+    public void showSnackbar(@NonNull View container, @StringRes int message) {
+        Snackbar snackbar = getSnackBar(container, message);
+        if (snackbar != null) {
             snackbar.show();
         }
     }

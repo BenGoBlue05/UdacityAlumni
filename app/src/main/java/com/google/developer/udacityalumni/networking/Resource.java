@@ -58,6 +58,15 @@ public class Resource<T> {
         loadingIndicator.setVisibility(status == LOADING ? View.VISIBLE : View.GONE);
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    @Nullable
+    public T getData() {
+        return data;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

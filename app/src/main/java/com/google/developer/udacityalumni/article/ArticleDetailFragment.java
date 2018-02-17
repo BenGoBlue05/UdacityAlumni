@@ -1,4 +1,4 @@
-package com.google.developer.udacityalumni.fragment;
+package com.google.developer.udacityalumni.article;
 
 
 import android.content.ContentValues;
@@ -40,12 +40,6 @@ public class ArticleDetailFragment extends Fragment
 
     private static final String LOG_TAG = ArticleDetailFragment.class.getSimpleName();
     private final int LOADER_FIRST_ARTICLE = 100, LOADER_SECOND_ARTICLE = 200, LOADER_CURRENT_AND_NEXT = 300;
-    private long mArticleId, mNextArticleId;
-    private boolean mIsFollowing;
-
-    private SlidingViewManager mSlidingViewManager;
-    private AvatarCardAdapter mSlidingViewAdapter;
-
     @BindView(R.id.detail_article_title_tv)
     TextView mTitleTV;
     @BindView(R.id.detail_article_image)
@@ -70,12 +64,24 @@ public class ArticleDetailFragment extends Fragment
     ImageView mFollowIV;
     @BindView(R.id.detail_article_preview_ll)
     LinearLayout mPreviewLL;
+    private long mArticleId, mNextArticleId;
+    private boolean mIsFollowing;
+    private SlidingViewManager mSlidingViewManager;
+    private final AvatarCardAdapter.OnClickListener slidingCardClickListener =
+            new AvatarCardAdapter.OnClickListener() {
+                @Override
+                public void onSeeMoreClick() {
+                    Toast.makeText(getContext(), "See More Clicked", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onDismissClick() {
+                    mSlidingViewManager.animate();
+                }
+            };
+    private AvatarCardAdapter mSlidingViewAdapter;
 
     public ArticleDetailFragment() {
-    }
-
-    public interface DetailArticleCallbacks {
-        void onNextArticleClicked();
     }
 
     @Override
@@ -250,17 +256,8 @@ public class ArticleDetailFragment extends Fragment
         mFollowIV.setImageResource(mIsFollowing ? R.drawable.ic_following : R.drawable.ic_add_follow);
     }
 
-    private final AvatarCardAdapter.OnClickListener slidingCardClickListener =
-            new AvatarCardAdapter.OnClickListener() {
-        @Override
-        public void onSeeMoreClick() {
-            Toast.makeText(getContext(), "See More Clicked", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onDismissClick() {
-            mSlidingViewManager.animate();
-        }
-    };
+    public interface DetailArticleCallbacks {
+        void onNextArticleClicked();
+    }
 
 }

@@ -1,4 +1,4 @@
-package com.google.developer.udacityalumni.fragment;
+package com.google.developer.udacityalumni.article;
 
 
 import android.content.ContentValues;
@@ -62,10 +62,6 @@ public class ArticleFragment extends Fragment implements LoaderManager.LoaderCal
 
     private SlidingViewManager mManager;
     private AvatarCardAdapter mAvatarCardAdapter;
-
-    public interface ArticleCallback {
-        void onArticleSelected(long articleId, boolean isBookmarked, String tag);
-    }
 
     public ArticleFragment() {
     }
@@ -137,7 +133,7 @@ public class ArticleFragment extends Fragment implements LoaderManager.LoaderCal
                 title = title.toLowerCase();
                 String url = "https://udacity-alumni-client.herokuapp.com/articles/" + title.replaceAll("\\s", "-");
 //                ie: https://udacity-alumni-client.herokuapp.com/articles/medically-necessary-utilization-review-evidence-of-insurability
-//                TODO: Share DYNAMIC link to the article  (the 'url' above is a link to the article on the web app)
+//                TODO: Share DYNAMIC link to the article  (the 'url' above is a link to the article on the web item_app)
 //               Will implement later
                     Intent i = new Intent(Intent.ACTION_SEND);
                     i.setType("text/plain");
@@ -176,7 +172,6 @@ public class ArticleFragment extends Fragment implements LoaderManager.LoaderCal
         mManager.onSaveInstanceState(outState);
     }
 
-
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(getActivity(), AlumContract.ArticleEntry.CONTENT_URI, ARTICLE_COLUMNS,
@@ -191,6 +186,10 @@ public class ArticleFragment extends Fragment implements LoaderManager.LoaderCal
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mArticleAdapter.swapCursor(null);
+    }
+
+    public interface ArticleCallback {
+        void onArticleSelected(long articleId, boolean isBookmarked, String tag);
     }
 
 }

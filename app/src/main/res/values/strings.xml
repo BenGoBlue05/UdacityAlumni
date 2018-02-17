@@ -13,6 +13,9 @@
     <string name="post_photo">Photo of Post</string>
     <string name="post">Post</string>
     <string name="add_photo_video">Add Photo or Video</string>
+    <string name="loading_fake_data">Loading Fake Data</string>
+    <string name="debug_mode">Debug Mode</string>
+    <string name="add_fake_data">Add Fake Data</string>
 
     <!--keys-->
     <string name="article_id_key" translatable="false">articleIdKey</string>
@@ -80,6 +83,9 @@
     <string name="apps">Apps</string>
 
 
+    <!-- Error Messages -->
+    <string name="error_connection">Connection Error</string>
+
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
@@ -116,14 +122,19 @@
     <string name="posts_send">Send</string>
 
     <!-- a11y -->
+    <string name="a11y_github">Github link</string>
     <string name="a11y_like_button">Like button</string>
     <string name="a11y_posted_image">Picture posted</string>
     <string name="a11y_user_photo">Picture of user</string>
     <string name="a11y_comment_button">Add comment</string>
     <string name="a11y_flag_icon">Report this post</string>
+    <string name="a11y_more_options">More options</string>
     <string name="a11y_posts_send_button">Send this post</string>
     <string name="a11y_posts_add_image_button">Add an image to this post</string>
     <string name="a11y_posts_take_photo_button">Take a photo and add it to this post</string>
+    <string name="a11y_app_image">App Image</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

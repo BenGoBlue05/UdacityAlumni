@@ -18,7 +18,7 @@ import android.view.ViewTreeObserver;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 
-import com.google.developer.udacityalumni.view.ViewUtils;
+import com.google.developer.udacityalumni.view.UAViewUtils;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -36,18 +36,15 @@ public final class SlidingViewManager implements View.OnTouchListener, ViewTreeO
     private static final String STATE_KEY = TAG + ".STATE_KEY";
     private static final String OPTIONS_KEY = TAG + ".OPTIONS_KEY";
     private static final int ANIMATION_DURATION = 500;
-    private static final int SLIDING_CARD_ELEVATION = ViewUtils.dpToPx(16);
-
-    private boolean isExpanded = false, isAnimating = false;
-
-    private SlidingView mAdapter;
+    private static final int SLIDING_CARD_ELEVATION = UAViewUtils.dpToPx(16);
     private final ViewGroup mSlidingView;
     private final View mScrim;
     private final Interpolator mFastOutSlowInInterpolator = new FastOutSlowInInterpolator();
     private final ArgbEvaluator mArgbEvaluator = new ArgbEvaluator();
-
     private final int startColor = Color.TRANSPARENT;
     private final int endColor = Color.argb(120, 40, 40, 40);
+    private boolean isExpanded = false, isAnimating = false;
+    private SlidingView mAdapter;
 
     public SlidingViewManager(Activity activity) {
         this(activity.findViewById(android.R.id.content));

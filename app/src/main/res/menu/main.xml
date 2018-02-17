@@ -11,5 +11,9 @@
         android:id="@+id/sign_out"
         android:title="@string/sign_out"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/fakeData"
+        android:title="@string/add_fake_data"
+        app:showAsAction="never" />
 
 </menu>

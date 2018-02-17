@@ -12,13 +12,14 @@ import java.util.HashMap;
 
 @IgnoreExtraProperties
 public class Post {
+    private final HashMap<String, Boolean> likes = new HashMap<>();
+    private String id;
     private String userId;
     private String userDisplayName;
     private String userProfPicUrl;
     private String textContent;
     private String photoContentUrl;
     private int numLikes;
-    private final HashMap<String, Boolean> likes = new HashMap<>();
     private @ServerTimestamp
     Date timestamp;
 
@@ -26,7 +27,8 @@ public class Post {
         //Empty constructor needed for FireStore toObject()
     }
 
-    public Post(String userId, String userDisplayName, String userProfPicUrl, String textContent, String photoContentUrl, int numLikes) {
+    public Post(String id, String userId, String userDisplayName, String userProfPicUrl, String textContent, String photoContentUrl, int numLikes) {
+        this.id = id;
         this.userId = userId;
         this.userDisplayName = userDisplayName;
         this.userProfPicUrl = userProfPicUrl;
@@ -35,16 +37,24 @@ public class Post {
         this.numLikes = numLikes;
     }
 
-    public Post(String userId, String userDisplayName, String userProfPicUrl) {
-        this(userId, userDisplayName, userProfPicUrl, "", "", 0);
+    public Post(String id, String userId, String userDisplayName, String userProfPicUrl) {
+        this(id, userId, userDisplayName, userProfPicUrl, "", "", 0);
     }
 
-    public Post(String userId, String userDisplayName, String userProfPicUrl, String textContent) {
-        this(userId, userDisplayName, userProfPicUrl, textContent, "", 0);
+    public Post(String id, String userId, String userDisplayName, String userProfPicUrl, String textContent) {
+        this(id, userId, userDisplayName, userProfPicUrl, textContent, "", 0);
+    }
+
+    public String getId() {
+        return id;
     }
 
     public Date getTimestamp() {
         return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getUserId() {
@@ -55,47 +65,43 @@ public class Post {
         return userDisplayName;
     }
 
-    public String getUserProfPicUrl() {
-        return userProfPicUrl;
-    }
-
-    public String getTextContent() {
-        return textContent;
-    }
-
-    public String getPhotoContentUrl() {
-        return photoContentUrl;
-    }
-
-    public int getNumLikes() {
-        return numLikes;
-    }
-
-    public HashMap<String, Boolean> getLikes() {
-        return likes;
-    }
-
     public void setUserDisplayName(String userDisplayName) {
         this.userDisplayName = userDisplayName;
     }
 
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
+    public String getUserProfPicUrl() {
+        return userProfPicUrl;
     }
 
     public void setUserProfPicUrl(String userProfPicUrl) {
         this.userProfPicUrl = userProfPicUrl;
     }
 
+    public String getTextContent() {
+        return textContent;
+    }
+
     public void setTextContent(String textContent) {
         this.textContent = textContent;
+    }
+
+    public String getPhotoContentUrl() {
+        return photoContentUrl;
     }
 
     public void setPhotoContentUrl(String photoContentUrl) {
         this.photoContentUrl = photoContentUrl;
     }
 
+    public int getNumLikes() {
+        return numLikes;
+    }
+
     public void setNumLikes(int numLikes) {
         this.numLikes = numLikes;
+    }
+
+    public HashMap<String, Boolean> getLikes() {
+        return likes;
     }
 }

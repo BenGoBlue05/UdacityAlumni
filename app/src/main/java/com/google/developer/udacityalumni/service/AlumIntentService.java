@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.util.Log;
 
+import com.google.developer.udacityalumni.article.Article;
+import com.google.developer.udacityalumni.article.Articles;
 import com.google.developer.udacityalumni.data.AlumContract;
-import com.google.developer.udacityalumni.model.Article;
-import com.google.developer.udacityalumni.model.Articles;
 import com.google.developer.udacityalumni.notification.SpotlightNotificationFactory;
 import com.google.developer.udacityalumni.notification.SpotlightNotificationManager;
 import com.google.developer.udacityalumni.notification.SpotlightNotificationUtils;

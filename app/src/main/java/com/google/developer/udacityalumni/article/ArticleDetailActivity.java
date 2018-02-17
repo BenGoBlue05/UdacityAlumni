@@ -1,4 +1,4 @@
-package com.google.developer.udacityalumni.activity;
+package com.google.developer.udacityalumni.article;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -24,7 +24,6 @@ import android.widget.TextView;
 import com.google.developer.udacityalumni.R;
 import com.google.developer.udacityalumni.adapter.PageAdapter;
 import com.google.developer.udacityalumni.data.AlumContract;
-import com.google.developer.udacityalumni.fragment.ArticleDetailFragment;
 
 import java.util.Arrays;
 
@@ -34,12 +33,12 @@ import butterknife.ButterKnife;
 public class ArticleDetailActivity extends AppCompatActivity
         implements ViewPager.OnPageChangeListener, ArticleDetailFragment.DetailArticleCallbacks {
     private static final String LOG_TAG = ArticleDetailActivity.class.getSimpleName();
-    private PageAdapter mPageAdapter;
-    private ViewPager mViewPager;
     @BindView(R.id.detail_article_toolbar)
     Toolbar mToolbar;
     @BindView(R.id.detail_toolbar_tv)
     TextView mToolbarTitleTV;
+    private PageAdapter mPageAdapter;
+    private ViewPager mViewPager;
     private long[] mArticleIds;
     private int[] mBookMarks;
     private String[] mTags;

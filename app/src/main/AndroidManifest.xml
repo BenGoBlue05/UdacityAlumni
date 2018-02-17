@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:supportsRtl">
-        <activity android:name=".activity.ArticleDetailActivity" />
+        <activity android:name=".article.ArticleDetailActivity" />
 
         <provider
             android:name=".data.AlumContentProvider"
@@ -57,9 +57,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".post.NewPostActivityV2" />
-        <activity
-            android:name=".login.FakeDataActivity"
-            android:theme="@style/NoDisplay" />
+        <activity android:name=".fakedata.FakeDataActivity" />
     </application>
 
 </manifest>

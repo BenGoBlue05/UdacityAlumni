@@ -1,5 +1,6 @@
-package com.google.developer.udacityalumni.model;
+package com.google.developer.udacityalumni.article;
 
+import com.google.developer.udacityalumni.model.Tag;
 import com.google.developer.udacityalumni.user.User;
 import com.google.gson.annotations.SerializedName;
 

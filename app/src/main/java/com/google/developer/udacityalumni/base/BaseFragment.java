@@ -9,6 +9,7 @@ import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,25 @@ public class BaseFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_base, container, false);
     }
 
+    public void addFragment(@IdRes int containerViewId, Fragment fragment) {
+        FragmentManager fragmentManager = getFragmentManager();
+        if (fragmentManager != null) {
+            fragmentManager.beginTransaction()
+                    .add(containerViewId, fragment)
+                    .commit();
+        }
+    }
+
+    public void replaceFragment(@IdRes int containerViewId, Fragment fragment) {
+        FragmentManager fragmentManager = getFragmentManager();
+        if (fragmentManager != null) {
+            fragmentManager.beginTransaction()
+                    .replace(containerViewId, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
+    }
+
     public Snackbar getSnackbar(@IdRes int container, @StringRes int message) {
         FragmentActivity activity = getActivity();
         if (activity instanceof BaseActivity) {
@@ -54,6 +74,13 @@ public class BaseFragment extends Fragment {
     }
 
     public void showSnackbar(@IdRes int container, @StringRes int message) {
+        FragmentActivity activity = getActivity();
+        if (activity instanceof BaseActivity) {
+            ((BaseActivity) activity).showSnackbar(container, message);
+        }
+    }
+
+    public void showSnackbar(View container, @StringRes int message) {
         FragmentActivity activity = getActivity();
         if (activity instanceof BaseActivity) {
             ((BaseActivity) activity).showSnackbar(container, message);

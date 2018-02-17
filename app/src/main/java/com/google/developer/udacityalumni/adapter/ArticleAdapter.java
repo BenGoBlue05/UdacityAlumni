@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.google.developer.udacityalumni.R;
 import com.google.developer.udacityalumni.animation.AnimationUtils;
-import com.google.developer.udacityalumni.fragment.ArticleFragment;
+import com.google.developer.udacityalumni.article.ArticleFragment;
 import com.google.developer.udacityalumni.utils.Utility;
 import com.squareup.picasso.Picasso;
 
@@ -23,25 +23,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder> {
 
-    private Cursor mCursor;
     final private Context mContext;
     final private ArticleItemClickHandler mArticleClickHandler;
+    private Cursor mCursor;
 
     public ArticleAdapter(Context mContext, ArticleItemClickHandler mArticleClickHandler) {
         this.mContext = mContext;
         this.mArticleClickHandler = mArticleClickHandler;
-    }
-
-    public interface ArticleItemClickHandler {
-        void onArticleClick(long articleId, boolean isBookmarked, String tag);
-
-        void onProfPicClick(long userId, int position);
-
-        void onFollowUserClick(long userId, long articleId, boolean wasFollowingBeforeClick, ImageView icon);
-
-        void onShareClick(String title);
-
-        void onBookmarkClick(long articleId, boolean wasBookmarkedBeforeClick, ImageView icon);
     }
 
     @Override
@@ -106,6 +94,18 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
     public int getItemCount() {
         if (mCursor == null) return 0;
         return mCursor.getCount();
+    }
+
+    public interface ArticleItemClickHandler {
+        void onArticleClick(long articleId, boolean isBookmarked, String tag);
+
+        void onProfPicClick(long userId, int position);
+
+        void onFollowUserClick(long userId, long articleId, boolean wasFollowingBeforeClick, ImageView icon);
+
+        void onShareClick(String title);
+
+        void onBookmarkClick(long articleId, boolean wasBookmarkedBeforeClick, ImageView icon);
     }
 
     public class ArticleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
