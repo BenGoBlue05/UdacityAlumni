@@ -1,6 +1,5 @@
 package com.google.developer.udacityalumni.post;
 
-import android.content.res.Resources;
 import android.support.annotation.Nullable;
 
 import com.google.developer.udacityalumni.base.BaseView;
@@ -14,9 +13,7 @@ import java.util.List;
 
 public class PostsPresenter {
 
-    private static final String TAG = PostsPresenter.class.getSimpleName();
-
-    public void processPosts(@Nullable Resource<List<Post>> posts, BaseView<List<Post>> view, Resources resources) {
+    public void processPosts(@Nullable Resource<List<Post>> posts, BaseView<List<Post>> view) {
         if (posts != null) {
             posts.setLoadingVisibility(view.getLoadingIndicator());
             if (posts.isSuccess()) {

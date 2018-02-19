@@ -16,10 +16,6 @@ public class Resource<T> {
 
     public static final int ERROR = 2;
 
-    public static final int GETTER = 0;
-
-    public static final int SETTER = 1;
-
     public final int status;
 
     @Nullable
@@ -81,5 +77,4 @@ public class Resource<T> {
         return status == resource.status &&
                 (data != null ? data.equals(resource.data) : resource.data == null);
     }
-
 }

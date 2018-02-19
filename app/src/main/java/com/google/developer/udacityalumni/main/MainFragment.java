@@ -2,7 +2,6 @@ package com.google.developer.udacityalumni.main;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
@@ -33,7 +32,6 @@ import com.google.developer.udacityalumni.app.AppsFragment;
 import com.google.developer.udacityalumni.base.BaseFragment;
 import com.google.developer.udacityalumni.fakedata.FakeDataActivity;
 import com.google.developer.udacityalumni.login.LoginActivity;
-import com.google.developer.udacityalumni.networking.Resource;
 import com.google.developer.udacityalumni.post.NewPostActivity;
 import com.google.developer.udacityalumni.post.PostsFragment;
 import com.google.developer.udacityalumni.view.UAViewUtils;
@@ -58,7 +56,6 @@ public class MainFragment extends BaseFragment
     private String[] appsTitles;
     private MainViewModel viewModel;
     private FrameLayout container;
-    private Toolbar toolbar;
     private DrawerLayout drawer;
     private NavigationView navView;
     private FloatingActionButton fab;
@@ -86,7 +83,7 @@ public class MainFragment extends BaseFragment
 
     private void initViews(View view) {
         setHasOptionsMenu(true);
-        toolbar = view.findViewById(R.id.toolbar);
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setTitle("");
         drawer = view.findViewById(R.id.drawer);
         navView = view.findViewById(R.id.navView);
@@ -114,17 +111,8 @@ public class MainFragment extends BaseFragment
         super.onActivityCreated(savedInstanceState);
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         viewModel.getNavState().observe(this, state -> {
-            if (state != null) {
-                updateState(state);
-            }
+            if (state != null) updateState(state);
         });
-        viewModel.getCurrentUserProfPic().observe(this, this::updateNavIcon);
-    }
-
-    private void updateNavIcon(@Nullable Resource<Drawable> pic) {
-        if (toolbar != null && pic != null && pic.isSuccess()) {
-            toolbar.setNavigationIcon(pic.getData());
-        }
     }
 
     private void updateState(@NavState int state) {

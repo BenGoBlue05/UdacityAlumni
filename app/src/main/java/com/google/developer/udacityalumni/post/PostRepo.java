@@ -45,6 +45,4 @@ public class PostRepo {
         DocumentReference ref = FirebaseFirestore.getInstance().collection(CollectionNames.POSTS).document();
         return new FirestoreSetterResource(ref, post).asLiveData();
     }
-
-
 }

@@ -49,7 +49,7 @@ public class PostsFragment extends BaseRecyclerFragment<Post, PostsAdapter>
         super.onActivityCreated(savedInstanceState);
         PostsViewModel viewModel = ViewModelProviders.of(this).get(PostsViewModel.class);
         viewModel.setQuery(getPostsQuery());
-        viewModel.getPosts().observe(this, posts -> presenter.processPosts(posts, this, getResources()));
+        viewModel.getPosts().observe(this, posts -> presenter.processPosts(posts, this));
     }
 
     private Query getPostsQuery() {
