@@ -1,0 +1,38 @@
+[
+  {
+    "id": "klfdasljfkda",
+    "name": "Sebastion Thrun",
+    "email": "thegodfather@gmail.com",
+    "photoUrl": "https://crunchbase-production-res.cloudinary.com/image/upload/c_thumb,h_256,w_256,f_auto,g_faces,z_0.7,q_auto:eco/v1477032915/mxnksvsveccaqgip2sib.png"
+  },
+  {
+    "id": "fkjdaljfilf334",
+    "name": "Elon Musk",
+    "email": "rocketman@gmail.com",
+    "photoUrl": "https://cdn.dialogues.org/100555/images/5762298e7b2840353640e66e/tn_01wrsjo7uk_100555.jpg"
+  },
+  {
+    "id": "fljkhadlkhuresklhu432",
+    "name": "Larry Page",
+    "email": "gunit@gmail.com",
+    "photoUrl": "http://shyrobotics.com/wp-content/uploads/2014/05/larry-page-128x128.jpg"
+  },
+  {
+    "id": "HjiorehalHdiopaj283",
+    "name": "Mark Zuckerberg",
+    "email": "zuck@gmail.com",
+    "photoUrl": "https://assets.change.org/photos/3/pz/ur/IZPZUrJczRxOpDB-128x128-noPad.jpg?1465599428"
+  },
+  {
+    "id": "rgjklhaklghrskjngro7",
+    "name": "Jeff Bezos",
+    "email": "richestmanalive@gmail.com",
+    "photoUrl": "https://pbs.twimg.com/profile_images/669103856106668033/UF3cgUk4.jpg"
+  },
+  {
+    "id": "gfjdkslahjrl34lfgj",
+    "name": "Bill Gates",
+    "email": "formerrichestmanalive@gmail.com",
+    "photoUrl": "https://i.guim.co.uk/img/static/sys-images/Media/Pix/pictures/2006/06/21/GatesBillGetty1.jpg?w=300&q=55&auto=format&usm=12&fit=max&s=16f88f1b9f4451a65018572495dc2f51"
+  }
+]

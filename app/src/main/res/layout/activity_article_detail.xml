@@ -6,7 +6,7 @@
     android:id="@+id/detail_article_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.google.developer.udacityalumni.activity.ArticleDetailActivity">
+    tools:context="com.google.developer.udacityalumni.article.ArticleDetailActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/detail_article_appbar"

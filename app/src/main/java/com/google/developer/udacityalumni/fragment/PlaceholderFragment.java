@@ -24,13 +24,8 @@ public class PlaceholderFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_placeholder, container, false);
         Button button = view.findViewById(R.id.placeholder_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(new Intent(Intent.ACTION_VIEW).setData(
-                        Uri.parse("https://github.com/BenGoBlue05/UdacityAlumni"))));
-            }
-        });
+        button.setOnClickListener(v -> startActivity(new Intent(new Intent(Intent.ACTION_VIEW).setData(
+                Uri.parse("https://github.com/BenGoBlue05/UdacityAlumni")))));
         return view;
     }
 

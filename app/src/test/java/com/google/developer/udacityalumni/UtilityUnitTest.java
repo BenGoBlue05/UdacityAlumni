@@ -1,6 +1,6 @@
 package com.google.developer.udacityalumni;
 
-import com.google.developer.udacityalumni.utility.Utility;
+import com.google.developer.udacityalumni.utils.Utility;
 
 import org.junit.Test;
 

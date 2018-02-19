@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
-import android.support.v4.view.ViewPropertyAnimatorUpdateListener;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.util.Log;
 import android.view.Gravity;
@@ -19,7 +18,7 @@ import android.view.ViewTreeObserver;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 
-import com.google.developer.udacityalumni.view.ViewUtils;
+import com.google.developer.udacityalumni.view.UAViewUtils;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -37,29 +36,26 @@ public final class SlidingViewManager implements View.OnTouchListener, ViewTreeO
     private static final String STATE_KEY = TAG + ".STATE_KEY";
     private static final String OPTIONS_KEY = TAG + ".OPTIONS_KEY";
     private static final int ANIMATION_DURATION = 500;
-    private static final int SLIDING_CARD_ELEVATION = ViewUtils.dpToPx(16);
-
-    private boolean isExpanded = false, isAnimating = false;
-
-    private SlidingView mAdapter;
+    private static final int SLIDING_CARD_ELEVATION = UAViewUtils.dpToPx(16);
     private final ViewGroup mSlidingView;
     private final View mScrim;
     private final Interpolator mFastOutSlowInInterpolator = new FastOutSlowInInterpolator();
     private final ArgbEvaluator mArgbEvaluator = new ArgbEvaluator();
-
     private final int startColor = Color.TRANSPARENT;
     private final int endColor = Color.argb(120, 40, 40, 40);
+    private boolean isExpanded = false, isAnimating = false;
+    private SlidingView mAdapter;
 
     public SlidingViewManager(Activity activity) {
-        this((ViewGroup) activity.findViewById(android.R.id.content));
+        this(activity.findViewById(android.R.id.content));
     }
 
     public SlidingViewManager(android.app.Fragment fragment) {
-        this((ViewGroup) fragment.getActivity().findViewById(android.R.id.content));
+        this(fragment.getActivity().findViewById(android.R.id.content));
     }
 
     public SlidingViewManager(android.support.v4.app.Fragment fragment) {
-        this((ViewGroup) fragment.getActivity().findViewById(android.R.id.content));
+        this(fragment.getActivity().findViewById(android.R.id.content));
     }
 
     public SlidingViewManager(ViewGroup rootView) {
@@ -105,15 +101,12 @@ public final class SlidingViewManager implements View.OnTouchListener, ViewTreeO
                         isAnimating = false;
                     }
                 })
-                .setUpdateListener(new ViewPropertyAnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(View view) {
-                        final float transY = ViewCompat.getTranslationY(mSlidingView);
-                        final float targetY = mSlidingView.getHeight();
-                        final float delta = transY/targetY;
-                        setScrimBackgroundColor(delta);
+                .setUpdateListener(view -> {
+                    final float transY = ViewCompat.getTranslationY(mSlidingView);
+                    final float targetY = mSlidingView.getHeight();
+                    final float delta = transY/targetY;
+                    setScrimBackgroundColor(delta);
 
-                    }
                 }).start();
     }
 
@@ -139,14 +132,11 @@ public final class SlidingViewManager implements View.OnTouchListener, ViewTreeO
                         isAnimating = false;
                     }
                 })
-                .setUpdateListener(new ViewPropertyAnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(View view) {
-                        final float transY = ViewCompat.getTranslationY(mSlidingView);
-                        final float targetY = mSlidingView.getHeight();
-                        final float delta = transY/targetY;
-                        setScrimBackgroundColor(delta);
-                    }
+                .setUpdateListener(view -> {
+                    final float transY = ViewCompat.getTranslationY(mSlidingView);
+                    final float targetY = mSlidingView.getHeight();
+                    final float delta = transY/targetY;
+                    setScrimBackgroundColor(delta);
                 }).start();
 
     }
