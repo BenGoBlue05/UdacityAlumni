@@ -8,10 +8,13 @@ import com.google.developer.udacityalumni.login.LoginActivity;
 import com.google.developer.udacityalumni.session.UASession;
 import com.google.firebase.auth.FirebaseAuth;
 
+import dagger.android.AndroidInjection;
+
 public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {

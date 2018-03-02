@@ -36,6 +36,7 @@ ext {
     buildToolsVersion = '27.0.2'
 
     // App dependencies
+    daggerVersion = '2.14.1'
     supportLibraryVersion = '27.0.2'
     guavaVersion = '23.4'
     junitVersion = '4.12'
