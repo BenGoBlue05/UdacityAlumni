@@ -13,6 +13,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.developer.udacityalumni.R;
 import com.google.developer.udacityalumni.base.BaseActivity;
@@ -24,6 +25,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * A login screen that offers login via email/password.
  */
@@ -33,6 +38,8 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.OnCon
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private ProgressBar progressBar;
     private FirebaseAuth.AuthStateListener authStateListener;
+    @BindView(R.id.sign_in_button)
+    SignInButton signInBtn;
 
     public static Intent getLaunchIntent(@NonNull Context context) {
         return new Intent(context, LoginActivity.class);
@@ -42,9 +49,14 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.OnCon
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        findViewById(R.id.sign_in_button).setOnClickListener(v -> signIn());
+        ButterKnife.bind(this);
         progressBar = findViewById(R.id.progressBar);
         authStateListener = firebaseAuth -> addFirebaseUser();
+    }
+
+    @OnClick(R.id.sign_in_button)
+    public void signInButtonClicked() {
+        signIn();
     }
 
     private GoogleApiClient buildGoogleApiClient() {
