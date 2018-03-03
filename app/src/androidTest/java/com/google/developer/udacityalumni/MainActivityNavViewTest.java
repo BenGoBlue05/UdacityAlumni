@@ -14,7 +14,7 @@ public class MainActivityNavViewTest {
 //
 //    @Test
 //    public void openNavDrawer() {
-//        // Open Drawer to click on navigation.
+//        // Open Drawer to click on navigation_bottom.
 //        onView(withId(R.id.drawer))
 //                .check(matches(isClosed(Gravity.START))) // Left Drawer should be closed.
 //                .perform(open()); // Open Drawer
@@ -27,11 +27,11 @@ public class MainActivityNavViewTest {
 //        onView(withId(R.id.drawer))
 //                .check(matches(isOpen(Gravity.START))); // Left drawer is open open.
 //
-//        //Check if navigation drawer contains profile pic
+//        //Check if navigation_bottom drawer contains profile pic
 //        onView(withContentDescription(R.string.profile_pic))
 //                .check(matches(isDisplayed()));
 //
-//        //Check if navigation drawer contains the word 'Udacity'
+//        //Check if navigation_bottom drawer contains the word 'Udacity'
 //        onView(withText("Udacity"))
 //                .check(matches(isDisplayed()));
 //

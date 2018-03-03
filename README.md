@@ -9,7 +9,7 @@ If you are a Udacity ND graduate, or current or prospective student you are welc
 
 [![Demo](https://j.gifs.com/GZXDKJ.gif)]
 
-##How to Start
+## How to Start
 
 1. Clone this repository. If you would like to learn how to use GitHub on Android Studio please check out this tutorial by Will Willis https://www.youtube.com/playlist?list=PLhO3X757HABdao5hv4HGQSWPX0tnN4lCO. 
 

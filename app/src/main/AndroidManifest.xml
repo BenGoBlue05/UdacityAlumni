@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.google.developer.udacityalumni">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -16,23 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:supportsRtl">
-        <activity
-            android:name=".activity.SplashActivity"
-            android:theme="@style/SplashTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".activity.MainActivity" />
-        <activity
-            android:name=".activity.ArticleDetailActivity"
-            android:parentActivityName=".activity.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MainActivity" />
-        </activity>
+        <activity android:name=".article.ArticleDetailActivity" />
 
         <provider
             android:name=".data.AlumContentProvider"
@@ -52,32 +37,27 @@
             </intent-filter>
         </service>
 
+        <activity android:name=".activity.WebViewActivity" />
+        <activity android:name=".base.BaseActivity" />
         <activity
-            android:name=".activity.WebViewActivity"
-            android:parentActivityName=".activity.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MainActivity" />
-        </activity>
-        <activity android:name=".activity.BaseActivity" />
-        <activity
-            android:name=".activity.LoginActivity"
+            android:name=".login.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity
-            android:name=".activity.NewPostActivity"
+            android:name=".post.NewPostActivity"
             android:label="@string/title_activity_new_post"
-            android:parentActivityName=".activity.MainActivity"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MainActivity" />
+            android:theme="@style/AppTheme" />
+        <activity android:name=".activity.NewAppActivity" />
+        <activity
+            android:name=".main.MainActivity"
+            android:label="@string/title_activity_main_v2">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-        <activity android:name=".activity.NewAppActivity"
-            android:parentActivityName=".activity.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MainActivity" />
-        </activity>
+        <activity android:name=".post.NewPostActivityV2" />
+        <activity android:name=".fakedata.FakeDataActivity" />
     </application>
 
 </manifest>

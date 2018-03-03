@@ -11,7 +11,7 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 
 import com.google.developer.udacityalumni.R;
-import com.google.developer.udacityalumni.activity.MainActivity;
+import com.google.developer.udacityalumni.main.MainActivity;
 
 import java.util.List;
 
