@@ -11,6 +11,7 @@ import com.google.developer.udacityalumni.fragment.WebViewFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.android.AndroidInjection;
 
 public class WebViewActivity extends AppCompatActivity {
 
@@ -19,6 +20,7 @@ public class WebViewActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
         ButterKnife.bind(this);

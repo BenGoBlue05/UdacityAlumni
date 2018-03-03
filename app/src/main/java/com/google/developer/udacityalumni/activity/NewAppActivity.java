@@ -12,10 +12,13 @@ import android.view.WindowManager;
 
 import com.google.developer.udacityalumni.R;
 
+import dagger.android.AndroidInjection;
+
 public class NewAppActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_app);
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.status_bar_color));
