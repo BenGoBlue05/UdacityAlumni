@@ -86,7 +86,6 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.OnCon
 
     @OnClick(R.id.sign_in_button)
     public void signInButtonClicked(){
-        Log.i("TAG", "signInButtonClicked: ");
         signIn();
     }
 
